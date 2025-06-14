@@ -3,10 +3,36 @@ import datetime
 import os
 
 
-tokens = (
+reserved = {
+    #incio DavidlunaT{
+    'using': 'USING',
+    'class': 'CLASS',
+    'static': 'STATIC',
+    'void': 'VOID',
+    'int': 'INT_TYPE',
+    'string': 'STRING_TYPE',
+    'bool': 'BOOL_TYPE',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    'if': 'IF',
+    'else': 'ELSE',
+    'return': 'RETURN',
+    'Console': 'CONSOLE',
+    'WriteLine': 'WRITELINE',
+    'ReadLine': 'READLINE',
+    'Convert': 'CONVERT',
+    'ToInt32': 'TOINT32',
+    #}fin DavidlunaT
+    #inicio waldaara {
+    'Write': "WRITE",
+    "for": "FOR",
+    #}fin waldaara
+}
+
+tokens = [
     #incio DavidlunaT {
     'IDENTIFIER',
-    'NUMBER',
+    'INTEGER',
     'OPERATOR',
     'ASSIGN',
     'OPEN_PAREN',
@@ -16,19 +42,18 @@ tokens = (
     'OPEN_BRACKET',
     'CLOSE_BRACKET',
     'SEMICOLON',
-    'KEYWORD',
     'STRING',
     'DOT',
     # }fin DavidlunaT
-)
+    #inicio waldaara {
+    'COMMA',
+    #}fin waldaara
+] + list(reserved.values())
 
-keywords = {
-    #incio DavidlunaT{
-    'using', 'class', 'static', 'void', 'int', 'string', 'bool',
-    'true', 'false', 'if', 'else', 'return', 'Console', 'WriteLine',
-    'ReadLine', 'Convert', 'ToInt32'
-    #}fin DavidlunaT
-}
+#inicio waldaara{
+# preguntar si esto es necesario en lugar de t_OPERATOR
+# literals = ['+', '-', '*', '/', '=', '<', '>', '!', ';', ',', '.', '(', ')', '{', '}', '[', ']']
+#}fin waldaara
 
 #incio DavidlunaT{
 t_OPERATOR = r'[\+\-\*/=<>!]=?|==|!='
@@ -44,15 +69,17 @@ t_DOT = r'\.'
 t_STRING = r'\"([^\\\n]|(\\.))*?\"'
 t_ignore = ' \t'
 #}fin DavidlunaT
+#inicio waldaara{
+t_COMMA = r','
+#}fin waldaara
 
 #incio DavidlunaT{
 def t_IDENTIFIER(t):
     r'[A-Za-z_][A-Za-z_0-9]*'
-    if t.value in keywords:
-        t.type = 'KEYWORD'
+    t.type = reserved.get(t.value, 'IDENTIFIER')
     return t
 
-def t_NUMBER(t):
+def t_INTEGER(t):
     r'\d+'
     t.value = int(t.value)
     return t
@@ -70,10 +97,15 @@ def t_error(t):
 
 #} fin DavidlunaT
 
+#inicio waldaara{
+def t_COMMENT(t):
+    r'//.*\n'
+    pass  # Ignore single-line comments
+#} fin waldaara
+
 lexer = lex.lex()
 
 #funcion que ejecuta el analizador lexico y guarda el log con el nombre respectivogit 
-#incio DavidlunaT{
 def run_lexical_analysis(file_path, user_git_name):
     now = datetime.datetime.now()
     timestamp = now.strftime("%d-%m-%Y-%Hh%M")
@@ -101,7 +133,6 @@ def run_lexical_analysis(file_path, user_git_name):
             log_file.write("\nNo lexical errors detected.\n")
 
     print(f"\n✔ Analysis complete. Log saved to {log_filename}\n")
-#}fin DavidlunaT
 
 # ========== Main Menu ==========
 if __name__ == "__main__":
@@ -113,9 +144,15 @@ if __name__ == "__main__":
             "user": "DavidlunaT"
         }
         #}fin DavidlunaT
-        # Agregar aquí la info para que les salga el nombre en el log que se genera
+        #inicio waldaara{
+        , "2": {
+            "name": "algoritmo2.cs",
+            "path": "algoritmos/algoritmo2.cs",
+            "user": "waldaara"
+        }
+        #}fin waldaara
     }
-    #incio DavidlunaT{
+    
     print("Select algorithm to analyze:")
     for key, data in algorithms.items():
         print(f"{key}. {data['name']} (Git: {data['user']})")
@@ -128,4 +165,4 @@ if __name__ == "__main__":
         run_lexical_analysis(file_path=selected["path"], user_git_name=selected["user"])
     else:
         print("❌ Invalid option.")
-    #}fin DavidlunaT
+    
