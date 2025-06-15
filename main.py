@@ -151,6 +151,13 @@ if __name__ == "__main__":
             "user": "waldaara"
         }
         #}fin waldaara
+        #inicio gabsjimz{
+        , "3": {
+            "name": "algoritmo3.cs",
+            "path": "algoritmos/algoritmo3.cs",
+            "user": "gabsjimz"
+        }
+        #}fin gabsjimz
     }
     
     print("Select algorithm to analyze:")
