@@ -1,39 +1,24 @@
 using System;
 
-class BubbleSortExample
+class FactorialCalculator
 {
-    static void BubbleSort(int[] array)
+    static int Factorial(int n)
     {
-        int n = array.Length;
-        for (int i = 0; i < n - 1; i++)
+        if (n <= 1)
         {
-            for (int j = 0; j < n - i - 1; j++)
-            {
-                if (array[j] > array[j + 1])
-                {
-                    int temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
-                }
-            }
+            return 1;
+        }
+        else$
+        {
+            return n * Factorial(n - 1);
         }
     }
 
     static void Main(string[] args)
     {
-        int[] numbers = { 5, 2, 9, 1, 5, 6 };
-        Console.WriteLine("Original array:");
-        foreach (int num in numbers)
-        {
-            Console.Write(num + " ");
-        }
-
-        BubbleSort(numbers);
-
-        Console.WriteLine("\nSorted array:");
-        foreach (int num in numbers)
-        {
-            Console.Write(num + " ");
-        }
+        Console.Write("Enter a number: ");
+        int num#ber = Convert.ToInt32(Console.ReadLine());
+        int result = Factorial(num#ber);
+        Console.Writeline("Factorial is: " + result);
     }
 }
