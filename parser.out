@@ -1,0 +1,344 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ASSIGN
+    BOOL_TYPE
+    BREAK
+    CASE
+    CLASS
+    CLASS_NAME
+    CLOSE_BRACE
+    CLOSE_BRACKET
+    COMMA
+    CONSOLE
+    CONTINUE
+    CONVERT
+    DEFAULT
+    DO
+    DOT
+    ELSE
+    EQUAL
+    FALSE
+    FLOAT
+    FLOAT_TYPE
+    FOR
+    FOREACH
+    GREATER_THAN
+    GREATER_THAN_EQUAL
+    IDENTIFIER
+    IF
+    IN
+    INT_TYPE
+    LESS_THAN
+    LESS_THAN_EQUAL
+    NOT
+    NOT_EQUAL
+    OPEN_BRACE
+    OPEN_BRACKET
+    READLINE
+    RETURN
+    SEMICOLON
+    STATIC
+    STRING
+    STRING_TYPE
+    SWITCH
+    TOINT32
+    TRUE
+    USING
+    VOID
+    WHILE
+    WRITE
+    WRITELINE
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> expression PLUS term
+Rule 2     expression -> expression MINUS term
+Rule 3     expression -> term
+Rule 4     term -> term MULTIPLY factor
+Rule 5     term -> term DIVIDE factor
+Rule 6     term -> factor
+Rule 7     factor -> INTEGER
+Rule 8     factor -> OPEN_PAREN expression CLOSE_PAREN
+
+Terminals, with rules where they appear
+
+ASSIGN               : 
+BOOL_TYPE            : 
+BREAK                : 
+CASE                 : 
+CLASS                : 
+CLASS_NAME           : 
+CLOSE_BRACE          : 
+CLOSE_BRACKET        : 
+CLOSE_PAREN          : 8
+COMMA                : 
+CONSOLE              : 
+CONTINUE             : 
+CONVERT              : 
+DEFAULT              : 
+DIVIDE               : 5
+DO                   : 
+DOT                  : 
+ELSE                 : 
+EQUAL                : 
+FALSE                : 
+FLOAT                : 
+FLOAT_TYPE           : 
+FOR                  : 
+FOREACH              : 
+GREATER_THAN         : 
+GREATER_THAN_EQUAL   : 
+IDENTIFIER           : 
+IF                   : 
+IN                   : 
+INTEGER              : 7
+INT_TYPE             : 
+LESS_THAN            : 
+LESS_THAN_EQUAL      : 
+MINUS                : 2
+MULTIPLY             : 4
+NOT                  : 
+NOT_EQUAL            : 
+OPEN_BRACE           : 
+OPEN_BRACKET         : 
+OPEN_PAREN           : 8
+PLUS                 : 1
+READLINE             : 
+RETURN               : 
+SEMICOLON            : 
+STATIC               : 
+STRING               : 
+STRING_TYPE          : 
+SWITCH               : 
+TOINT32              : 
+TRUE                 : 
+USING                : 
+VOID                 : 
+WHILE                : 
+WRITE                : 
+WRITELINE            : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 8 0
+factor               : 4 5 6
+term                 : 1 2 3 4 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (4) term -> . term MULTIPLY factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    expression                     shift and go to state 1
+    term                           shift and go to state 2
+    factor                         shift and go to state 3
+
+state 1
+
+    (0) S' -> expression .
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+
+    PLUS            shift and go to state 6
+    MINUS           shift and go to state 7
+
+
+state 2
+
+    (3) expression -> term .
+    (4) term -> term . MULTIPLY factor
+    (5) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 3 (expression -> term .)
+    MINUS           reduce using rule 3 (expression -> term .)
+    $end            reduce using rule 3 (expression -> term .)
+    CLOSE_PAREN     reduce using rule 3 (expression -> term .)
+    MULTIPLY        shift and go to state 8
+    DIVIDE          shift and go to state 9
+
+
+state 3
+
+    (6) term -> factor .
+
+    MULTIPLY        reduce using rule 6 (term -> factor .)
+    DIVIDE          reduce using rule 6 (term -> factor .)
+    PLUS            reduce using rule 6 (term -> factor .)
+    MINUS           reduce using rule 6 (term -> factor .)
+    $end            reduce using rule 6 (term -> factor .)
+    CLOSE_PAREN     reduce using rule 6 (term -> factor .)
+
+
+state 4
+
+    (7) factor -> INTEGER .
+
+    MULTIPLY        reduce using rule 7 (factor -> INTEGER .)
+    DIVIDE          reduce using rule 7 (factor -> INTEGER .)
+    PLUS            reduce using rule 7 (factor -> INTEGER .)
+    MINUS           reduce using rule 7 (factor -> INTEGER .)
+    $end            reduce using rule 7 (factor -> INTEGER .)
+    CLOSE_PAREN     reduce using rule 7 (factor -> INTEGER .)
+
+
+state 5
+
+    (8) factor -> OPEN_PAREN . expression CLOSE_PAREN
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (4) term -> . term MULTIPLY factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    expression                     shift and go to state 10
+    term                           shift and go to state 2
+    factor                         shift and go to state 3
+
+state 6
+
+    (1) expression -> expression PLUS . term
+    (4) term -> . term MULTIPLY factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    term                           shift and go to state 11
+    factor                         shift and go to state 3
+
+state 7
+
+    (2) expression -> expression MINUS . term
+    (4) term -> . term MULTIPLY factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    term                           shift and go to state 12
+    factor                         shift and go to state 3
+
+state 8
+
+    (4) term -> term MULTIPLY . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    factor                         shift and go to state 13
+
+state 9
+
+    (5) term -> term DIVIDE . factor
+    (7) factor -> . INTEGER
+    (8) factor -> . OPEN_PAREN expression CLOSE_PAREN
+
+    INTEGER         shift and go to state 4
+    OPEN_PAREN      shift and go to state 5
+
+    factor                         shift and go to state 14
+
+state 10
+
+    (8) factor -> OPEN_PAREN expression . CLOSE_PAREN
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+
+    CLOSE_PAREN     shift and go to state 15
+    PLUS            shift and go to state 6
+    MINUS           shift and go to state 7
+
+
+state 11
+
+    (1) expression -> expression PLUS term .
+    (4) term -> term . MULTIPLY factor
+    (5) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 1 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 1 (expression -> expression PLUS term .)
+    $end            reduce using rule 1 (expression -> expression PLUS term .)
+    CLOSE_PAREN     reduce using rule 1 (expression -> expression PLUS term .)
+    MULTIPLY        shift and go to state 8
+    DIVIDE          shift and go to state 9
+
+
+state 12
+
+    (2) expression -> expression MINUS term .
+    (4) term -> term . MULTIPLY factor
+    (5) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 2 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 2 (expression -> expression MINUS term .)
+    $end            reduce using rule 2 (expression -> expression MINUS term .)
+    CLOSE_PAREN     reduce using rule 2 (expression -> expression MINUS term .)
+    MULTIPLY        shift and go to state 8
+    DIVIDE          shift and go to state 9
+
+
+state 13
+
+    (4) term -> term MULTIPLY factor .
+
+    MULTIPLY        reduce using rule 4 (term -> term MULTIPLY factor .)
+    DIVIDE          reduce using rule 4 (term -> term MULTIPLY factor .)
+    PLUS            reduce using rule 4 (term -> term MULTIPLY factor .)
+    MINUS           reduce using rule 4 (term -> term MULTIPLY factor .)
+    $end            reduce using rule 4 (term -> term MULTIPLY factor .)
+    CLOSE_PAREN     reduce using rule 4 (term -> term MULTIPLY factor .)
+
+
+state 14
+
+    (5) term -> term DIVIDE factor .
+
+    MULTIPLY        reduce using rule 5 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 5 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 5 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 5 (term -> term DIVIDE factor .)
+    $end            reduce using rule 5 (term -> term DIVIDE factor .)
+    CLOSE_PAREN     reduce using rule 5 (term -> term DIVIDE factor .)
+
+
+state 15
+
+    (8) factor -> OPEN_PAREN expression CLOSE_PAREN .
+
+    MULTIPLY        reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+    DIVIDE          reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+    PLUS            reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+    MINUS           reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+    $end            reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+    CLOSE_PAREN     reduce using rule 8 (factor -> OPEN_PAREN expression CLOSE_PAREN .)
+
