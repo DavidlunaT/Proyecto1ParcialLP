@@ -1,0 +1,7 @@
+Lexical Analysis Log
+User: waldaara
+File: algoritmos/algoritmo2.cs
+Date: 16-06-2025-11h44
+
+=== TOKENS ===
+USING             'using'                        (line 1)

@@ -26,6 +26,16 @@ reserved = {
     #inicio waldaara {
     'Write': "WRITE",
     "for": "FOR",
+    'while': 'WHILE',
+    'do': 'DO',
+    'break': 'BREAK',
+    'continue': 'CONTINUE',
+    'switch': 'SWITCH',
+    'case': 'CASE',
+    'default': 'DEFAULT',
+    "in": "IN",
+    "foreach": "FOREACH",
+    'float': 'FLOAT_TYPE',
     #}fin waldaara
 }
 
@@ -33,7 +43,6 @@ tokens = [
     #incio DavidlunaT {
     'IDENTIFIER',
     'INTEGER',
-    'OPERATOR',
     'ASSIGN',
     'OPEN_PAREN',
     'CLOSE_PAREN',
@@ -46,17 +55,25 @@ tokens = [
     'DOT',
     # }fin DavidlunaT
     #inicio waldaara {
+    'FLOAT',
     'COMMA',
+    'PLUS',
+    'MINUS',
+    'MULTIPLY',
+    'DIVIDE',
+    'LESS_THAN',
+    'LESS_THAN_EQUAL',
+    'GREATER_THAN',
+    'GREATER_THAN_EQUAL',
+    'NOT_EQUAL',
+    'EQUAL',
+    'NOT',
+    'CLASS_NAME',
     #}fin waldaara
 ] + list(reserved.values())
 
-#inicio waldaara{
-# preguntar si esto es necesario en lugar de t_OPERATOR
-# literals = ['+', '-', '*', '/', '=', '<', '>', '!', ';', ',', '.', '(', ')', '{', '}', '[', ']']
-#}fin waldaara
 
 #incio DavidlunaT{
-t_OPERATOR = r'[\+\-\*/=<>!]=?|==|!='
 t_ASSIGN = r'='
 t_OPEN_PAREN = r'\('
 t_CLOSE_PAREN = r'\)'
@@ -71,12 +88,37 @@ t_ignore = ' \t'
 #}fin DavidlunaT
 #inicio waldaara{
 t_COMMA = r','
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_MULTIPLY = r'\*'
+t_DIVIDE = r'/'
+t_LESS_THAN = r'<'
+t_LESS_THAN_EQUAL = r'<='
+t_GREATER_THAN = r'>'
+t_GREATER_THAN_EQUAL = r'>='
+t_NOT_EQUAL = r'!='
+t_EQUAL = r'=='
+t_NOT = r'!'
 #}fin waldaara
+
+
+#inicio waldaara{
+def t_CLASS_NAME(t):
+    r'[A-Z][A-Za-z_0-9]*'
+    t.type = reserved.get(t.value, 'CLASS_NAME')
+    return t
+#}fin waldaara
+
 
 #incio DavidlunaT{
 def t_IDENTIFIER(t):
     r'[A-Za-z_][A-Za-z_0-9]*'
     t.type = reserved.get(t.value, 'IDENTIFIER')
+    return t
+
+def t_FLOAT(t):
+    r'\d+\.\d+'
+    t.value = float(t.value)
     return t
 
 def t_INTEGER(t):
