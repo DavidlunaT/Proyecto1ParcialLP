@@ -2,78 +2,63 @@ import ply.lex as lex
 import datetime
 import os
 
-
+# C# reserved keywords
 reserved = {
-    #incio DavidlunaT{
-    'using': 'USING',
-    'class': 'CLASS',
-    'static': 'STATIC',
-    'void': 'VOID',
-    'int': 'INT_TYPE',
-    'string': 'STRING_TYPE',
-    'bool': 'BOOL_TYPE',
-    'true': 'TRUE',
-    'false': 'FALSE',
-    'if': 'IF',
-    'else': 'ELSE',
-    'return': 'RETURN',
-    'Console': 'CONSOLE',
-    'WriteLine': 'WRITELINE',
-    'ReadLine': 'READLINE',
-    'Convert': 'CONVERT',
-    'ToInt32': 'TOINT32',
-    #}fin DavidlunaT
-    #inicio waldaara {
-    'Write': "WRITE",
-    "for": "FOR",
-    'while': 'WHILE',
-    'do': 'DO',
-    'break': 'BREAK',
-    'continue': 'CONTINUE',
-    'switch': 'SWITCH',
-    'case': 'CASE',
-    'default': 'DEFAULT',
-    "in": "IN",
-    "foreach": "FOREACH",
-    'float': 'FLOAT_TYPE',
-    #}fin waldaara
+    # Reserved keywords
+    'abstract': 'ABSTRACT', 'as': 'AS', 'base': 'BASE', 'bool': 'BOOL_TYPE',
+    'break': 'BREAK', 'byte': 'BYTE', 'case': 'CASE', 'catch': 'CATCH',
+    'char': 'CHAR', 'checked': 'CHECKED', 'class': 'CLASS', 'const': 'CONST',
+    'continue': 'CONTINUE', 'decimal': 'DECIMAL', 'default': 'DEFAULT',
+    'delegate': 'DELEGATE', 'do': 'DO', 'double': 'DOUBLE', 'else': 'ELSE',
+    'enum': 'ENUM', 'event': 'EVENT', 'explicit': 'EXPLICIT', 'extern': 'EXTERN',
+    'false': 'FALSE', 'finally': 'FINALLY', 'fixed': 'FIXED', 'float': 'FLOAT_TYPE',
+    'for': 'FOR', 'foreach': 'FOREACH', 'goto': 'GOTO', 'if': 'IF', 'implicit': 'IMPLICIT',
+    'in': 'IN', 'int': 'INT_TYPE', 'interface': 'INTERFACE', 'internal': 'INTERNAL',
+    'is': 'IS', 'lock': 'LOCK', 'long': 'LONG', 'namespace': 'NAMESPACE', 'new': 'NEW',
+    'null': 'NULL', 'object': 'OBJECT', 'operator': 'OPERATOR', 'out': 'OUT',
+    'override': 'OVERRIDE', 'params': 'PARAMS', 'private': 'PRIVATE', 'protected': 'PROTECTED',
+    'public': 'PUBLIC', 'readonly': 'READONLY', 'ref': 'REF', 'return': 'RETURN',
+    'sbyte': 'SBYTE', 'sealed': 'SEALED', 'short': 'SHORT', 'sizeof': 'SIZEOF',
+    'stackalloc': 'STACKALLOC', 'static': 'STATIC', 'string': 'STRING_TYPE', 'struct': 'STRUCT',
+    'switch': 'SWITCH', 'this': 'THIS', 'throw': 'THROW', 'true': 'TRUE', 'try': 'TRY',
+    'typeof': 'TYPEOF', 'uint': 'UINT', 'ulong': 'ULONG', 'unchecked': 'UNCHECKED',
+    'unsafe': 'UNSAFE', 'ushort': 'USHORT', 'using': 'USING', 'virtual': 'VIRTUAL',
+    'void': 'VOID', 'volatile': 'VOLATILE', 'while': 'WHILE',
+    
+    # Contextual keywords
+    'add': 'ADD', 'alias': 'ALIAS', 'ascending': 'ASCENDING', 'async': 'ASYNC', 'await': 'AWAIT',
+    'by': 'BY', 'descending': 'DESCENDING', 'dynamic': 'DYNAMIC', 'equals': 'EQUALS',
+    'from': 'FROM', 'get': 'GET', 'global': 'GLOBAL', 'group': 'GROUP', 'into': 'INTO',
+    'join': 'JOIN', 'let': 'LET', 'nameof': 'NAMEOF', 'notnull': 'NOTNULL', 'on': 'ON',
+    'orderby': 'ORDERBY', 'partial': 'PARTIAL', 'remove': 'REMOVE', 'select': 'SELECT',
+    'set': 'SET', 'unmanaged': 'UNMANAGED', 'value': 'VALUE', 'var': 'VAR', 'when': 'WHEN',
+    'where': 'WHERE', 'yield': 'YIELD',
+    
+    # Special identifiers
+    'Console': 'CONSOLE', 'WriteLine': 'WRITELINE', 'ReadLine': 'READLINE',
+    'Convert': 'CONVERT', 'ToInt32': 'TOINT32', 'Write': 'WRITE'
 }
 
 tokens = [
-    #incio DavidlunaT {
-    'IDENTIFIER',
-    'INTEGER',
-    'ASSIGN',
-    'OPEN_PAREN',
-    'CLOSE_PAREN',
-    'OPEN_BRACE',
-    'CLOSE_BRACE',
-    'OPEN_BRACKET',
-    'CLOSE_BRACKET',
-    'SEMICOLON',
-    'STRING',
-    'DOT',
-    # }fin DavidlunaT
-    #inicio waldaara {
-    'FLOAT',
-    'COMMA',
-    'PLUS',
-    'MINUS',
-    'MULTIPLY',
-    'DIVIDE',
-    'LESS_THAN',
-    'LESS_THAN_EQUAL',
-    'GREATER_THAN',
-    'GREATER_THAN_EQUAL',
-    'NOT_EQUAL',
-    'EQUAL',
-    'NOT',
-    'CLASS_NAME',
-    #}fin waldaara
+    # Identifiers and literals
+    'IDENTIFIER', 'CLASS_NAME', 'INTEGER', 'FLOAT', 'STRING', 'CHAR_LITERAL',
+    
+    # Operators and punctuators
+    'ASSIGN', 'OPEN_PAREN', 'CLOSE_PAREN', 'OPEN_BRACE', 'CLOSE_BRACE',
+    'OPEN_BRACKET', 'CLOSE_BRACKET', 'SEMICOLON', 'DOT', 'COMMA', 'PLUS', 'MINUS',
+    'MULTIPLY', 'DIVIDE', 'PERCENT', 'AMPERSAND', 'PIPE', 'CARET', 'BANG', 'TILDE',
+    'QUESTION', 'COLON', 'DOUBLE_QUESTION', 'DOUBLE_COLON', 'INCREMENT', 'DECREMENT',
+    'DOUBLE_AMPERSAND', 'DOUBLE_PIPE', 'ARROW', 'LAMBDA_ARROW', 'PLUS_ASSIGN',
+    'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'PERCENT_ASSIGN',
+    'AMPERSAND_ASSIGN', 'PIPE_ASSIGN', 'CARET_ASSIGN', 'LEFT_SHIFT', 'RIGHT_SHIFT',
+    'LEFT_SHIFT_ASSIGN', 'RIGHT_SHIFT_ASSIGN', 'EQUAL', 'NOT_EQUAL', 'LESS_THAN',
+    'GREATER_THAN', 'LESS_THAN_EQUAL', 'GREATER_THAN_EQUAL', 
+    
+    # Special tokens
+    'NULLABLE_OPERATOR', 'VERBATIM_STRING'
 ] + list(reserved.values())
 
-
-#incio DavidlunaT{
+# Simple tokens
 t_ASSIGN = r'='
 t_OPEN_PAREN = r'\('
 t_CLOSE_PAREN = r'\)'
@@ -83,71 +68,134 @@ t_OPEN_BRACKET = r'\['
 t_CLOSE_BRACKET = r'\]'
 t_SEMICOLON = r';'
 t_DOT = r'\.'
-t_STRING = r'\"([^\\\n]|(\\.))*?\"'
-t_ignore = ' \t'
-#}fin DavidlunaT
-#inicio waldaara{
 t_COMMA = r','
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'/'
-t_LESS_THAN = r'<'
-t_LESS_THAN_EQUAL = r'<='
-t_GREATER_THAN = r'>'
-t_GREATER_THAN_EQUAL = r'>='
-t_NOT_EQUAL = r'!='
+t_PERCENT = r'%'
+t_AMPERSAND = r'&'
+t_PIPE = r'\|'
+t_CARET = r'\^'
+t_BANG = r'!'
+t_TILDE = r'~'
+t_QUESTION = r'\?'
+t_COLON = r':'
+
+# Complex tokens (longest patterns first)
+t_DOUBLE_QUESTION = r'\?\?'
+t_DOUBLE_COLON = r'::'
+t_INCREMENT = r'\+\+'
+t_DECREMENT = r'--'
+t_DOUBLE_AMPERSAND = r'&&'
+t_DOUBLE_PIPE = r'\|\|'
+t_ARROW = r'->'
+t_LAMBDA_ARROW = r'=>'
+t_PLUS_ASSIGN = r'\+='
+t_MINUS_ASSIGN = r'-='
+t_MULTIPLY_ASSIGN = r'\*='
+t_DIVIDE_ASSIGN = r'/='
+t_PERCENT_ASSIGN = r'%='
+t_AMPERSAND_ASSIGN = r'&='
+t_PIPE_ASSIGN = r'\|='
+t_CARET_ASSIGN = r'\^='
+t_LEFT_SHIFT_ASSIGN = r'<<='
+t_RIGHT_SHIFT_ASSIGN = r'>>='
+t_LEFT_SHIFT = r'<<'
+t_RIGHT_SHIFT = r'>>'
 t_EQUAL = r'=='
-t_NOT = r'!'
-#}fin waldaara
+t_NOT_EQUAL = r'!='
+t_LESS_THAN_EQUAL = r'<='
+t_GREATER_THAN_EQUAL = r'>='
+t_LESS_THAN = r'<'
+t_GREATER_THAN = r'>'
+t_NULLABLE_OPERATOR = r'\?'  # Already defined as t_QUESTION, but kept for clarity
 
+# Ignore whitespace and tabs
+t_ignore = ' \t'
 
-#inicio waldaara{
+# Verbatim string
+def t_VERBATIM_STRING(t):
+    r'@"([^"]|"")*"'
+    t.value = t.value[2:-1].replace('""', '"')  # Remove @"" and handle escaped quotes
+    return t
+
+# Regular string
+def t_STRING(t):
+    r'\"([^\\\n]|(\\.))*?\"'
+    t.value = bytes(t.value[1:-1], 'utf-8').decode('unicode_escape')  # Handle escape sequences
+    return t
+
+# Character literal
+def t_CHAR_LITERAL(t):
+    r'\'([^\\\n]|(\\.))*?\''
+    t.value = t.value[1:-1]
+    return t
+
+# Class names (must start with uppercase)
 def t_CLASS_NAME(t):
-    r'[A-Z][A-Za-z_0-9]*'
+    r'[A-Z][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'CLASS_NAME')
     return t
-#}fin waldaara
 
-
-#incio DavidlunaT{
+# Identifiers
 def t_IDENTIFIER(t):
-    r'[A-Za-z_][A-Za-z_0-9]*'
+    r'[a-z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'IDENTIFIER')
     return t
 
+# Floating point numbers with exponent support
 def t_FLOAT(t):
-    r'\d+\.\d+'
-    t.value = float(t.value)
+    r'(\d+\.\d*|\.\d+)([eE][-+]?\d+)?[fFdDmM]?|\d+[eE][-+]?\d+[fFdDmM]?|\d+[fFdDmM]'
+    # Remove type suffix for value conversion
+    if t.value[-1] in 'fFdDmM':
+        value_str = t.value[:-1]
+    else:
+        value_str = t.value
+        
+    try:
+        t.value = float(value_str)
+    except ValueError:
+        print(f"Float conversion error: {t.value}")
+        t.value = 0.0
     return t
 
+# Integer literals with support for hex/binary
 def t_INTEGER(t):
-    r'\d+'
-    t.value = int(t.value)
+    r'0[xX][0-9a-fA-F_]+|0[bB][01_]+|\d+'
+    if t.value.startswith(('0x', '0X')):
+        # Hexadecimal
+        t.value = int(t.value[2:].replace('_', ''), 16)
+    elif t.value.startswith(('0b', '0B')):
+        # Binary
+        t.value = int(t.value[2:].replace('_', ''), 2)
+    else:
+        # Decimal
+        t.value = int(t.value.replace('_', ''))
     return t
 
+# Comments
+def t_COMMENT(t):
+    r'//.*|/\*(.|\n)*?\*/'
+    t.lexer.lineno += t.value.count('\n')  # Update line count
+    pass  # Ignore comments
+
+# Newline handling
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
+# Error handling
 error_log = []
-
 def t_error(t):
     msg = f"[ERROR] Illegal character '{t.value[0]}' at line {t.lineno}\n"
     error_log.append(msg)
     t.lexer.skip(1)
 
-#} fin DavidlunaT
-
-#inicio waldaara{
-def t_COMMENT(t):
-    r'//.*\n'
-    pass  # Ignore single-line comments
-#} fin waldaara
-
+# Build the lexer
 lexer = lex.lex()
 
-#funcion que ejecuta el analizador lexico y guarda el log con el nombre respectivogit 
+
 def run_lexical_analysis(file_path, user_git_name):
     now = datetime.datetime.now()
     timestamp = now.strftime("%d-%m-%Y-%Hh%M")
@@ -177,41 +225,35 @@ def run_lexical_analysis(file_path, user_git_name):
     print(f"\n✔ Analysis complete. Log saved to {log_filename}\n")
 
 # ========== Main Menu ==========
-# if __name__ == "__main__":
-#     #incio DavidlunaT{
-#     algorithms = {
-#         "1": {
-#             "name": "algoritmo1.cs",
-#             "path": "algoritmos/algoritmo1.cs",
-#             "user": "DavidlunaT"
-#         }
-#         #}fin DavidlunaT
-#         #inicio waldaara{
-#         , "2": {
-#             "name": "algoritmo2.cs",
-#             "path": "algoritmos/algoritmo2.cs",
-#             "user": "waldaara"
-#         }
-#         #}fin waldaara
-#         #inicio gabsjimz{
-#         , "3": {
-#             "name": "algoritmo3.cs",
-#             "path": "algoritmos/algoritmo3.cs",
-#             "user": "gabsjimz"
-#         }
-#         #}fin gabsjimz
-#     }
+if __name__ == "__main__":
+    algorithms = {
+        "1": {
+            "name": "algoritmo1.cs",
+            "path": "algoritmos/algoritmo1.cs",
+            "user": "DavidlunaT"
+        }
+        , "2": {
+            "name": "algoritmo2.cs",
+            "path": "algoritmos/algoritmo2.cs",
+            "user": "waldaara"
+        }
+        , "3": {
+            "name": "algoritmo3.cs",
+            "path": "algoritmos/algoritmo3.cs",
+            "user": "gabsjimz"
+        }
+    }
     
-#     print("Select algorithm to analyze:")
-#     for key, data in algorithms.items():
-#         print(f"{key}. {data['name']} (Git: {data['user']})")
+    print("Select algorithm to analyze:")
+    for key, data in algorithms.items():
+        print(f"{key}. {data['name']} (Git: {data['user']})")
 
-#     choice = input("Enter choice: ").strip()
+    choice = input("Enter choice: ").strip()
 
-#     if choice in algorithms:
-#         error_log.clear()
-#         selected = algorithms[choice]
-#         run_lexical_analysis(file_path=selected["path"], user_git_name=selected["user"])
-#     else:
-#         print("❌ Invalid option.")
+    if choice in algorithms:
+        error_log.clear()
+        selected = algorithms[choice]
+        run_lexical_analysis(file_path=selected["path"], user_git_name=selected["user"])
+    else:
+        print("❌ Invalid option.")
     
