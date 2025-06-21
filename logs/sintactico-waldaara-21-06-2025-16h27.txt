@@ -1,0 +1,12 @@
+Syntactic Analysis Log
+User: waldaara
+File: algoritmos/algoritmo2.cs
+Date: 21-06-2025-16h27
+
+=== SYNTACTIC ERRORS ===
+[ERROR] Syntax error at token CLASS_NAME ('System') at line 1
+[ERROR] Syntax error at token CLASS_NAME ('Fibonacci') at line 5
+[ERROR] Syntax error at token COMMA (',') at line 7
+[ERROR] Syntax error at token FOR ('for') at line 9
+[ERROR] Syntax error at token LESS_THAN ('<') at line 9
+[ERROR] Syntax error at token CLOSE_BRACE ('}') at line 15

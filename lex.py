@@ -120,6 +120,9 @@ reserved = {
     "Convert": "CONVERT",
     "ToInt32": "TOINT32",
     "Write": "WRITE",
+    # Data structures
+    "List": "LIST",
+    "Dictionary": "DICTIONARY",
 }
 
 tokens = [

@@ -1,3 +1,12 @@
+Syntactic Analysis Log
+User: waldaara
+File: algoritmos/algoritmo2.cs
+Date: 21-06-2025-16h40
+
+No syntactic errors detected.
+Parse result: ('program', [('using', 'System'), ('class', 'Program', [('static_method', 'void', 'Fibonacci', [('param', 'int', 'count')], [('multiple_decl', 'int', [('var_assign', 'a', 0), ('var_assign', 'b', 1)]), ('print', 'Fibonacci: '), ('for', ('for_init', 'int', 'i', 0), ('condition', '<', 'i', 'count'), ('post_op', 'i', '++'), [('print', 'a '), ('declare_assign', 'int', 'temp', 'a'), ('assign', 'a', 'b'), ('assign', 'b', 'tempb')])]), ('static_method', 'void', 'Main', [], [('call_stmt', ('function_call', 'Fibonacci', [7]))])])])
+
+=== PARSER DEBUG INFO ===
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
