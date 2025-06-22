@@ -152,7 +152,7 @@ def p_input_statement(p):
 def p_expression_input_statement(p):
     "expression : input_statement"
     p[0] = p[1] 
-    
+
 # Convert.ToInt32
 def p_convert_statement(p):
     "convert_statement : CONVERT DOT TOINT32 OPEN_PAREN expression CLOSE_PAREN"
@@ -232,7 +232,7 @@ def p_array_assignment(p):
     p[0] = ("array_assign", p[1], p[3], p[6])
 
 
-# Estructura de control: If-Else
+# Estructura de control: If-Else -> fixed
 def p_if_statement(p):
     """if_statement : IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
     | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE if_statement
