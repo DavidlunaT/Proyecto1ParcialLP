@@ -53,6 +53,7 @@ def p_expression_function_call(p):
     p[0] = p[1]
 
 
+
 def p_term_times(p):
     "term : term MULTIPLY factor"
     try:
@@ -147,7 +148,11 @@ def p_input_statement(p):
     "input_statement : CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN"
     p[0] = ("input",)
 
-
+# Permitir Console.ReadLine() como expresión
+def p_expression_input_statement(p):
+    "expression : input_statement"
+    p[0] = p[1] 
+    
 # Convert.ToInt32
 def p_convert_statement(p):
     "convert_statement : CONVERT DOT TOINT32 OPEN_PAREN expression CLOSE_PAREN"
@@ -230,15 +235,15 @@ def p_array_assignment(p):
 # Estructura de control: If-Else
 def p_if_statement(p):
     """if_statement : IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+    | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE if_statement
     | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE OPEN_BRACE statement_list CLOSE_BRACE
     """
     if len(p) == 8:
         p[0] = ("if", p[3], p[6])
-    elif len(p) == 16:
-        p[0] = ("if_elif", p[3], p[6], p[11], p[14])
+    elif len(p) == 10:
+        p[0] = ("if_else", p[3], p[6], p[9])
     else:
-        p[0] = ("if_else", p[3], p[6], p[10])
+        p[0] = ("if_else_if", p[3], p[6], p[8])
 
 
 # Función básica
