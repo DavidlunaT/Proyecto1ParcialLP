@@ -1,3 +1,12 @@
+Syntactic Analysis Log
+User: gabsjimz
+File: algoritmos/algoritmo3.cs
+Date: 22-06-2025-12h12
+
+No syntactic errors detected.
+Parse result: ('program', [('using', 'System'), ('class', 'BubbleSortExample', [('static_method', 'void', 'BubbleSort', [('param_array', 'int', 'array')], [('declare_assign', 'int', 'n', ('dot_access', 'array', 'Length')), ('for', ('for_init', 'int', 'i', 0), ('condition', '<', 'i', ('minus', 'n', 1)), ('post_op', 'i', '++'), [('for', ('for_init', 'int', 'j', 0), ('condition', '<', 'j', ('minus', ('minus', 'n', 'i'), 1)), ('post_op', 'j', '++'), [('if', ('condition', '>', ('array_access', 'array', 'j'), ('array_access', 'array', 'j1')), [('declare_assign', 'int', 'temp', ('array_access', 'array', 'j')), ('array_assign', 'array', 'j', ('array_access', 'array', 'j1')), ('array_assign', 'array', 'j1', 'temp')])])])]), ('main_method', 'Main', 'args', [('array_decl_values', 'int', 'numbers', ('array_initializer_short', [5, 2, 9, 1, 5, 6])), ('print', 'Original array:'), ('foreach', 'int', 'num', 'numbers', [('print', 'num ')]), ('call_stmt', ('function_call', 'BubbleSort', ['numbers'])), ('print', '\nSorted array:'), ('foreach', 'int', 'num', 'numbers', [('print', 'num ')])])])])
+
+=== PARSER DEBUG INFO ===
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:

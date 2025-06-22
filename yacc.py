@@ -329,6 +329,10 @@ def p_parameter(p):
     | FLOAT_TYPE IDENTIFIER"""
     p[0] = ("param", p[1], p[2])
 
+def p_foreach_statement(p):
+    "foreach_statement : FOREACH OPEN_PAREN INT_TYPE IDENTIFIER IN IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE"
+    p[0] = ("foreach", p[3], p[4], p[6], p[9])
+
 
 # ========== SECCIÓN gabsjimz ==========
 # Responsable de: Diccionarios, Switch, Función con retorno
@@ -414,6 +418,14 @@ def p_value_list(p):
 def p_expression_new_array_with_values(p):
     """expression : NEW INT_TYPE OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE value_list CLOSE_BRACE"""
     p[0] = ("new_array_init", p[2], p[6])
+
+def p_parameter_array(p):
+    "parameter : INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER"
+    p[0] = ("param_array", p[1], p[4])
+
+def p_expression_array_initializer_short(p):
+    "expression : OPEN_BRACE value_list CLOSE_BRACE"
+    p[0] = ("array_initializer_short", p[2])
 
 
 # ========== REGLAS ADICIONALES ==========
@@ -516,6 +528,7 @@ def p_statement(p):
     | array_assignment
     | list_declaration
     | list_add
+    | foreach_statement
     | dictionary_declaration
     | dict_assignment
     | class_definition
