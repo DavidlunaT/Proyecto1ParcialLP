@@ -182,6 +182,7 @@ tokens = [
     "GREATER_THAN",
     "LESS_THAN_EQUAL",
     "GREATER_THAN_EQUAL",
+
     # Special tokens
     "NULLABLE_OPERATOR",
     "VERBATIM_STRING",
@@ -270,8 +271,12 @@ def t_CHAR_LITERAL(t):
 # Class names (must start with uppercase)
 def t_CLASS_NAME(t):
     r"[A-Z][a-zA-Z_0-9]*"
-    t.type = reserved.get(t.value, "CLASS_NAME")
+    if t.value in reserved:
+        t.type = reserved[t.value]
+    else:
+        t.type = "IDENTIFIER"  # <- Lo marcamos como IDENTIFIER si no está reservado
     return t
+
 
 
 # Identifiers

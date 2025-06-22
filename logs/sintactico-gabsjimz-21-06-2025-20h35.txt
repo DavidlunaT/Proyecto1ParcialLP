@@ -1,0 +1,503 @@
+Syntactic Analysis Log
+User: gabsjimz
+File: algoritmos/algoritmo3.cs
+Date: 21-06-2025-20h35
+
+=== SYNTACTIC ERRORS ===
+[ERROR] Syntax error at token OPEN_BRACKET ('[') at line 5
+[ERROR] Syntax error at token DOT ('.') at line 7
+[ERROR] Syntax error at token CLOSE_BRACE ('}') at line 20
+[ERROR] Syntax error at token CLOSE_BRACKET (']') at line 24
+[ERROR] Syntax error at token DOT ('.') at line 26
+[ERROR] Syntax error at token CLOSE_BRACE ('}') at line 29
+[ERROR] Syntax error at token DOT ('.') at line 34
+[ERROR] Syntax error at token CLOSE_BRACE ('}') at line 37
+
+=== PARSER DEBUG INFO ===
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ABSTRACT
+    ALIAS
+    AMPERSAND
+    AMPERSAND_ASSIGN
+    ARROW
+    AS
+    ASCENDING
+    ASYNC
+    AWAIT
+    BANG
+    BASE
+    BY
+    BYTE
+    CARET
+    CARET_ASSIGN
+    CATCH
+    CHAR
+    CHAR_LITERAL
+    CHECKED
+    CONST
+    CONTINUE
+    DECIMAL
+    DELEGATE
+    DESCENDING
+    DIVIDE_ASSIGN
+    DO
+    DOUBLE
+    DOUBLE_COLON
+    DOUBLE_QUESTION
+    DYNAMIC
+    ENUM
+    EQUALS
+    EVENT
+    EXPLICIT
+    EXTERN
+    FALSE
+    FINALLY
+    FIXED
+    FOREACH
+    FROM
+    GLOBAL
+    GOTO
+    GROUP
+    IMPLICIT
+    IN
+    INTERFACE
+    INTERNAL
+    INTO
+    IS
+    JOIN
+    LAMBDA_ARROW
+    LEFT_SHIFT
+    LEFT_SHIFT_ASSIGN
+    LET
+    LOCK
+    LONG
+    MINUS_ASSIGN
+    MULTIPLY_ASSIGN
+    NAMEOF
+    NAMESPACE
+    NOTNULL
+    NULL
+    NULLABLE_OPERATOR
+    OBJECT
+    ON
+    OPERATOR
+    ORDERBY
+    OUT
+    OVERRIDE
+    PARAMS
+    PARTIAL
+    PERCENT
+    PERCENT_ASSIGN
+    PIPE
+    PIPE_ASSIGN
+    PLUS_ASSIGN
+    PRIVATE
+    PROTECTED
+    QUESTION
+    READONLY
+    REF
+    REMOVE
+    RIGHT_SHIFT
+    RIGHT_SHIFT_ASSIGN
+    SBYTE
+    SEALED
+    SELECT
+    SHORT
+    SIZEOF
+    STACKALLOC
+    STRUCT
+    THIS
+    THROW
+    TILDE
+    TRUE
+    TRY
+    TYPEOF
+    UINT
+    ULONG
+    UNCHECKED
+    UNMANAGED
+    UNSAFE
+    USHORT
+    VALUE
+    VAR
+    VERBATIM_STRING
+    VIRTUAL
+    VOLATILE
+    WHEN
+    WHERE
+    YIELD
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> statement_list
+Rule 2     program -> empty
+Rule 3     empty -> <empty>
+Rule 4     expression -> expression PLUS term
+Rule 5     expression -> expression MINUS term
+Rule 6     expression -> IDENTIFIER
+Rule 7     expression -> function_call
+Rule 8     term -> term MULTIPLY factor
+Rule 9     term -> term DIVIDE factor
+Rule 10    term -> factor
+Rule 11    factor -> INTEGER
+Rule 12    factor -> FLOAT
+Rule 13    factor -> STRING
+Rule 14    factor -> IDENTIFIER
+Rule 15    factor -> OPEN_PAREN expression CLOSE_PAREN
+Rule 16    using_statement -> USING IDENTIFIER SEMICOLON
+Rule 17    using_statement -> USING CLASS_NAME SEMICOLON
+Rule 18    function_call -> IDENTIFIER OPEN_PAREN CLOSE_PAREN
+Rule 19    function_call -> IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
+Rule 20    function_call -> CLASS_NAME OPEN_PAREN CLOSE_PAREN
+Rule 21    function_call -> CLASS_NAME OPEN_PAREN argument_list CLOSE_PAREN
+Rule 22    function_call_statement -> function_call SEMICOLON
+Rule 23    argument_list -> expression
+Rule 24    argument_list -> argument_list COMMA expression
+Rule 25    print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+Rule 26    print_statement -> CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+Rule 27    input_statement -> CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
+Rule 28    convert_statement -> CONVERT DOT TOINT32 OPEN_PAREN expression CLOSE_PAREN
+Rule 29    assignment -> IDENTIFIER ASSIGN expression SEMICOLON
+Rule 30    assignment -> IDENTIFIER ASSIGN convert_statement SEMICOLON
+Rule 31    assignment -> INT_TYPE IDENTIFIER ASSIGN expression SEMICOLON
+Rule 32    assignment -> INT_TYPE IDENTIFIER ASSIGN convert_statement SEMICOLON
+Rule 33    assignment -> INT_TYPE multiple_var_declaration SEMICOLON
+Rule 34    assignment -> FLOAT_TYPE IDENTIFIER ASSIGN expression SEMICOLON
+Rule 35    assignment -> STRING_TYPE IDENTIFIER ASSIGN expression SEMICOLON
+Rule 36    assignment -> STRING_TYPE IDENTIFIER ASSIGN input_statement SEMICOLON
+Rule 37    assignment -> BOOL_TYPE IDENTIFIER ASSIGN expression SEMICOLON
+Rule 38    multiple_var_declaration -> IDENTIFIER ASSIGN expression COMMA IDENTIFIER ASSIGN expression
+Rule 39    multiple_var_declaration -> multiple_var_declaration COMMA IDENTIFIER ASSIGN expression
+Rule 40    condition -> expression EQUAL expression
+Rule 41    condition -> expression NOT_EQUAL expression
+Rule 42    condition -> expression LESS_THAN expression
+Rule 43    condition -> expression GREATER_THAN expression
+Rule 44    condition -> expression LESS_THAN_EQUAL expression
+Rule 45    condition -> expression GREATER_THAN_EQUAL expression
+Rule 46    condition -> expression EQUAL STRING
+Rule 47    condition -> STRING EQUAL expression
+Rule 48    logical_condition -> condition
+Rule 49    logical_condition -> condition DOUBLE_AMPERSAND condition
+Rule 50    logical_condition -> condition DOUBLE_PIPE condition
+Rule 51    array_declaration -> INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN NEW INT_TYPE OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON
+Rule 52    array_declaration -> STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN NEW STRING_TYPE OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON
+Rule 53    array_declaration -> INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN NEW INT_TYPE OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE expression_list CLOSE_BRACE
+Rule 54    array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
+Rule 55    array_assignment -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
+Rule 56    if_statement -> IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 57    if_statement -> IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 58    if_statement -> IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE OPEN_BRACE statement_list CLOSE_BRACE
+Rule 59    basic_function -> VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 60    list_declaration -> LIST LESS_THAN INT_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW LIST LESS_THAN INT_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
+Rule 61    list_declaration -> LIST LESS_THAN STRING_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW LIST LESS_THAN STRING_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
+Rule 62    list_add -> IDENTIFIER DOT ADD OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+Rule 63    while_statement -> WHILE OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 64    for_statement -> FOR OPEN_PAREN for_init SEMICOLON logical_condition SEMICOLON for_update CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 65    for_init -> INT_TYPE IDENTIFIER ASSIGN expression
+Rule 66    for_init -> assignment_no_semicolon
+Rule 67    assignment_no_semicolon -> IDENTIFIER ASSIGN expression
+Rule 68    for_update -> IDENTIFIER INCREMENT
+Rule 69    for_update -> IDENTIFIER DECREMENT
+Rule 70    for_update -> INCREMENT IDENTIFIER
+Rule 71    for_update -> DECREMENT IDENTIFIER
+Rule 72    for_update -> IDENTIFIER ASSIGN IDENTIFIER PLUS INTEGER
+Rule 73    for_update -> IDENTIFIER ASSIGN IDENTIFIER MINUS INTEGER
+Rule 74    param_function -> VOID IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 75    param_function -> INT_TYPE IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 76    parameter_list -> parameter
+Rule 77    parameter_list -> parameter_list COMMA parameter
+Rule 78    parameter -> INT_TYPE IDENTIFIER
+Rule 79    parameter -> STRING_TYPE IDENTIFIER
+Rule 80    parameter -> FLOAT_TYPE IDENTIFIER
+Rule 81    dictionary_declaration -> DICTIONARY LESS_THAN STRING_TYPE COMMA INT_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW DICTIONARY LESS_THAN STRING_TYPE COMMA INT_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
+Rule 82    dictionary_declaration -> DICTIONARY LESS_THAN INT_TYPE COMMA STRING_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW DICTIONARY LESS_THAN INT_TYPE COMMA STRING_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
+Rule 83    dictionary_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
+Rule 84    dict_assignment -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
+Rule 85    switch_statement -> SWITCH OPEN_PAREN expression CLOSE_PAREN OPEN_BRACE case_list CLOSE_BRACE
+Rule 86    case_list -> case_statement
+Rule 87    case_list -> case_list case_statement
+Rule 88    case_statement -> CASE expression COLON statement_list BREAK SEMICOLON
+Rule 89    case_statement -> DEFAULT COLON statement_list BREAK SEMICOLON
+Rule 90    return_function -> INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
+Rule 91    return_function -> STRING_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
+Rule 92    return_function -> FLOAT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
+Rule 93    return_statement -> RETURN SEMICOLON
+Rule 94    expression -> expression OPEN_BRACKET expression CLOSE_BRACKET
+Rule 95    static_method -> STATIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 96    static_method -> STATIC VOID IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 97    static_method -> STATIC VOID CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 98    static_method -> STATIC VOID CLASS_NAME OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 99    static_method -> STATIC INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 100   static_method -> STATIC INT_TYPE IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 101   static_method -> STATIC INT_TYPE CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 102   static_method -> STATIC INT_TYPE CLASS_NAME OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 103   main_method -> STATIC VOID IDENTIFIER OPEN_PAREN STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 104   main_method -> STATIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 105   main_method -> STATIC VOID CLASS_NAME OPEN_PAREN STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 106   main_method -> STATIC VOID CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 107   class_definition -> CLASS CLASS_NAME OPEN_BRACE class_body CLOSE_BRACE
+Rule 108   class_definition -> CLASS IDENTIFIER OPEN_BRACE class_body CLOSE_BRACE
+Rule 109   class_definition -> PUBLIC CLASS CLASS_NAME OPEN_BRACE class_body CLOSE_BRACE
+Rule 110   class_body -> class_member
+Rule 111   class_body -> class_body class_member
+Rule 112   class_member -> property_definition
+Rule 113   class_member -> method_definition
+Rule 114   class_member -> main_method
+Rule 115   class_member -> static_method
+Rule 116   property_definition -> PUBLIC INT_TYPE IDENTIFIER OPEN_BRACE GET SEMICOLON SET SEMICOLON CLOSE_BRACE
+Rule 117   property_definition -> PUBLIC STRING_TYPE IDENTIFIER OPEN_BRACE GET SEMICOLON SET SEMICOLON CLOSE_BRACE
+Rule 118   method_definition -> PUBLIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 119   method_definition -> PUBLIC INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+Rule 120   statement_list -> statement
+Rule 121   statement_list -> statement_list statement
+Rule 122   statement -> assignment
+Rule 123   statement -> print_statement
+Rule 124   statement -> if_statement
+Rule 125   statement -> while_statement
+Rule 126   statement -> for_statement
+Rule 127   statement -> switch_statement
+Rule 128   statement -> array_declaration
+Rule 129   statement -> array_assignment
+Rule 130   statement -> list_declaration
+Rule 131   statement -> list_add
+Rule 132   statement -> dictionary_declaration
+Rule 133   statement -> dict_assignment
+Rule 134   statement -> class_definition
+Rule 135   statement -> basic_function
+Rule 136   statement -> param_function
+Rule 137   statement -> return_function
+Rule 138   statement -> return_statement
+Rule 139   statement -> using_statement
+Rule 140   statement -> function_call_statement
+
+Terminals, with rules where they appear
+
+ABSTRACT             : 
+ADD                  : 62
+ALIAS                : 
+AMPERSAND            : 
+AMPERSAND_ASSIGN     : 
+ARROW                : 
+AS                   : 
+ASCENDING            : 
+ASSIGN               : 29 30 31 32 34 35 36 37 38 38 39 51 52 53 55 60 61 65 67 72 73 81 82 84
+ASYNC                : 
+AWAIT                : 
+BANG                 : 
+BASE                 : 
+BOOL_TYPE            : 37
+BREAK                : 88 89
+BY                   : 
+BYTE                 : 
+CARET                : 
+CARET_ASSIGN         : 
+CASE                 : 88
+CATCH                : 
+CHAR                 : 
+CHAR_LITERAL         : 
+CHECKED              : 
+CLASS                : 107 108 109
+CLASS_NAME           : 17 20 21 97 98 101 102 105 106 107 109
+CLOSE_BRACE          : 53 56 57 57 58 58 59 63 64 74 75 85 90 91 92 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 116 117 118 119
+CLOSE_BRACKET        : 51 51 52 52 53 53 54 55 83 84 94 103 105
+CLOSE_PAREN          : 15 18 19 20 21 25 26 27 28 56 57 57 58 59 60 61 62 63 64 74 75 81 82 85 90 91 92 95 96 97 98 99 100 101 102 103 104 105 106 118 119
+COLON                : 88 89
+COMMA                : 24 38 39 77 81 81 82 82
+CONSOLE              : 25 26 27
+CONST                : 
+CONTINUE             : 
+CONVERT              : 28
+DECIMAL              : 
+DECREMENT            : 69 71
+DEFAULT              : 89
+DELEGATE             : 
+DESCENDING           : 
+DICTIONARY           : 81 81 82 82
+DIVIDE               : 9
+DIVIDE_ASSIGN        : 
+DO                   : 
+DOT                  : 25 26 27 28 62
+DOUBLE               : 
+DOUBLE_AMPERSAND     : 49
+DOUBLE_COLON         : 
+DOUBLE_PIPE          : 50
+DOUBLE_QUESTION      : 
+DYNAMIC              : 
+ELSE                 : 57 58
+ENUM                 : 
+EQUAL                : 40 46 47
+EQUALS               : 
+EVENT                : 
+EXPLICIT             : 
+EXTERN               : 
+FALSE                : 
+FINALLY              : 
+FIXED                : 
+FLOAT                : 12
+FLOAT_TYPE           : 34 80 92
+FOR                  : 64
+FOREACH              : 
+FROM                 : 
+GET                  : 116 117
+GLOBAL               : 
+GOTO                 : 
+GREATER_THAN         : 43 60 60 61 61 81 81 82 82
+GREATER_THAN_EQUAL   : 45
+GROUP                : 
+IDENTIFIER           : 6 14 16 18 19 29 30 31 32 34 35 36 37 38 38 39 51 52 53 54 55 59 60 61 62 65 67 68 69 70 71 72 72 73 73 74 75 78 79 80 81 82 83 84 90 91 92 95 96 99 100 103 103 104 105 108 116 117 118 119
+IF                   : 56 57 57 58
+IMPLICIT             : 
+IN                   : 
+INCREMENT            : 68 70
+INTEGER              : 11 51 52 72 73
+INTERFACE            : 
+INTERNAL             : 
+INTO                 : 
+INT_TYPE             : 31 32 33 51 51 53 53 60 60 65 75 78 81 81 82 82 90 99 100 101 102 116 119
+IS                   : 
+JOIN                 : 
+LAMBDA_ARROW         : 
+LEFT_SHIFT           : 
+LEFT_SHIFT_ASSIGN    : 
+LESS_THAN            : 42 60 60 61 61 81 81 82 82
+LESS_THAN_EQUAL      : 44
+LET                  : 
+LIST                 : 60 60 61 61
+LOCK                 : 
+LONG                 : 
+MINUS                : 5 73
+MINUS_ASSIGN         : 
+MULTIPLY             : 8
+MULTIPLY_ASSIGN      : 
+NAMEOF               : 
+NAMESPACE            : 
+NEW                  : 51 52 53 60 61 81 82
+NOTNULL              : 
+NOT_EQUAL            : 41
+NULL                 : 
+NULLABLE_OPERATOR    : 
+OBJECT               : 
+ON                   : 
+OPEN_BRACE           : 53 56 57 57 58 58 59 63 64 74 75 85 90 91 92 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 116 117 118 119
+OPEN_BRACKET         : 51 51 52 52 53 53 54 55 83 84 94 103 105
+OPEN_PAREN           : 15 18 19 20 21 25 26 27 28 56 57 57 58 59 60 61 62 63 64 74 75 81 82 85 90 91 92 95 96 97 98 99 100 101 102 103 104 105 106 118 119
+OPERATOR             : 
+ORDERBY              : 
+OUT                  : 
+OVERRIDE             : 
+PARAMS               : 
+PARTIAL              : 
+PERCENT              : 
+PERCENT_ASSIGN       : 
+PIPE                 : 
+PIPE_ASSIGN          : 
+PLUS                 : 4 72
+PLUS_ASSIGN          : 
+PRIVATE              : 
+PROTECTED            : 
+PUBLIC               : 109 116 117 118 119
+QUESTION             : 
+READLINE             : 27
+READONLY             : 
+REF                  : 
+REMOVE               : 
+RETURN               : 90 91 92 93
+RIGHT_SHIFT          : 
+RIGHT_SHIFT_ASSIGN   : 
+SBYTE                : 
+SEALED               : 
+SELECT               : 
+SEMICOLON            : 16 17 22 25 26 29 30 31 32 33 34 35 36 37 51 52 55 60 61 62 64 64 81 82 84 88 89 90 91 92 93 116 116 117 117
+SET                  : 116 117
+SHORT                : 
+SIZEOF               : 
+STACKALLOC           : 
+STATIC               : 95 96 97 98 99 100 101 102 103 104 105 106
+STRING               : 13 46 47
+STRING_TYPE          : 35 36 52 52 61 61 79 81 81 82 82 91 103 105 117
+STRUCT               : 
+SWITCH               : 85
+THIS                 : 
+THROW                : 
+TILDE                : 
+TOINT32              : 28
+TRUE                 : 
+TRY                  : 
+TYPEOF               : 
+UINT                 : 
+ULONG                : 
+UNCHECKED            : 
+UNMANAGED            : 
+UNSAFE               : 
+USHORT               : 
+USING                : 16 17
+VALUE                : 
+VAR                  : 
+VERBATIM_STRING      : 
+VIRTUAL              : 
+VOID                 : 59 74 95 96 97 98 103 104 105 106 118
+VOLATILE             : 
+WHEN                 : 
+WHERE                : 
+WHILE                : 63
+WRITE                : 26
+WRITELINE            : 25
+YIELD                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+argument_list        : 19 21 24
+array_access         : 
+array_assignment     : 129
+array_declaration    : 128
+assignment           : 122
+assignment_no_semicolon : 66
+basic_function       : 135
+case_list            : 85 87
+case_statement       : 86 87
+class_body           : 107 108 109 111
+class_definition     : 134
+class_member         : 110 111
+condition            : 48 49 49 50 50
+convert_statement    : 30 32
+dict_assignment      : 133
+dictionary_access    : 
+dictionary_declaration : 132
+empty                : 2
+expression           : 4 5 15 23 24 25 26 28 29 31 34 35 37 38 38 39 40 40 41 41 42 42 43 43 44 44 45 45 46 47 54 55 55 62 65 67 83 84 84 85 88 90 91 92 94 94
+expression_list      : 53
+factor               : 8 9 10
+for_init             : 64
+for_statement        : 126
+for_update           : 64
+function_call        : 7 22
+function_call_statement : 140
+if_statement         : 124
+input_statement      : 36
+list_add             : 131
+list_declaration     : 130
+logical_condition    : 56 57 57 58 63 64
+main_method          : 114
+method_definition    : 113
+multiple_var_declaration : 33 39
+param_function       : 136
+parameter            : 76 77
+parameter_list       : 74 75 77 96 98 100 102
+print_statement      : 123
+program              : 0
+property_definition  : 112
+return_function      : 137
+return_statement     : 138
+statement            : 120 121
+statement_list       : 1 56 57 57 58 58 59 63 64 74 75 88 89 90 91 92 95 96 97 98 99 100 101 102 103 104 105 106 118 119 121
+static_method        : 115
+switch_statement     : 127
+term                 : 4 5 8 9
+using_statement      : 139
+while_statement      : 125
+

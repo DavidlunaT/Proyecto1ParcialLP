@@ -385,6 +385,31 @@ def p_return_statement(p):
     "return_statement : RETURN SEMICOLON"
     p[0] = ("return_void",)
 
+def p_expression_array_access(p):
+    "expression : expression OPEN_BRACKET expression CLOSE_BRACKET"
+    p[0] = ("array_access", p[1], p[3])
+
+def p_expression_dot(p):
+    "expression : expression DOT IDENTIFIER"
+    p[0] = ("dot_access", p[1], p[3])
+
+def p_array_declaration_with_values(p):
+    """array_declaration : INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN expression SEMICOLON"""
+    p[0] = ("array_decl_values", p[1], p[4], p[6])
+
+
+def p_value_list(p):
+    """value_list : expression
+    | value_list COMMA expression"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+def p_expression_new_array_with_values(p):
+    """expression : NEW INT_TYPE OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE value_list CLOSE_BRACE"""
+    p[0] = ("new_array_init", p[2], p[6])
+
 
 # ========== REGLAS ADICIONALES ==========
 
@@ -478,11 +503,11 @@ def p_statement_list(p):
 def p_statement(p):
     """statement : assignment
     | print_statement
+    | array_declaration
     | if_statement
     | while_statement
     | for_statement
     | switch_statement
-    | array_declaration
     | array_assignment
     | list_declaration
     | list_add
