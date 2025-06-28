@@ -182,7 +182,6 @@ tokens = [
     "GREATER_THAN",
     "LESS_THAN_EQUAL",
     "GREATER_THAN_EQUAL",
-
     # Special tokens
     "NULLABLE_OPERATOR",
     "VERBATIM_STRING",
@@ -276,7 +275,6 @@ def t_CLASS_NAME(t):
     else:
         t.type = "IDENTIFIER"  # <- Lo marcamos como IDENTIFIER si no está reservado
     return t
-
 
 
 # Identifiers

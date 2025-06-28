@@ -1,0 +1,14 @@
+Semantic Analysis Log
+User: test
+File: test_errors.cs
+Date: 27-06-2025-22h03
+
+=== SYMBOL TABLE ===
+Main: {'type': 'function', 'initialized': True, 'parameters': []}
+result: {'type': 'int', 'initialized': True}
+
+=== SEMANTIC ERRORS ===
+[SEMANTIC ERROR] Variable 'x' not declared
+[SEMANTIC ERROR] Variable 'y' not declared
+[SEMANTIC ERROR] Variable 'undeclaredVar' not declared
+[SEMANTIC ERROR] Variable 'notDeclared' not declared

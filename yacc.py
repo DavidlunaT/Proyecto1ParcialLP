@@ -1,566 +1,973 @@
 import ply.yacc as yacc
 import datetime
 import os
+from lex import tokens, lexer
 
-# Get the token map from the lexer.  This is required.
-from lex import tokens
+# ========== ANÁLISIS SINTÁCTICO ==========
 
-# ========== REGLAS SINTÁCTICAS BÁSICAS ==========
+# Variables globales para control de errores
+syntax_errors = []
+semantic_errors = []
+symbol_table = {}
+current_scope = "global"
+undeclared_vars_reported = set()
+
+# ========== REGLAS GRAMATICALES: PROGRAMA PRINCIPAL ==========
 
 
-# Start symbol - programa principal
 def p_program(p):
-    """program : statement_list
+    """program : using_statements class_declarations"""
+    p[0] = ("program", p[1], p[2])
+
+
+def p_using_statements(p):
+    """using_statements : using_statements using_statement
+    | using_statement
     | empty"""
-    p[0] = ("program", p[1] if p[1] else [])
+    if len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = p[1] + [p[2]]
 
 
-def p_empty(p):
-    "empty :"
-    pass
-
-
-def p_expression_plus(p):
-    "expression : expression PLUS term"
-    # Handle string concatenation or numeric addition
-    try:
-        p[0] = p[1] + p[3]
-    except TypeError:
-        p[0] = str(p[1]) + str(p[3])
-
-
-def p_expression_minus(p):
-    "expression : expression MINUS term"
-    # Only handle numeric subtraction
-    try:
-        p[0] = p[1] - p[3]
-    except (TypeError, ValueError):
-        p[0] = ("minus", p[1], p[3])
-
-
-def p_expression_term(p):
-    "expression : term"
-    p[0] = p[1]
-
-
-def p_expression_identifier(p):
-    "expression : IDENTIFIER"
-    p[0] = p[1]
-
-
-def p_expression_function_call(p):
-    "expression : function_call"
-    p[0] = p[1]
-
-
-
-def p_term_times(p):
-    "term : term MULTIPLY factor"
-    try:
-        p[0] = p[1] * p[3]
-    except (TypeError, ValueError):
-        p[0] = ("multiply", p[1], p[3])
-
-
-def p_term_div(p):
-    "term : term DIVIDE factor"
-    try:
-        p[0] = p[1] / p[3]
-    except (TypeError, ValueError, ZeroDivisionError):
-        p[0] = ("divide", p[1], p[3])
-
-
-def p_term_factor(p):
-    "term : factor"
-    p[0] = p[1]
-
-
-def p_factor_int(p):
-    "factor : INTEGER"
-    p[0] = p[1]
-
-
-def p_factor_float(p):
-    "factor : FLOAT"
-    p[0] = p[1]
-
-
-def p_factor_string(p):
-    "factor : STRING"
-    p[0] = p[1]
-
-
-def p_factor_identifier(p):
-    "factor : IDENTIFIER"
-    p[0] = p[1]
-
-
-def p_factor_expr(p):
-    "factor : OPEN_PAREN expression CLOSE_PAREN"
-    p[0] = p[2]
-
-
-# ========== REGLAS COMUNES ==========
-
-
-# Using statements - Fixed to handle System
 def p_using_statement(p):
     """using_statement : USING IDENTIFIER SEMICOLON
-    | USING CLASS_NAME SEMICOLON"""
-    p[0] = ("using", p[2])
-
-
-# Function calls
-def p_function_call(p):
-    """function_call : IDENTIFIER OPEN_PAREN CLOSE_PAREN
-    | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
-    | CLASS_NAME OPEN_PAREN CLOSE_PAREN
-    | CLASS_NAME OPEN_PAREN argument_list CLOSE_PAREN"""
+    | USING IDENTIFIER DOT IDENTIFIER SEMICOLON"""
     if len(p) == 4:
-        p[0] = ("function_call", p[1], [])
+        p[0] = ("using", p[2])
     else:
-        p[0] = ("function_call", p[1], p[3])
+        p[0] = ("using", f"{p[2]}.{p[4]}")
 
 
-def p_function_call_statement(p):
-    "function_call_statement : function_call SEMICOLON"
-    p[0] = ("call_stmt", p[1])
+# ========== REGLAS GRAMATICALES: DEFINICIÓN DE CLASES ==========
 
 
-def p_argument_list(p):
-    """argument_list : expression
-    | argument_list COMMA expression"""
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[3]]
-
-
-# Impresión (Console.WriteLine)
-def p_print_statement(p):
-    """print_statement : CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
-    | CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON"""
-    p[0] = ("print", p[5])
-
-
-# Ingreso de datos por teclado
-def p_input_statement(p):
-    "input_statement : CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN"
-    p[0] = ("input",)
-
-# Permitir Console.ReadLine() como expresión
-def p_expression_input_statement(p):
-    "expression : input_statement"
-    p[0] = p[1] 
-
-# Convert.ToInt32
-def p_convert_statement(p):
-    "convert_statement : CONVERT DOT TOINT32 OPEN_PAREN expression CLOSE_PAREN"
-    p[0] = ("convert_int", p[5])
-
-
-# Asignación de variables - Enhanced to support multiple declarations
-def p_assignment(p):
-    """assignment : IDENTIFIER ASSIGN expression SEMICOLON
-    | IDENTIFIER ASSIGN convert_statement SEMICOLON
-    | INT_TYPE IDENTIFIER ASSIGN expression SEMICOLON
-    | INT_TYPE IDENTIFIER ASSIGN convert_statement SEMICOLON
-    | INT_TYPE multiple_var_declaration SEMICOLON
-    | FLOAT_TYPE IDENTIFIER ASSIGN expression SEMICOLON
-    | STRING_TYPE IDENTIFIER ASSIGN expression SEMICOLON
-    | STRING_TYPE IDENTIFIER ASSIGN input_statement SEMICOLON
-    | BOOL_TYPE IDENTIFIER ASSIGN expression SEMICOLON"""
-    if len(p) == 5:
-        p[0] = ("assign", p[1], p[3])
-    elif len(p) == 4 and p[2] != "ASSIGN":  # multiple declarations
-        p[0] = ("multiple_decl", p[1], p[2])
-    else:
-        p[0] = ("declare_assign", p[1], p[2], p[4])
-
-
-def p_multiple_var_declaration(p):
-    """multiple_var_declaration : IDENTIFIER ASSIGN expression COMMA IDENTIFIER ASSIGN expression
-    | multiple_var_declaration COMMA IDENTIFIER ASSIGN expression"""
-    if len(p) == 8:  # first case: a = 0, b = 1
-        p[0] = [("var_assign", p[1], p[3]), ("var_assign", p[5], p[7])]
-    else:  # continuation: ..., c = 2
-        p[0] = p[1] + [("var_assign", p[3], p[5])]
-
-
-# Condiciones con conectores lógicos
-def p_condition(p):
-    """condition : expression EQUAL expression
-    | expression NOT_EQUAL expression
-    | expression LESS_THAN expression
-    | expression GREATER_THAN expression
-    | expression LESS_THAN_EQUAL expression
-    | expression GREATER_THAN_EQUAL expression
-    | expression EQUAL STRING
-    | STRING EQUAL expression"""
-    p[0] = ("condition", p[2], p[1], p[3])
-
-
-def p_logical_condition(p):
-    """logical_condition : condition
-    | condition DOUBLE_AMPERSAND condition
-    | condition DOUBLE_PIPE condition"""
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = ("logical", p[2], p[1], p[3])
-
-
-# ========== SECCIÓN DavidlunaT ==========
-# Responsable de: Arreglos, If-Else, Función básica
-
-
-# Estructura de datos: Arreglos
-def p_array_declaration(p):
-    """array_declaration : INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN NEW INT_TYPE OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON
-    | STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN NEW STRING_TYPE OPEN_BRACKET INTEGER CLOSE_BRACKET SEMICOLON
-    """
-    p[0] = ("array_decl", p[1], p[4], p[9])
-
-
-def p_array_access(p):
-    "array_access : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET"
-    p[0] = ("array_access", p[1], p[3])
-
-
-def p_array_assignment(p):
-    "array_assignment : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON"
-    p[0] = ("array_assign", p[1], p[3], p[6])
-
-
-# Estructura de control: If-Else -> fixed
-def p_if_statement(p):
-    """if_statement : IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE if_statement
-    | IF OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE ELSE OPEN_BRACE statement_list CLOSE_BRACE
-    """
-    if len(p) == 8:
-        p[0] = ("if", p[3], p[6])
-    elif len(p) == 10:
-        p[0] = ("if_else", p[3], p[6], p[9])
-    else:
-        p[0] = ("if_else_if", p[3], p[6], p[8])
-
-
-# Función básica
-def p_basic_function(p):
-    "basic_function : VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE"
-    p[0] = ("function", p[2], [], p[6])
-
-
-# ========== SECCIÓN waldaara ==========
-# Responsable de: Listas, While, Función con parámetros
-
-
-# Estructura de datos: Listas (List<T>) - FIXED
-def p_list_declaration(p):
-    """list_declaration : LIST LESS_THAN INT_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW LIST LESS_THAN INT_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
-    | LIST LESS_THAN STRING_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW LIST LESS_THAN STRING_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
-    """
-    p[0] = ("list_decl", p[3], p[5])
-
-
-def p_list_add(p):
-    "list_add : IDENTIFIER DOT ADD OPEN_PAREN expression CLOSE_PAREN SEMICOLON"
-    p[0] = ("list_add", p[1], p[5])
-
-
-# Estructura de control: While
-def p_while_statement(p):
-    "while_statement : WHILE OPEN_PAREN logical_condition CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE"
-    p[0] = ("while", p[3], p[6])
-
-
-# Estructura de control: For (AÑADIDO para algoritmo2.cs)
-def p_for_statement(p):
-    "for_statement : FOR OPEN_PAREN for_init SEMICOLON logical_condition SEMICOLON for_update CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE"
-    p[0] = ("for", p[3], p[5], p[7], p[10])
-
-
-def p_for_init(p):
-    """for_init : INT_TYPE IDENTIFIER ASSIGN expression
-    | assignment_no_semicolon"""
-    if len(p) == 5:
-        p[0] = ("for_init", p[1], p[2], p[4])
-    else:
-        p[0] = p[1]
-
-
-def p_assignment_no_semicolon(p):
-    "assignment_no_semicolon : IDENTIFIER ASSIGN expression"
-    p[0] = ("assign", p[1], p[3])
-
-
-def p_for_update(p):
-    """for_update : IDENTIFIER INCREMENT
-    | IDENTIFIER DECREMENT
-    | INCREMENT IDENTIFIER
-    | DECREMENT IDENTIFIER"""
-    if p[2] in ("++", "--"):
-        p[0] = ("post_op", p[1], p[2])
-    else:
-        p[0] = ("pre_op", p[2], p[1])
-
-
-# Función con parámetros
-def p_param_function(p):
-    """param_function : VOID IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | INT_TYPE IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    """
-    p[0] = ("function_params", p[1], p[2], p[4], p[7])
-
-
-def p_parameter_list(p):
-    """parameter_list : parameter
-    | parameter_list COMMA parameter"""
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[3]]
-
-
-def p_parameter(p):
-    """parameter : INT_TYPE IDENTIFIER
-    | STRING_TYPE IDENTIFIER
-    | FLOAT_TYPE IDENTIFIER"""
-    p[0] = ("param", p[1], p[2])
-
-def p_foreach_statement(p):
-    "foreach_statement : FOREACH OPEN_PAREN INT_TYPE IDENTIFIER IN IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE"
-    p[0] = ("foreach", p[3], p[4], p[6], p[9])
-
-
-# ========== SECCIÓN gabsjimz ==========
-# Responsable de: Diccionarios, Switch, Función con retorno
-
-
-# Estructura de datos: Diccionarios (Dictionary<TKey, TValue>) - FIXED
-def p_dictionary_declaration(p):
-    """dictionary_declaration : DICTIONARY LESS_THAN STRING_TYPE COMMA INT_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW DICTIONARY LESS_THAN STRING_TYPE COMMA INT_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
-    | DICTIONARY LESS_THAN INT_TYPE COMMA STRING_TYPE GREATER_THAN IDENTIFIER ASSIGN NEW DICTIONARY LESS_THAN INT_TYPE COMMA STRING_TYPE GREATER_THAN OPEN_PAREN CLOSE_PAREN SEMICOLON
-    """
-    p[0] = ("dict_decl", p[3], p[5], p[7])
-
-
-def p_dictionary_access(p):
-    "dictionary_access : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET"
-    p[0] = ("dict_access", p[1], p[3])
-
-
-# Switch with different name to avoid conflict
-def p_dict_assignment(p):
-    "dict_assignment : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON"
-    p[0] = ("dict_assign", p[1], p[3], p[6])
-
-
-# Estructura de control: Switch
-def p_switch_statement(p):
-    "switch_statement : SWITCH OPEN_PAREN expression CLOSE_PAREN OPEN_BRACE case_list CLOSE_BRACE"
-    p[0] = ("switch", p[3], p[6])
-
-
-def p_case_list(p):
-    """case_list : case_statement
-    | case_list case_statement"""
+def p_class_declarations(p):
+    """class_declarations : class_declarations class_declaration
+    | class_declaration"""
     if len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = p[1] + [p[2]]
 
 
-def p_case_statement(p):
-    """case_statement : CASE expression COLON statement_list BREAK SEMICOLON
-    | DEFAULT COLON statement_list BREAK SEMICOLON"""
+def p_class_declaration(p):
+    """class_declaration : access_modifier CLASS IDENTIFIER OPEN_BRACE class_body CLOSE_BRACE
+    | CLASS IDENTIFIER OPEN_BRACE class_body CLOSE_BRACE"""
     if len(p) == 7:
-        p[0] = ("case", p[2], p[4])
+        p[0] = ("class", p[1], p[3], p[5])
     else:
-        p[0] = ("default", p[3])
+        p[0] = ("class", "internal", p[2], p[4])
 
 
-# Función con retorno
-def p_return_function(p):
-    """return_function : INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
-    | STRING_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
-    | FLOAT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list RETURN expression SEMICOLON CLOSE_BRACE
-    """
-    p[0] = ("return_function", p[1], p[2], p[6], p[8])
-
-
-def p_return_statement(p):
-    "return_statement : RETURN SEMICOLON"
-    p[0] = ("return_void",)
-
-def p_expression_array_access(p):
-    "expression : expression OPEN_BRACKET expression CLOSE_BRACKET"
-    p[0] = ("array_access", p[1], p[3])
-
-def p_expression_dot(p):
-    "expression : expression DOT IDENTIFIER"
-    p[0] = ("dot_access", p[1], p[3])
-
-def p_array_declaration_with_values(p):
-    """array_declaration : INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER ASSIGN expression SEMICOLON"""
-    p[0] = ("array_decl_values", p[1], p[4], p[6])
-
-
-def p_value_list(p):
-    """value_list : expression
-    | value_list COMMA expression"""
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[3]]
-
-def p_expression_new_array_with_values(p):
-    """expression : NEW INT_TYPE OPEN_BRACKET CLOSE_BRACKET OPEN_BRACE value_list CLOSE_BRACE"""
-    p[0] = ("new_array_init", p[2], p[6])
-
-def p_parameter_array(p):
-    "parameter : INT_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER"
-    p[0] = ("param_array", p[1], p[4])
-
-def p_expression_array_initializer_short(p):
-    "expression : OPEN_BRACE value_list CLOSE_BRACE"
-    p[0] = ("array_initializer_short", p[2])
-
-
-# ========== REGLAS ADICIONALES ==========
-
-
-# Static methods - AÑADIDO para algoritmo2.cs
-def p_static_method(p):
-    """static_method : STATIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID CLASS_NAME OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC INT_TYPE IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC INT_TYPE CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC INT_TYPE CLASS_NAME OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    """
-    if len(p) == 9:  # no parameters
-        p[0] = ("static_method", p[2], p[3], [], p[7])
-    else:  # with parameters
-        p[0] = ("static_method", p[2], p[3], p[5], p[8])
-
-
-# Main method
-def p_main_method(p):
-    """main_method : STATIC VOID IDENTIFIER OPEN_PAREN STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID CLASS_NAME OPEN_PAREN STRING_TYPE OPEN_BRACKET CLOSE_BRACKET IDENTIFIER CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | STATIC VOID CLASS_NAME OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    """
-    if len(p) == 13:
-        p[0] = ("main_method", p[3], p[8], p[11])
-    elif len(p) == 8:
-        p[0] = ("main_method", p[3], [], p[7])
-    else:
-        p[0] = ("main_method", p[3], [], p[6])
-
-
-# Definición de clases
-def p_class_definition(p):
-    """class_definition : CLASS CLASS_NAME OPEN_BRACE class_body CLOSE_BRACE
-    | CLASS IDENTIFIER OPEN_BRACE class_body CLOSE_BRACE
-    | PUBLIC CLASS CLASS_NAME OPEN_BRACE class_body CLOSE_BRACE"""
-    if len(p) == 6:
-        p[0] = ("class", p[2], p[4])
-    else:
-        p[0] = ("public_class", p[3], p[5])
+def p_access_modifier(p):
+    """access_modifier : PUBLIC
+    | PRIVATE
+    | PROTECTED
+    | INTERNAL"""
+    p[0] = p[1]
 
 
 def p_class_body(p):
-    """class_body : class_member
-    | class_body class_member"""
+    """class_body : class_body class_member
+    | class_member
+    | empty"""
     if len(p) == 2:
-        p[0] = [p[1]]
+        p[0] = [p[1]] if p[1] else []
     else:
         p[0] = p[1] + [p[2]]
 
 
 def p_class_member(p):
-    """class_member : property_definition
-    | method_definition
-    | main_method
-    | static_method"""
+    """class_member : field_declaration
+    | method_declaration
+    | property_declaration"""
     p[0] = p[1]
 
 
-# Propiedades
-def p_property_definition(p):
-    """property_definition : PUBLIC INT_TYPE IDENTIFIER OPEN_BRACE GET SEMICOLON SET SEMICOLON CLOSE_BRACE
-    | PUBLIC STRING_TYPE IDENTIFIER OPEN_BRACE GET SEMICOLON SET SEMICOLON CLOSE_BRACE
+# ========== REGLAS GRAMATICALES: PROPIEDADES ==========
+
+
+def p_property_declaration(p):
+    """property_declaration : access_modifier type_specifier IDENTIFIER OPEN_BRACE property_accessors CLOSE_BRACE"""
+    p[0] = ("property", p[1], p[2], p[3], p[5])
+
+
+def p_property_accessors(p):
+    """property_accessors : GET SEMICOLON SET SEMICOLON
+    | GET SEMICOLON
+    | SET SEMICOLON"""
+    if len(p) == 5:
+        p[0] = ("get_set",)
+    elif p[1] == "get":
+        p[0] = ("get_only",)
+    else:
+        p[0] = ("set_only",)
+
+
+# ========== REGLAS GRAMATICALES: CAMPOS ==========
+
+
+def p_field_declaration(p):
+    """field_declaration : access_modifier type_specifier IDENTIFIER SEMICOLON
+    | access_modifier type_specifier IDENTIFIER ASSIGN expression SEMICOLON
+    | type_specifier IDENTIFIER SEMICOLON
+    | type_specifier IDENTIFIER ASSIGN expression SEMICOLON"""
+    if len(p) == 5:
+        if p[1] in ["public", "private", "protected", "internal"]:
+            p[0] = ("field", p[1], p[2], p[3], None)
+        else:
+            p[0] = ("field", "private", p[1], p[2], None)
+    elif len(p) == 7:
+        if p[1] in ["public", "private", "protected", "internal"]:
+            p[0] = ("field", p[1], p[2], p[3], p[5])
+        else:
+            p[0] = ("field", "private", p[1], p[2], p[4])
+
+
+# ========== REGLAS GRAMATICALES: MÉTODOS Y FUNCIONES ==========
+
+
+def p_method_declaration(p):
+    """method_declaration : access_modifier STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+    | access_modifier type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
+    | STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
     """
-    p[0] = ("property", p[2], p[3])
+    if len(p) == 11:
+        p[0] = ("method", p[1], True, p[3], p[4], p[6], p[9])
+    elif len(p) == 10 and p[1] == "static":
+        p[0] = ("method", "internal", True, p[2], p[3], p[5], p[8])
+    else:
+        p[0] = ("method", p[1], False, p[2], p[3], p[5], p[8])
 
 
-# Métodos
-def p_method_definition(p):
-    """method_definition : PUBLIC VOID IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    | PUBLIC INT_TYPE IDENTIFIER OPEN_PAREN CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE
-    """
-    p[0] = ("method", p[2], p[3], p[7])
-
-
-# Lista de statements
-def p_statement_list(p):
-    """statement_list : statement
-    | statement_list statement"""
+def p_parameter_list(p):
+    """parameter_list : parameter_list COMMA parameter
+    | parameter
+    | empty"""
     if len(p) == 2:
-        p[0] = [p[1]]
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = p[1] + [p[3]]
+
+
+def p_parameter(p):
+    """parameter : type_specifier IDENTIFIER"""
+    p[0] = ("parameter", p[1], p[2])
+
+
+# ========== REGLAS GRAMATICALES: TIPOS DE DATOS ==========
+
+
+def p_type_specifier(p):
+    """type_specifier : INT_TYPE
+    | FLOAT_TYPE
+    | DOUBLE
+    | STRING_TYPE
+    | BOOL_TYPE
+    | CHAR
+    | VOID
+    | IDENTIFIER
+    | array_type
+    | generic_type"""
+    p[0] = p[1]
+
+
+def p_array_type(p):
+    """array_type : type_specifier OPEN_BRACKET CLOSE_BRACKET"""
+    p[0] = ("array_type", p[1])
+
+
+def p_generic_type(p):
+    """generic_type : LIST LESS_THAN type_specifier GREATER_THAN
+    | DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN"""
+    if len(p) == 5:
+        p[0] = ("list_type", p[3])
+    else:
+        p[0] = ("dictionary_type", p[3], p[5])
+
+
+# ========== REGLAS GRAMATICALES: DECLARACIONES Y SENTENCIAS ==========
+
+
+def p_statement_list(p):
+    """statement_list : statement_list statement
+    | statement
+    | empty"""
+    if len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
     else:
         p[0] = p[1] + [p[2]]
 
 
 def p_statement(p):
-    """statement : assignment
-    | print_statement
-    | array_declaration
+    """statement : expression_statement
+    | declaration_statement
+    | assignment_statement
     | if_statement
     | while_statement
     | for_statement
-    | switch_statement
-    | array_assignment
-    | list_declaration
-    | list_add
     | foreach_statement
-    | dictionary_declaration
-    | dict_assignment
-    | class_definition
-    | basic_function
-    | param_function
-    | return_function
     | return_statement
-    | using_statement
-    | function_call_statement"""
+    | block_statement
+    | print_statement
+    | input_statement"""
     p[0] = p[1]
 
 
-# Error rule for syntax errors
-error_log = []
+def p_block_statement(p):
+    """block_statement : OPEN_BRACE statement_list CLOSE_BRACE"""
+    p[0] = ("block", p[2])
+
+
+def p_expression_statement(p):
+    """expression_statement : expression SEMICOLON"""
+    p[0] = ("expression_stmt", p[1])
+
+
+# ========== REGLAS GRAMATICALES: ASIGNACIÓN DE VARIABLES ==========
+
+
+def p_declaration_statement(p):
+    """declaration_statement : type_specifier variable_declarator_list SEMICOLON
+    | VAR IDENTIFIER ASSIGN expression SEMICOLON"""
+    if len(p) == 6 and p[1] == "var":
+        p[0] = ("var_declaration", p[2], p[4])
+    else:
+        p[0] = ("multi_declaration", p[1], p[2])
+
+
+def p_variable_declarator_list(p):
+    """variable_declarator_list : variable_declarator_list COMMA variable_declarator
+    | variable_declarator"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+
+def p_variable_declarator(p):
+    """variable_declarator : IDENTIFIER
+    | IDENTIFIER ASSIGN expression"""
+    if len(p) == 2:
+        p[0] = ("declarator", p[1], None)
+    else:
+        p[0] = ("declarator", p[1], p[3])
+
+
+def p_assignment_statement(p):
+    """assignment_statement : IDENTIFIER ASSIGN expression SEMICOLON
+    | IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
+    | IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON"""
+    if len(p) == 5:
+        p[0] = ("assignment", p[1], p[3])
+    elif len(p) == 8:
+        p[0] = ("array_assignment", p[1], p[3], p[6])
+    else:
+        p[0] = ("member_assignment", p[1], p[3], p[5])
+
+
+# ========== REGLAS GRAMATICALES: ESTRUCTURAS DE CONTROL ==========
+
+
+def p_if_statement(p):
+    """if_statement : IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
+    | IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement"""
+    if len(p) == 6:
+        p[0] = ("if", p[3], p[5], None)
+    else:
+        p[0] = ("if", p[3], p[5], p[7])
+
+
+def p_while_statement(p):
+    """while_statement : WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement"""
+    p[0] = ("while", p[3], p[5])
+
+
+def p_for_statement(p):
+    """for_statement : FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement"""
+    p[0] = ("for", p[3], p[5], p[7], p[9])
+
+
+def p_for_init(p):
+    """for_init : type_specifier IDENTIFIER ASSIGN expression
+    | assignment_statement
+    | empty"""
+    if len(p) == 5:
+        p[0] = ("for_declaration", p[1], p[2], p[4])
+    else:
+        p[0] = p[1]
+
+
+def p_for_update(p):
+    """for_update : assignment_statement
+    | IDENTIFIER INCREMENT
+    | IDENTIFIER DECREMENT
+    | empty"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ("update", p[1], p[2])
+
+
+def p_foreach_statement(p):
+    """foreach_statement : FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement"""
+    p[0] = ("foreach", p[3], p[4], p[6], p[8])
+
+
+def p_return_statement(p):
+    """return_statement : RETURN expression SEMICOLON
+    | RETURN SEMICOLON"""
+    if len(p) == 4:
+        p[0] = ("return", p[2])
+    else:
+        p[0] = ("return", None)
+
+
+# ========== REGLAS GRAMATICALES: IMPRESIÓN E INGRESO DE DATOS ==========
+
+
+def p_print_statement(p):
+    """print_statement : CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+    | CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+    | CONSOLE DOT WRITELINE OPEN_PAREN CLOSE_PAREN SEMICOLON"""
+    if len(p) == 8:
+        p[0] = ("print", p[3], p[5])
+    else:
+        p[0] = ("print", p[3], None)
+
+
+def p_input_statement(p):
+    """input_statement : CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
+    | CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
+    """
+    if len(p) == 6:
+        p[0] = ("input", "string")
+    else:
+        p[0] = ("input", "int")
+
+
+# ========== REGLAS GRAMATICALES: EXPRESIONES ARITMÉTICAS ==========
+
+
+def p_expression(p):
+    """expression : primary_expression
+    | arithmetic_expression
+    | boolean_expression"""
+    p[0] = p[1]
+
+
+def p_primary_expression(p):
+    """primary_expression : literal
+    | IDENTIFIER
+    | function_call
+    | array_access
+    | member_access
+    | array_initialization
+    | input_statement
+    | TRUE
+    | FALSE
+    | OPEN_PAREN expression CLOSE_PAREN"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[2]
+
+
+def p_arithmetic_expression(p):
+    """arithmetic_expression : expression PLUS expression
+    | expression MINUS expression
+    | expression MULTIPLY expression
+    | expression DIVIDE expression
+    | expression PERCENT expression
+    | MINUS expression %prec UMINUS"""
+    if len(p) == 3:
+        p[0] = ("unary_minus", p[2])
+    else:
+        p[0] = ("binary_op", p[2], p[1], p[3])
+
+
+# ========== REGLAS GRAMATICALES: CONDICIONES Y CONECTORES LÓGICOS ==========
+
+
+def p_boolean_expression(p):
+    """boolean_expression : expression EQUAL expression
+    | expression NOT_EQUAL expression
+    | expression LESS_THAN expression
+    | expression GREATER_THAN expression
+    | expression LESS_THAN_EQUAL expression
+    | expression GREATER_THAN_EQUAL expression
+    | boolean_expression DOUBLE_AMPERSAND boolean_expression
+    | boolean_expression DOUBLE_PIPE boolean_expression
+    | BANG boolean_expression"""
+    if len(p) == 3:
+        p[0] = ("not", p[2])
+    else:
+        p[0] = ("comparison", p[2], p[1], p[3])
+
+
+# ========== REGLAS GRAMATICALES: ESTRUCTURAS DE DATOS ==========
+
+
+def p_array_initialization(p):
+    """array_initialization : OPEN_BRACE expression_list CLOSE_BRACE
+    | NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET"""
+    if p[1] == "{":
+        p[0] = ("array_literal", p[2])
+    else:
+        p[0] = ("array_new", p[2], p[4])
+
+
+def p_array_access(p):
+    """array_access : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET"""
+    p[0] = ("array_access", p[1], p[3])
+
+
+def p_member_access(p):
+    """member_access : IDENTIFIER DOT IDENTIFIER"""
+    p[0] = ("member_access", p[1], p[3])
+
+
+def p_function_call(p):
+    """function_call : IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN"""
+    p[0] = ("function_call", p[1], p[3])
+
+
+def p_argument_list(p):
+    """argument_list : argument_list COMMA expression
+    | expression
+    | empty"""
+    if len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = p[1] + [p[3]]
+
+
+def p_expression_list(p):
+    """expression_list : expression_list COMMA expression
+    | expression
+    | empty"""
+    if len(p) == 2:
+        p[0] = [p[1]] if p[1] else []
+    else:
+        p[0] = p[1] + [p[3]]
+
+
+# ========== REGLAS GRAMATICALES: LITERALES ==========
+
+
+def p_literal(p):
+    """literal : INTEGER
+    | FLOAT
+    | STRING
+    | CHAR_LITERAL
+    | NULL"""
+    p[0] = ("literal", type(p[1]).__name__, p[1])
+
+
+# ========== REGLAS GRAMATICALES: PRODUCCIONES VACÍAS ==========
+
+
+def p_empty(p):
+    """empty :"""
+    pass
+
+
+# ========== PRECEDENCIA DE OPERADORES ==========
+
+precedence = (
+    ("left", "DOUBLE_PIPE"),
+    ("left", "DOUBLE_AMPERSAND"),
+    ("left", "EQUAL", "NOT_EQUAL"),
+    ("left", "LESS_THAN", "GREATER_THAN", "LESS_THAN_EQUAL", "GREATER_THAN_EQUAL"),
+    ("left", "PLUS", "MINUS"),
+    ("left", "MULTIPLY", "DIVIDE", "PERCENT"),
+    ("right", "UMINUS"),
+    ("right", "BANG"),
+)
+
+# ========== MANEJO DE ERRORES SINTÁCTICOS ==========
 
 
 def p_error(p):
     if p:
-        msg = (
-            f"[ERROR] Syntax error at token {p.type} ('{p.value}') at line {p.lineno}\n"
+        msg = f"[SYNTAX ERROR] Unexpected token '{p.value}' at line {p.lineno}"
+        syntax_errors.append(msg)
+    else:
+        msg = "[SYNTAX ERROR] Unexpected end of input"
+        syntax_errors.append(msg)
+
+
+# ========== ANÁLISIS SEMÁNTICO ==========
+
+
+def semantic_analysis(ast):
+    """Realiza el análisis semántico del AST"""
+    semantic_errors.clear()
+    symbol_table.clear()
+    global undeclared_vars_reported
+    undeclared_vars_reported = set()
+
+    if ast:
+        check_node(ast)
+
+    return len(semantic_errors) == 0
+
+
+def check_method(node):
+    """Registra una función en la tabla de símbolos"""
+    method_name = node[4]
+    parameters = node[5]
+
+    symbol_table[method_name] = {
+        "type": "function",
+        "initialized": True,
+        "parameters": parameters,
+    }
+
+    # Registrar parámetros en el scope local
+    for param in parameters:
+        if isinstance(param, tuple) and param[0] == "parameter":
+            param_type = param[1]
+            param_name = param[2]
+            symbol_table[param_name] = {"type": param_type, "initialized": True}
+
+
+def check_parameter(node):
+    """Procesa un parámetro de función"""
+    param_type = node[1]
+    param_name = node[2]
+
+    symbol_table[param_name] = {"type": param_type, "initialized": True}
+
+
+def check_for_declaration(node):
+    """Procesa una declaración en un for loop"""
+    var_type = node[1]
+    var_name = node[2]
+    init_expr = node[3]
+
+    symbol_table[var_name] = {"type": var_type, "initialized": True}
+
+
+def check_node(node):
+    """Verifica un nodo del AST recursivamente"""
+    if not isinstance(node, tuple):
+        return
+
+    node_type = node[0]
+
+    # ========== PROCESAMIENTO DE DECLARACIONES ==========
+    if node_type == "method":
+        check_method(node)
+    elif node_type == "parameter":
+        check_parameter(node)
+    elif node_type == "for_declaration":
+        check_for_declaration(node)
+
+    # ========== VALIDACIÓN: COMPATIBILIDAD DE TIPOS ==========
+    elif node_type == "assignment":
+        check_assignment_compatibility(node)
+    elif node_type == "declaration":
+        check_declaration(node)
+    elif node_type == "multi_declaration":
+        check_multi_declaration(node)
+    elif node_type == "binary_op":
+        check_arithmetic_compatibility(node)
+    elif node_type == "comparison":
+        check_comparison_compatibility(node)
+
+    # ========== VALIDACIÓN: ESTRUCTURAS DE CONTROL ==========
+    elif node_type == "if":
+        check_control_structure(node)
+    elif node_type == "while":
+        check_control_structure(node)
+    elif node_type == "for":
+        check_for_structure(node)
+    elif node_type == "foreach":
+        check_foreach_structure(node)
+
+    # ========== VALIDACIÓN: OPERACIONES ==========
+    elif node_type == "function_call":
+        check_function_call(node)
+    elif node_type == "array_access":
+        check_array_access(node)
+
+    # Recursión para nodos hijos
+    for i in range(1, len(node)):
+        if isinstance(node[i], (list, tuple)):
+            if isinstance(node[i], list):
+                for item in node[i]:
+                    check_node(item)
+            else:
+                check_node(node[i])
+
+
+def check_assignment_compatibility(node):
+    """Verifica compatibilidad en asignaciones"""
+    var_name = node[1]
+    expr = node[2]
+
+    if var_name not in symbol_table:
+        semantic_errors.append(f"[SEMANTIC ERROR] Variable '{var_name}' not declared")
+        return
+
+    var_type = symbol_table[var_name]["type"]
+    expr_type = get_expression_type(expr)
+
+    # Solo verificar compatibilidad si el tipo de expresión es válido
+    if expr_type != "unknown" and not are_types_compatible(var_type, expr_type):
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] Type mismatch: Cannot assign {expr_type} to {var_type} variable '{var_name}'"
+        )
+
+
+def check_declaration(node):
+    """Registra una declaración en la tabla de símbolos"""
+    var_type = node[1]
+    var_name = node[2]
+    init_expr = node[3] if len(node) > 3 else None
+
+    if var_name in symbol_table:
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] Variable '{var_name}' already declared"
         )
     else:
-        msg = "[ERROR] Syntax error at EOF\n"
-    error_log.append(msg)
-    print(msg.strip())
+        symbol_table[var_name] = {
+            "type": var_type,
+            "initialized": init_expr is not None,
+        }
+
+        if init_expr:
+            expr_type = get_expression_type(init_expr)
+            # Solo verificar compatibilidad si el tipo de expresión es válido
+            if expr_type != "unknown" and not are_types_compatible(var_type, expr_type):
+                semantic_errors.append(
+                    f"[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize {var_type} with {expr_type}"
+                )
 
 
-# Build the parser
-parser = yacc.yacc()
+def check_multi_declaration(node):
+    """Registra múltiples declaraciones en la tabla de símbolos"""
+    var_type = node[1]
+    declarators = node[2]
+
+    for declarator in declarators:
+        if isinstance(declarator, tuple) and declarator[0] == "declarator":
+            var_name = declarator[1]
+            init_expr = declarator[2] if len(declarator) > 2 else None
+
+            if var_name in symbol_table:
+                semantic_errors.append(
+                    f"[SEMANTIC ERROR] Variable '{var_name}' already declared"
+                )
+            else:
+                symbol_table[var_name] = {
+                    "type": var_type,
+                    "initialized": init_expr is not None,
+                }
+
+                if init_expr:
+                    expr_type = get_expression_type(init_expr)
+                    # Solo verificar compatibilidad si el tipo de expresión es válido
+                    if expr_type != "unknown" and not are_types_compatible(
+                        var_type, expr_type
+                    ):
+                        semantic_errors.append(
+                            f"[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize {var_type} with {expr_type}"
+                        )
 
 
-def run_syntactic_analysis(file_path, user_git_name):
+def check_arithmetic_compatibility(node):
+    """Verifica compatibilidad en operaciones aritméticas"""
+    op = node[1]
+    left = node[2]
+    right = node[3]
+
+    left_type = get_expression_type(left)
+    right_type = get_expression_type(right)
+
+    # Solo verificar compatibilidad si ambos tipos son válidos
+    if (
+        left_type != "unknown"
+        and right_type != "unknown"
+        and not are_arithmetic_compatible(left_type, right_type)
+    ):
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] Arithmetic operation '{op}' not supported between {left_type} and {right_type}"
+        )
+
+
+def check_comparison_compatibility(node):
+    """Verifica compatibilidad en comparaciones"""
+    op = node[1]
+    left = node[2]
+    right = node[3]
+
+    left_type = get_expression_type(left)
+    right_type = get_expression_type(right)
+
+    # Solo verificar compatibilidad si ambos tipos son válidos
+    if (
+        left_type != "unknown"
+        and right_type != "unknown"
+        and not are_comparable(left_type, right_type)
+    ):
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] Comparison '{op}' not supported between {left_type} and {right_type}"
+        )
+
+
+def check_control_structure(node):
+    """Verifica estructuras de control"""
+    node_type = node[0]
+    condition = node[1]
+
+    cond_type = get_expression_type(condition)
+    if cond_type != "bool":
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] {node_type.capitalize()} condition must be boolean, got {cond_type}"
+        )
+
+
+def check_for_structure(node):
+    """Verifica estructura for"""
+    init_stmt = node[1]
+    condition = node[2]
+    update_stmt = node[3]
+
+    if condition:
+        cond_type = get_expression_type(condition)
+        if cond_type != "bool":
+            semantic_errors.append(
+                "[SEMANTIC ERROR] For loop condition must be boolean"
+            )
+
+
+def check_foreach_structure(node):
+    """Verifica estructura foreach y registra la variable del loop"""
+    var_type = node[1]  # tipo de la variable (ej: int)
+    var_name = node[2]  # nombre de la variable (ej: num)
+    collection = node[3]  # expresión de la colección (ej: numbers)
+    body = node[4]  # cuerpo del loop
+
+    # Registrar la variable del foreach en la tabla de símbolos
+    symbol_table[var_name] = {"type": var_type, "initialized": True}
+
+
+def check_function_call(node):
+    """Verifica llamadas a función"""
+    func_name = node[1]
+    args = node[2]
+
+    # Validar funciones conocidas del sistema
+    if (
+        func_name not in ["WriteLine", "Write", "ReadLine", "ToInt32"]
+        and func_name not in symbol_table
+    ):
+        semantic_errors.append(f"[SEMANTIC ERROR] Function '{func_name}' not declared")
+
+
+def check_array_access(node):
+    """Verifica acceso a arrays"""
+    array_name = node[1]
+    index_expr = node[2]
+
+    if array_name not in symbol_table:
+        semantic_errors.append(f"[SEMANTIC ERROR] Array '{array_name}' not declared")
+
+    index_type = get_expression_type(index_expr)
+    # Solo verificar tipo de índice si es válido
+    if index_type != "unknown" and index_type != "int":
+        semantic_errors.append(
+            f"[SEMANTIC ERROR] Array index must be integer, got {index_type}"
+        )
+
+
+def get_expression_type(expr):
+    """Obtiene el tipo de una expresión"""
+    if isinstance(expr, str):
+        if expr in symbol_table:
+            return symbol_table[expr]["type"]
+        # Valores booleanos
+        if expr in ["true", "false", "True", "False"]:
+            return "bool"
+        # Variable no declarada
+        if expr.isidentifier() and expr not in undeclared_vars_reported:
+            semantic_errors.append(f"[SEMANTIC ERROR] Variable '{expr}' not declared")
+            undeclared_vars_reported.add(expr)
+        return "unknown"
+
+    if isinstance(expr, tuple):
+        expr_type = expr[0]
+
+        if expr_type == "literal":
+            type_name = expr[1]
+            if type_name == "int":
+                return "int"
+            elif type_name == "float":
+                return "float"
+            elif type_name == "str":
+                return "string"
+            elif type_name == "bool":
+                return "bool"
+
+        elif expr_type == "binary_op":
+            op = expr[1]
+            left_type = get_expression_type(expr[2])
+            right_type = get_expression_type(expr[3])
+
+            # Para concatenación de strings
+            if op == "+" and (left_type == "string" or right_type == "string"):
+                return "string"
+
+            return resolve_arithmetic_type(left_type, right_type)
+
+        elif expr_type == "comparison":
+            return "bool"
+
+        elif expr_type == "array_access":
+            array_name = expr[1]
+            if array_name in symbol_table:
+                array_type = symbol_table[array_name]["type"]
+                if isinstance(array_type, tuple) and array_type[0] == "array_type":
+                    return array_type[1]  # Tipo del elemento
+            return "unknown"
+
+        elif expr_type == "member_access":
+            obj_name = expr[1]
+            member_name = expr[2]
+            if member_name == "Length" and obj_name in symbol_table:
+                return "int"
+            return "unknown"
+
+        elif expr_type == "input":
+            return expr[1]  # "string" o "int"
+
+        elif expr_type == "array_literal":
+            # Si es un array literal, retornar array_type del primer elemento
+            elements = expr[1]
+            if elements and len(elements) > 0:
+                elem_type = get_expression_type(elements[0])
+                return ("array_type", elem_type)
+            return "unknown"
+
+    return "unknown"
+
+
+def are_types_compatible(target_type, source_type):
+    """Verifica si los tipos son compatibles para asignación"""
+    if target_type == source_type:
+        return True
+
+    # Conversiones implícitas permitidas
+    if target_type == "float" and source_type == "int":
+        return True
+    if target_type == "double" and source_type in ["int", "float"]:
+        return True
+
+    # Compatibilidad de arrays
+    if isinstance(target_type, tuple) and isinstance(source_type, tuple):
+        if target_type[0] == "array_type" and source_type[0] == "array_type":
+            return are_types_compatible(target_type[1], source_type[1])
+
+    # String concatenation
+    if target_type == "string" and source_type in ["int", "float", "string"]:
+        return True
+
+    return False
+
+
+def are_arithmetic_compatible(left_type, right_type):
+    """Verifica compatibilidad para operaciones aritméticas"""
+    numeric_types = ["int", "float", "double"]
+
+    # Operaciones numéricas
+    if left_type in numeric_types and right_type in numeric_types:
+        return True
+
+    # Concatenación de strings (operador +)
+    if left_type == "string" or right_type == "string":
+        return True
+
+    return False
+
+
+def are_comparable(left_type, right_type):
+    """Verifica si los tipos se pueden comparar"""
+    if left_type == right_type:
+        return True
+
+    numeric_types = ["int", "float", "double"]
+    return left_type in numeric_types and right_type in numeric_types
+
+
+def resolve_arithmetic_type(left_type, right_type):
+    """Resuelve el tipo resultado de una operación aritmética"""
+    if "double" in [left_type, right_type]:
+        return "double"
+    elif "float" in [left_type, right_type]:
+        return "float"
+    else:
+        return "int"
+
+
+# ========== FUNCIONES DE FORMATEO ==========
+
+
+def format_ast(node, indent=0):
+    """Formatea el AST de manera legible con indentación"""
+    if node is None:
+        return "None"
+
+    indent_str = "  " * indent
+
+    if isinstance(node, str):
+        return f'"{node}"'
+
+    if isinstance(node, (int, float, bool)):
+        return str(node)
+
+    if isinstance(node, list):
+        if not node:
+            return "[]"
+
+        result = "[\n"
+        for i, item in enumerate(node):
+            result += f"{indent_str}  {format_ast(item, indent + 1)}"
+            if i < len(node) - 1:
+                result += ","
+            result += "\n"
+        result += f"{indent_str}]"
+        return result
+
+    if isinstance(node, tuple):
+        if not node:
+            return "()"
+
+        node_type = node[0]
+        result = f"({node_type}"
+
+        if len(node) > 1:
+            result += ",\n"
+            for i in range(1, len(node)):
+                result += f"{indent_str}  {format_ast(node[i], indent + 1)}"
+                if i < len(node) - 1:
+                    result += ","
+                result += "\n"
+            result += f"{indent_str}"
+
+        result += ")"
+        return result
+
+    return str(node)
+
+
+# ========== FUNCIONES DE ANÁLISIS ==========
+
+
+def run_syntax_analysis(file_path, user_git_name):
+    """Ejecuta el análisis sintáctico"""
     now = datetime.datetime.now()
     timestamp = now.strftime("%d-%m-%Y-%Hh%M")
 
@@ -570,40 +977,83 @@ def run_syntactic_analysis(file_path, user_git_name):
     with open(file_path, "r", encoding="utf-8") as f:
         source_code = f.read()
 
-    # Clear previous errors
-    error_log.clear()
+    # Limpiar errores previos
+    syntax_errors.clear()
 
-    # Parse the code
-    result = parser.parse(source_code)
+    # Construir el parser
+    parser = yacc.yacc()
 
-    # Write log
+    try:
+        # Parsear el código
+        ast = parser.parse(source_code, lexer=lexer)
+
+        with open(log_filename, "w", encoding="utf-8") as log_file:
+            log_file.write(
+                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+            )
+
+            if syntax_errors:
+                log_file.write("=== SYNTAX ERRORS ===\n")
+                for err in syntax_errors:
+                    log_file.write(err + "\n")
+                success = False
+            else:
+                log_file.write("✔ Syntax analysis completed successfully.\n")
+                log_file.write("\n=== ABSTRACT SYNTAX TREE ===\n")
+                log_file.write(format_ast(ast))
+                success = True
+
+        print(f"\n✔ Syntax analysis complete. Log saved to {log_filename}")
+        return success, ast
+
+    except Exception as e:
+        with open(log_filename, "w", encoding="utf-8") as log_file:
+            log_file.write(
+                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+            )
+            log_file.write("=== CRITICAL ERROR ===\n")
+            log_file.write(f"Parser failed: {str(e)}\n")
+
+            if syntax_errors:
+                log_file.write("\n=== SYNTAX ERRORS ===\n")
+                for err in syntax_errors:
+                    log_file.write(err + "\n")
+
+        print(f"\n❌ Syntax analysis failed. Log saved to {log_filename}")
+        return False, None
+
+
+def run_semantic_analysis(ast, file_path, user_git_name):
+    """Ejecuta el análisis semántico"""
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%d-%m-%Y-%Hh%M")
+
+    log_filename = f"logs/semantico-{user_git_name}-{timestamp}.txt"
+
+    success = semantic_analysis(ast)
+
     with open(log_filename, "w", encoding="utf-8") as log_file:
         log_file.write(
-            f"Syntactic Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+            f"Semantic Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
         )
 
-        if error_log:
-            log_file.write("=== SYNTACTIC ERRORS ===\n")
-            for err in error_log:
-                log_file.write(err)
+        log_file.write("=== SYMBOL TABLE ===\n")
+        for name, info in symbol_table.items():
+            log_file.write(f"{name}: {info}\n")
+
+        if semantic_errors:
+            log_file.write("\n=== SEMANTIC ERRORS ===\n")
+            for err in semantic_errors:
+                log_file.write(err + "\n")
         else:
-            log_file.write("No syntactic errors detected.\n")
-            log_file.write(f"Parse result: {result}\n")
+            log_file.write("\n✔ Semantic analysis completed successfully.\n")
 
-        # Add parser.out content if it exists
-        if os.path.exists("parser.out"):
-            log_file.write("\n=== PARSER DEBUG INFO ===\n")
-            try:
-                with open("parser.out", "r", encoding="utf-8") as parser_file:
-                    log_file.write(parser_file.read())
-            except Exception as e:
-                log_file.write(f"Error reading parser.out: {e}\n")
-
-    print(f"\n✔ Syntactic analysis complete. Log saved to {log_filename}\n")
-    return result
+    print(f"\n✔ Semantic analysis complete. Log saved to {log_filename}")
+    return success
 
 
-# ========== Main Menu ==========
+# ========== MENÚ PRINCIPAL ==========
+
 if __name__ == "__main__":
     algorithms = {
         "1": {
@@ -621,9 +1071,14 @@ if __name__ == "__main__":
             "path": "algoritmos/algoritmo3.cs",
             "user": "gabsjimz",
         },
+        "4": {
+            "name": "test_errors.cs (Semantic Errors Demo)",
+            "path": "algoritmos/test_errors.cs",
+            "user": "test",
+        },
     }
 
-    print("Select algorithm to analyze syntactically:")
+    print("Select algorithm to analyze:")
     for key, data in algorithms.items():
         print(f"{key}. {data['name']} (Git: {data['user']})")
 
@@ -631,8 +1086,23 @@ if __name__ == "__main__":
 
     if choice in algorithms:
         selected = algorithms[choice]
-        run_syntactic_analysis(
+
+        # Ejecutar análisis sintáctico
+        syntax_success, ast = run_syntax_analysis(
             file_path=selected["path"], user_git_name=selected["user"]
         )
+
+        # Solo continuar con semántico si sintáctico fue exitoso
+        if syntax_success:
+            semantic_success = run_semantic_analysis(
+                ast=ast, file_path=selected["path"], user_git_name=selected["user"]
+            )
+
+            if semantic_success:
+                print("\n🎉 Both syntax and semantic analysis completed successfully!")
+            else:
+                print("\n⚠️ Syntax analysis passed, but semantic analysis found errors.")
+        else:
+            print("\n❌ Syntax analysis failed. Semantic analysis skipped.")
     else:
         print("❌ Invalid option.")

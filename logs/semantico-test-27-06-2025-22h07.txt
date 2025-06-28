@@ -1,0 +1,51 @@
+Semantic Analysis Log
+User: test
+File: test_errors.cs
+Date: 27-06-2025-22h07
+
+=== SYMBOL TABLE ===
+Main: {'type': 'function', 'initialized': True, 'parameters': []}
+result1: {'type': 'int', 'initialized': True}
+number: {'type': 'int', 'initialized': True}
+text: {'type': 'string', 'initialized': True}
+decimal_num: {'type': 'float', 'initialized': True}
+flag: {'type': 'bool', 'initialized': True}
+badResult1: {'type': 'int', 'initialized': True}
+badResult2: {'type': 'int', 'initialized': True}
+badResult3: {'type': 'float', 'initialized': True}
+badComp1: {'type': 'bool', 'initialized': True}
+badComp2: {'type': 'bool', 'initialized': True}
+wrongInt: {'type': 'int', 'initialized': True}
+wrongString: {'type': 'string', 'initialized': True}
+wrongBool: {'type': 'bool', 'initialized': True}
+wrongFloat: {'type': 'float', 'initialized': True}
+element: {'type': 'int', 'initialized': True}
+validArray: {'type': ('array_type', 'int'), 'initialized': True}
+badElement1: {'type': 'int', 'initialized': True}
+badElement2: {'type': 'int', 'initialized': True}
+badElement3: {'type': 'int', 'initialized': True}
+complexError: {'type': 'int', 'initialized': True}
+
+=== SEMANTIC ERRORS ===
+[SEMANTIC ERROR] Variable 'x' not declared
+[SEMANTIC ERROR] Variable 'y' not declared
+[SEMANTIC ERROR] Variable 'undeclaredVar' not declared
+[SEMANTIC ERROR] Variable 'notDeclared' not declared
+[SEMANTIC ERROR] Arithmetic operation '+' not supported between int and bool
+[SEMANTIC ERROR] Comparison '>' not supported between string and int
+[SEMANTIC ERROR] Comparison '<' not supported between bool and float
+[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize int with string
+[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize bool with int
+[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize float with bool
+[SEMANTIC ERROR] Variable 'unknownVariable' not declared
+[SEMANTIC ERROR] Variable 'nonExistentVar' not declared
+[SEMANTIC ERROR] Array 'nonExistentArray' not declared
+[SEMANTIC ERROR] Array index must be integer, got string
+[SEMANTIC ERROR] Array index must be integer, got bool
+[SEMANTIC ERROR] Array index must be integer, got float
+[SEMANTIC ERROR] Function 'UndeclaredFunction' not declared
+[SEMANTIC ERROR] Variable 'undeclaredA' not declared
+[SEMANTIC ERROR] Variable 'undeclaredB' not declared
+[SEMANTIC ERROR] Variable 'missingX' not declared
+[SEMANTIC ERROR] Variable 'missingY' not declared
+[SEMANTIC ERROR] Variable 'wrongTarget' not declared
