@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: test
+File: algoritmos/test_errors.cs
+Date: 29-06-2025-14h50
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token ')' at line 64

@@ -271,8 +271,8 @@ def p_assignment_statement(p):
 
 
 def p_if_statement(p):
-    """if_statement : IF OPEN_PAREN expression CLOSE_PAREN statement
-    | IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement"""
+    """if_statement : IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
+    | IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement"""
     if len(p) == 6:
         p[0] = ("if", p[3], p[5], None)
     else:
@@ -411,15 +411,22 @@ def p_boolean_expression(p):
 
 def p_array_initialization(p):
     """array_initialization : OPEN_BRACE expression_list CLOSE_BRACE
-    | NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET"""
-    if p[1] == "{":
-        p[0] = ("array_literal", p[2])
-    else:
+    | NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
+    | NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    | NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE"""
+    if len(p) == 4:
+        p[0] = ("array_init", p[2])
+    elif len(p) == 6:
         p[0] = ("array_new", p[2], p[4])
+    elif len(p) == 10:
+        p[0] = ("dict_new", p[4], p[6])
+    else:
+        p[0] = ("dict_init", p[4], p[6], p[9])
 
 
 def p_array_access(p):
     """array_access : IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET"""
+    # El tipo de acceso (array o diccionario) se determina en el análisis semántico
     p[0] = ("array_access", p[1], p[3])
 
 
@@ -447,10 +454,25 @@ def p_expression_list(p):
     """expression_list : expression_list COMMA expression
     | expression
     | empty"""
-    if len(p) == 2:
-        p[0] = [p[1]] if p[1] else []
-    else:
+    if len(p) == 4:
         p[0] = p[1] + [p[3]]
+    elif len(p) == 2:
+        p[0] = [p[1]] if p[1] is not None else []
+
+
+def p_dictionary_initializer_list(p):
+    """dictionary_initializer_list : dictionary_initializer_list COMMA dictionary_initializer
+    | dictionary_initializer
+    | empty"""
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    elif len(p) == 2:
+        p[0] = [p[1]] if p[1] is not None else []
+
+
+def p_dictionary_initializer(p):
+    """dictionary_initializer : OPEN_BRACE expression COMMA expression CLOSE_BRACE"""
+    p[0] = ("key_value", p[2], p[4])
 
 
 # ========== REGLAS GRAMATICALES: LITERALES ==========
@@ -592,6 +614,8 @@ def check_node(node):
         check_function_call(node)
     elif node_type == "array_access":
         check_array_access(node)
+    elif node_type in ["dict_access", "dict_init"]:
+        check_dictionary_operation(node)
 
     # Recursión para nodos hijos
     for i in range(1, len(node)):
@@ -784,6 +808,50 @@ def check_array_access(node):
         )
 
 
+def check_dictionary_operation(node):
+    """Verifica operaciones con diccionarios"""
+    if node[0] == "dict_access":
+        dict_name = node[1]
+        key_expr = node[2]
+
+        if dict_name not in symbol_table:
+            semantic_errors.append(f"[SEMANTIC ERROR] Dictionary '{dict_name}' not declared")
+            return
+
+        dict_type = symbol_table[dict_name]["type"]
+        if not isinstance(dict_type, tuple) or dict_type[0] != "dictionary":
+            semantic_errors.append(f"[SEMANTIC ERROR] Variable '{dict_name}' is not a dictionary")
+            return
+
+        key_type = get_expression_type(key_expr)
+        expected_key_type = dict_type[1]
+
+        if key_type != "unknown" and key_type != expected_key_type:
+            semantic_errors.append(
+                f"[SEMANTIC ERROR] Dictionary key must be of type {expected_key_type}, got {key_type}"
+            )
+
+    elif node[0] == "dict_init":
+        key_value_pairs = node[3]  # Lista de tuplas (key_value, key, value)
+        key_type = node[1]
+        value_type = node[2]
+
+        for pair in key_value_pairs:
+            if pair[0] == "key_value":
+                actual_key_type = get_expression_type(pair[1])
+                actual_value_type = get_expression_type(pair[2])
+
+                if actual_key_type != "unknown" and actual_key_type != key_type:
+                    semantic_errors.append(
+                        f"[SEMANTIC ERROR] Dictionary key must be of type {key_type}, got {actual_key_type}"
+                    )
+
+                if actual_value_type != "unknown" and actual_value_type != value_type:
+                    semantic_errors.append(
+                        f"[SEMANTIC ERROR] Dictionary value must be of type {value_type}, got {actual_value_type}"
+                    )
+
+
 def get_expression_type(expr, is_condition=False):
     """Obtiene el tipo de una expresión"""
     if isinstance(expr, str):
@@ -864,6 +932,34 @@ def get_expression_type(expr, is_condition=False):
                         return "unknown"
                     return element_type
             return "unknown"
+
+        elif expr_type == "dict_access":
+            dict_name = expr[1]
+            if dict_name in symbol_table:
+                dict_type = symbol_table[dict_name]["type"]
+                if isinstance(dict_type, tuple) and dict_type[0] == "dictionary":
+                    value_type = dict_type[2]  # El tipo del valor es el tercer elemento
+                    if is_condition:
+                        semantic_errors.append(
+                            f"[SEMANTIC ERROR] Cannot use dictionary value of type {value_type} directly as a condition"
+                        )
+                        return "unknown"
+                    return value_type
+                else:
+                    semantic_errors.append(
+                        f"[SEMANTIC ERROR] Variable '{dict_name}' is not a dictionary"
+                    )
+            else:
+                semantic_errors.append(
+                    f"[SEMANTIC ERROR] Dictionary '{dict_name}' not declared"
+                )
+            return "unknown"
+
+        elif expr_type == "dict_new":
+            return ("dictionary", expr[1], expr[2])  # (tipo_clave, tipo_valor)
+
+        elif expr_type == "dict_init":
+            return ("dictionary", expr[1], expr[2])  # (tipo_clave, tipo_valor)
 
         elif expr_type == "member_access":
             obj_name = expr[1]

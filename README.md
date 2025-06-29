@@ -98,6 +98,49 @@ deactivate
   El parser reconoce declaraciones de variables, arreglos, listas, diccionarios, funciones (con y sin parámetros, con retorno), clases, métodos, propiedades, y estructuras de control (`if`, `else`, `while`, `for`, `switch`).
 - **Soporte para expresiones complejas:**  
   Manejo de operaciones aritméticas, lógicas, acceso a arreglos y diccionarios, llamadas a funciones y métodos estáticos.
+
+#### Análisis Semántico y Estructuras:
+
+- **Flujo de Análisis:**
+  - El análisis semántico solo se ejecuta si el sintáctico pasa sin errores
+  - Se utiliza el árbol de sintaxis abstracta (AST) según la documentación de PLY
+  - Los logs muestran el árbol para facilitar la depuración
+
+- **Distribución del Trabajo:**
+
+  **Estructuras de Datos:**
+  - **Arrays:** David Aragundy
+    - Declaración e inicialización de arrays
+    - Acceso a elementos
+
+  - **Listas:** David Luna
+    - Manejo de listas dinámicas
+    - Operaciones de lista
+
+  - **Diccionarios:** Gabriela Jiménez
+    - Implementación de Dictionary<K,V>
+    - Acceso y modificación de elementos
+
+  **Análisis Semántico:**
+  - **Compatibilidad de Operaciones:** David Aragundy
+    - Validación de tipos en operaciones
+    - Detección de operaciones inválidas
+
+  - **Asignaciones:** David Luna
+    - Verificación de tipos en asignaciones
+    - Control de inicialización de variables
+
+  - **Estructuras de Control:** Gabriela Jiménez
+    - Validación de condiciones booleanas
+    - Comprobación de tipos en bucles
+
+- **Ejemplos de Prueba:**
+  Se incluyen ejemplos de cada funcionalidad en `test_errors.cs`, organizados por secciones:
+  - Variables no declaradas
+  - Compatibilidad de tipos en operaciones
+  - Asignaciones inválidas
+  - Estructuras de control (condiciones no booleanas)
+  - Operaciones con arrays y diccionarios
 - **Manejo de entrada/salida:**  
   Reconocimiento de instrucciones como `Console.WriteLine`, `Console.ReadLine` y conversiones de tipo (`Convert.ToInt32`).
 - **Registro de errores sintácticos:**  

@@ -48,10 +48,6 @@ class TestErrors
         bool wrongBool = 5;
         float wrongFloat = flag;
         
-        // Asignación a variable no declarada
-        unknownVariable = text;
-        
-        
         // ========== ERRORES EN ESTRUCTURAS DE CONTROL ==========
         Console.WriteLine("=== Testing control structure errors ===");
         
@@ -74,6 +70,32 @@ class TestErrors
         int badElement2 = validArray[flag];
         int badElement3 = validArray[decimal_num];
         
+        // ========== ERRORES DE DICCIONARIOS ==========
+        Console.WriteLine("=== Testing dictionary errors ===");
+        
+        // Declaración correcta de diccionario
+        Dictionary<string, int> scores = new Dictionary<string, int>();
+        
+        // Error: Tipo de clave incorrecto
+        scores[42] = 100;  // Error: la clave debe ser string
+        
+        // Error: Tipo de valor incorrecto
+        scores["John"] = "A+";  // Error: el valor debe ser int
+        
+        // Error: Usar valor de diccionario como condición
+        if (scores["John"] > 0) { }  // Error: no se puede usar int como condición
+        
+        // Error: Acceder a diccionario no declarado
+        Dictionary<int, string> undeclaredDict;
+        undeclaredDict[1] = "test";
+        
+        // Error: Inicialización con tipos incorrectos
+        Dictionary<string, int> wrongInit = new Dictionary<string, int>();
+        wrongInit[42] = "wrong";  // Error: clave debe ser string, valor debe ser int
+        wrongInit["ok"] = false;  // Error: valor debe ser int
+        
+        // Asignación a variable no declarada
+        unknownVariable = text;
         
         // ========== ERRORES CON FUNCIONES ==========
         Console.WriteLine("=== Testing function call errors ===");
