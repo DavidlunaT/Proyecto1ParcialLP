@@ -1,73 +1,118 @@
-# Proyecto1ParcialLP
+<div align="center">
 
-## Setup Instructions
+# 🎯 Analizador Léxico, Sintáctico y Semántico para C#
 
-### Prerequisites
+[![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![PLY](https://img.shields.io/badge/PLY-4.0-green.svg)](https://www.dabeaz.com/ply/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-- Python 3.7+ installed on your system
+</div>
 
-### Installation Steps
+## 📋 Contenido
 
-1. **Clone the repository** (if you haven't already):
+- [Instalación](#-instalación)
+- [Uso](#-uso)
+- [Equipo](#-equipo)
+- [Características](#-características)
+- [Ejemplos](#-ejemplos)
 
+## 🚀 Instalación
+
+### Prerrequisitos
+
+- Python 3.7 o superior
+- pip (gestor de paquetes de Python)
+
+### Pasos
+
+1. **Clonar el repositorio**
    ```bash
    git clone <repository-url>
    cd Proyecto1ParcialLP
    ```
 
-2. **Create a virtual environment**:
-
+2. **Crear y activar entorno virtual**
    ```bash
+   # Crear entorno
    python -m venv venv
+
+   # Activar entorno
+   # Windows (Git Bash)
+   source venv/Scripts/activate
+   # Windows (CMD)
+   venv\Scripts\activate
+   # macOS/Linux
+   source venv/bin/activate
    ```
 
-3. **Activate the virtual environment**:
-
-   - **Windows (Git Bash)**: `source venv/Scripts/activate`
-   - **Windows (Command Prompt)**: `venv\Scripts\activate`
-   - **macOS/Linux**: `source venv/bin/activate`
-
-4. **Install the required dependencies**:
-
+3. **Instalar dependencias**
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **Run the lexical analyzer**:
+## 💻 Uso
+
+1. **Ejecutar analizador léxico**
    ```bash
    python lex.py
    ```
-   
-6. **Ejecuta el analizador sintáctico**:
+
+2. **Ejecutar analizador sintáctico y semántico**
    ```bash
    python yacc.py
    ```
 
-### Deactivating the Virtual Environment
+## 👥 Equipo
 
-When you're done working, you can deactivate the virtual environment:
+### Estructuras de Datos
 
-```bash
-deactivate
-```
+| Miembro | Responsabilidad | Descripción |
+|---------|----------------|-------------|
+| David Aragundy | Arrays | Declaración, inicialización y acceso |
+| David Luna | Listas | Manejo de listas dinámicas |
+| Gabriela Jiménez | Diccionarios | Implementación de Dictionary<K,V> |
 
-## Algoritmos
+### Análisis Semántico
 
-1. **Algoritmo 1**:
-   - **Encargado:** David Luna
-   - **Descripción:** Este algoritmo se encarga de funcionar como una calculadora simple.
-   - **Nota:** Se actualizó el algoritmo en función de las sugerencias del profesor.
-2. **Algoritmo 2**:
-   - **Encargado:** David Aragundy
-   - **Descripción:** Este algoritmo se encarga de calcular el número de Fibonacci de forma iterativa .
-   - **Nota:** Hay algunas decisiones de diseño que se tomaron que aún no están del todo claras (como la de los tokens de operadores y los tipos de datos). Agradecemos cualquier sugerencia al respecto para un diseño más eficiente.
-3. **Algoritmo 3**:
-   - **Encargado:** Gabriela Jiménez
-   - **Descripción:** Este algoritmo se encarga de ordenar una lista de números con el algoritmo de ordenamiento por burbuja.
+| Miembro | Responsabilidad | Descripción |
+|---------|----------------|-------------|
+| David Aragundy | Compatibilidad | Validación de tipos en operaciones |
+| David Luna | Asignaciones | Verificación de tipos en asignaciones |
+| Gabriela Jiménez | Control | Validación de condiciones booleanas |
 
----
+## ✨ Características
 
-## Segundo avance
+### Análisis Léxico
+- 🔍 79 palabras reservadas de C#
+- 🎯 27 palabras clave contextuales
+- 🔢 Soporte para literales numéricos avanzados
+- 📝 Manejo de cadenas y caracteres
+
+### Análisis Sintáctico
+- 🏗️ Construcción de AST
+- 📊 Estructuras de control
+- 📦 Declaraciones de variables
+- 🔧 Expresiones y operaciones
+
+### Análisis Semántico
+- ✅ Validación de tipos
+- 🔄 Comprobación de declaraciones
+- 🚦 Validación de condiciones
+- 📝 Registro detallado de errores
+
+## 📝 Ejemplos
+
+Encontarás ejemplos detallados en `test_errors.cs` que cubren:
+
+- Variables no declaradas
+- Compatibilidad de tipos
+- Asignaciones inválidas
+- Estructuras de control
+- Arrays y diccionarios
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ### Resumen de cambios y mejoras
 
