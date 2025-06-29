@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: gabsjimz
+File: algoritmos/algoritmo3.cs
+Date: 29-06-2025-14h37
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token ')' at line 12

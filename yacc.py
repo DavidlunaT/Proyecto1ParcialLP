@@ -271,8 +271,8 @@ def p_assignment_statement(p):
 
 
 def p_if_statement(p):
-    """if_statement : IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    | IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement"""
+    """if_statement : IF OPEN_PAREN expression CLOSE_PAREN statement
+    | IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement"""
     if len(p) == 6:
         p[0] = ("if", p[3], p[5], None)
     else:
@@ -723,7 +723,7 @@ def check_control_structure(node):
     node_type = node[0]
     condition = node[1]
 
-    cond_type = get_expression_type(condition)
+    cond_type = get_expression_type(condition, is_condition=True)
     if cond_type != "bool":
         semantic_errors.append(
             f"[SEMANTIC ERROR] {node_type.capitalize()} condition must be boolean, got {cond_type}"
@@ -784,11 +784,17 @@ def check_array_access(node):
         )
 
 
-def get_expression_type(expr):
+def get_expression_type(expr, is_condition=False):
     """Obtiene el tipo de una expresión"""
     if isinstance(expr, str):
         if expr in symbol_table:
-            return symbol_table[expr]["type"]
+            expr_type = symbol_table[expr]["type"]
+            if is_condition and expr_type != "bool":
+                semantic_errors.append(
+                    f"[SEMANTIC ERROR] Cannot use type {expr_type} as a condition"
+                )
+                return "unknown"
+            return expr_type
         # Valores booleanos
         if expr in ["true", "false", "True", "False"]:
             return "bool"
@@ -804,10 +810,25 @@ def get_expression_type(expr):
         if expr_type == "literal":
             type_name = expr[1]
             if type_name == "int":
+                if is_condition:
+                    semantic_errors.append(
+                        "[SEMANTIC ERROR] Cannot use integer literal as a condition"
+                    )
+                    return "unknown"
                 return "int"
             elif type_name == "float":
+                if is_condition:
+                    semantic_errors.append(
+                        "[SEMANTIC ERROR] Cannot use float literal as a condition"
+                    )
+                    return "unknown"
                 return "float"
             elif type_name == "str":
+                if is_condition:
+                    semantic_errors.append(
+                        "[SEMANTIC ERROR] Cannot use string literal as a condition"
+                    )
+                    return "unknown"
                 return "string"
             elif type_name == "bool":
                 return "bool"
@@ -821,6 +842,10 @@ def get_expression_type(expr):
             if op == "+" and (left_type == "string" or right_type == "string"):
                 return "string"
 
+            # Para operaciones de comparación
+            if op in ["<", ">", "<=", ">=", "==", "!="]:
+                return "bool"
+
             return resolve_arithmetic_type(left_type, right_type)
 
         elif expr_type == "comparison":
@@ -831,18 +856,35 @@ def get_expression_type(expr):
             if array_name in symbol_table:
                 array_type = symbol_table[array_name]["type"]
                 if isinstance(array_type, tuple) and array_type[0] == "array_type":
-                    return array_type[1]  # Tipo del elemento
+                    element_type = array_type[1]
+                    if is_condition:
+                        semantic_errors.append(
+                            f"[SEMANTIC ERROR] Cannot use array element of type {element_type} directly as a condition"
+                        )
+                        return "unknown"
+                    return element_type
             return "unknown"
 
         elif expr_type == "member_access":
             obj_name = expr[1]
             member_name = expr[2]
             if member_name == "Length" and obj_name in symbol_table:
+                if is_condition:
+                    semantic_errors.append(
+                        "[SEMANTIC ERROR] Cannot use array length directly as a condition"
+                    )
+                    return "unknown"
                 return "int"
             return "unknown"
 
         elif expr_type == "input":
-            return expr[1]  # "string" o "int"
+            input_type = expr[1]  # "string" o "int"
+            if is_condition:
+                semantic_errors.append(
+                    f"[SEMANTIC ERROR] Cannot use input of type {input_type} directly as a condition"
+                )
+                return "unknown"
+            return input_type
 
         elif expr_type == "array_literal":
             # Si es un array literal, retornar array_type del primer elemento

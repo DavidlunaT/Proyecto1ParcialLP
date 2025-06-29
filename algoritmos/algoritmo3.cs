@@ -9,7 +9,7 @@ class BubbleSortExample
         {
             for (int j = 0; j < n - i - 1; j++)
             {
-                if (array[j] > array[j + 1])
+                if (array[j])
                 {
                     int temp = array[j];
                     array[j] = array[j + 1];
