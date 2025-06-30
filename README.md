@@ -129,20 +129,32 @@ deactivate
 | Asignaciones                  | David Luna       | • Verificación de tipos en asignaciones<br>• Control de inicialización de variables |
 | Estructuras de Control        | Gabriela Jiménez | • Validación de condiciones booleanas<br>• Comprobación de tipos en bucles          |
 
-- **Ejemplos de Prueba:**
-  Se incluyen ejemplos de cada funcionalidad en `test_errors.cs`, organizados por secciones:
-  - Variables no declaradas
-  - Compatibilidad de tipos en operaciones
-  - Asignaciones inválidas
-  - Estructuras de control (condiciones no booleanas)
-  - Operaciones con arrays y diccionarios
-- **Manejo de entrada/salida:**  
-  Reconocimiento de instrucciones como `Console.WriteLine`, `Console.ReadLine` y conversiones de tipo (`Convert.ToInt32`).
-- **Registro de errores sintácticos:**  
-  Los errores se registran con detalles y se guardan en archivos de log con marca de tiempo y nombre de usuario.
-- **Menú interactivo:**  
-  Permite seleccionar el archivo de algoritmo a analizar y genera un log detallado del análisis sintáctico.
-- **Soporte para clases y métodos públicos/estáticos:**  
-  Reconocimiento de clases públicas, métodos estáticos, métodos principales (`Main`) y propiedades con `get`/`set`.
-- **Extensible y modular:**  
-  El parser está organizado por secciones responsables, facilitando la colaboración y el mantenimiento.
+### 🧪 Ejemplos de Prueba
+
+Se incluyen ejemplos de cada funcionalidad en `test_errors.cs`, organizados por secciones:
+
+- Variables no declaradas
+- Compatibilidad de tipos en operaciones
+- Asignaciones inválidas
+- Estructuras de control (condiciones no booleanas)
+- Operaciones con arrays y diccionarios
+
+### Manejo de entrada/salida
+
+Reconocimiento de instrucciones como `Console.WriteLine`, `Console.ReadLine` y conversiones de tipo (`Convert.ToInt32`).
+
+### Registro de errores sintácticos
+
+Los errores se registran con detalles y se guardan en archivos de log con marca de tiempo y nombre de usuario.
+
+### Menú interactivo
+
+Permite seleccionar el archivo de algoritmo a analizar y genera un log detallado del análisis sintáctico.
+
+### Soporte para clases y métodos públicos/estáticos
+
+Reconocimiento de clases públicas, métodos estáticos, métodos principales (`Main`) y propiedades con `get`/`set`.
+
+### Extensible y modular
+
+El parser está organizado por secciones responsables, facilitando la colaboración y el mantenimiento.
