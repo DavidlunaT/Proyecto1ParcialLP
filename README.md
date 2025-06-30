@@ -4,41 +4,40 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
 
 ---
 
-## 🛠️ Setup Instructions
+## 🛠️ Instrucciones de Configuración
 
 ### 📋 Prerrequisitos
 
-- Python 3.7 o superior instalado.
+- Python 3.7 o superior instalado en tu sistema
 
-### 🔧 Installation Steps
+### 💻 Pasos de Instalación
 
-1. **Clona el repositorio:**
+1. **Clona el repositorio** (si aún no lo has hecho):
 
    ```bash
    git clone <repository-url>
    cd Proyecto1ParcialLP
-
    ```
 
-2. **Create a virtual environment**:
+2. **Crea un entorno virtual**:
 
    ```bash
    python -m venv venv
    ```
 
-3. **Activate the virtual environment**:
+3. **Activa el entorno virtual**:
 
    - **Windows (Git Bash)**: `source venv/Scripts/activate`
    - **Windows (Command Prompt)**: `venv\Scripts\activate`
    - **macOS/Linux**: `source venv/bin/activate`
 
-4. **Install the required dependencies**:
+4. **Instala las dependencias requeridas**:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **Run the lexical analyzer**:
+5. **Ejecuta el analizador léxico**:
    ```bash
    python lex.py
    ```
@@ -47,9 +46,9 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
    python yacc.py
    ```
 
-### 🔌 Desactivación del Entorno Virtual
+### 🔌 Desactivar el Entorno Virtual
 
-Cuando termines de trabajar, puedes desactivar el entorno virtual:
+Cuando hayas terminado de trabajar, puedes desactivar el entorno virtual:
 
 ```bash
 deactivate
