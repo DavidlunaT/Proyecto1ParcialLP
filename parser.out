@@ -16,15 +16,19 @@ Unused terminals:
     BREAK
     BY
     BYTE
+    CAPACITY
     CARET
     CARET_ASSIGN
     CASE
     CATCH
     CHECKED
     CLASS_NAME
+    CLEAR
     COLON
     CONST
+    CONTAINS
     CONTINUE
+    COUNT
     DECIMAL
     DEFAULT
     DELEGATE
@@ -46,6 +50,8 @@ Unused terminals:
     GOTO
     GROUP
     IMPLICIT
+    INDEXOF
+    INSERT
     INTERFACE
     INTO
     IS
@@ -78,6 +84,7 @@ Unused terminals:
     READONLY
     REF
     REMOVE
+    REMOVEAT
     RIGHT_SHIFT
     RIGHT_SHIFT_ASSIGN
     SBYTE
@@ -273,6 +280,7 @@ BOOL_TYPE            : 40
 BREAK                : 
 BY                   : 
 BYTE                 : 
+CAPACITY             : 
 CARET                : 
 CARET_ASSIGN         : 
 CASE                 : 
@@ -282,6 +290,7 @@ CHAR_LITERAL         : 141
 CHECKED              : 
 CLASS                : 9 10
 CLASS_NAME           : 
+CLEAR                : 
 CLOSE_BRACE          : 9 10 21 29 30 31 63 121 124 137
 CLOSE_BRACKET        : 46 72 122 125
 CLOSE_PAREN          : 29 30 31 74 75 76 77 85 88 89 90 91 92 92 105 123 127
@@ -289,8 +298,10 @@ COLON                :
 COMMA                : 32 48 67 123 124 128 131 134 137
 CONSOLE              : 88 89 90 91 92
 CONST                : 
+CONTAINS             : 
 CONTINUE             : 
 CONVERT              : 92
+COUNT                : 
 DECIMAL              : 
 DECREMENT            : 83
 DEFAULT              : 
@@ -333,6 +344,8 @@ IF                   : 74 75
 IMPLICIT             : 
 IN                   : 85
 INCREMENT            : 82
+INDEXOF              : 
+INSERT               : 
 INTEGER              : 138
 INTERFACE            : 
 INTERNAL             : 14
@@ -385,6 +398,7 @@ READLINE             : 91 92
 READONLY             : 
 REF                  : 
 REMOVE               : 
+REMOVEAT             : 
 RETURN               : 86 87
 RIGHT_SHIFT          : 
 RIGHT_SHIFT_ASSIGN   : 

@@ -7,7 +7,8 @@ class SimpleCalculator
         Console.WriteLine("Simple Calculator - Add or Subtract");
         Console.Write("Enter first number: ");
         int num1 = Convert.ToInt32(Console.ReadLine());
-
+        //int num1 = Convert.ToInt32(Console.ReadLine()); -> prueba de error con el semantico
+        //num3 = Console.ReadLine(); 
         Console.Write("Enter second number: ");
         int num2 = Convert.ToInt32(Console.ReadLine());
 
