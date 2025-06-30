@@ -6,7 +6,7 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
 
 ## 🛠️ Setup Instructions
 
-### 📋 Prerequisites
+### 📋 Prerrequisitos
 
 - Python 3.7 o superior instalado.
 
@@ -47,9 +47,9 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
    python yacc.py
    ```
 
-### 🔌 Deactivating the Virtual Environment
+### 🔌 Desactivación del Entorno Virtual
 
-When you're done working, you can deactivate the virtual environment:
+Cuando termines de trabajar, puedes desactivar el entorno virtual:
 
 ```bash
 deactivate
