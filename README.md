@@ -1,6 +1,6 @@
-# 📦 Proyecto1ParcialLP
+# 📦 ProyectoLP
 
-Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado con Python y PLY.
+Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado con Python, PLY y Flet.
 
 ---
 
@@ -16,7 +16,7 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
 
    ```bash
    git clone <repository-url>
-   cd Proyecto1ParcialLP
+   cd ProyectoLP
    ```
 
 2. **Crea un entorno virtual**:
@@ -37,14 +37,36 @@ Analizador léxico, sintáctico y semántico para el lenguaje C#, desarrollado c
    pip install -r requirements.txt
    ```
 
-5. **Ejecuta el analizador léxico**:
+5. **Ejecuta el analizador léxico (línea de comandos)**:
+
    ```bash
    python lex.py
    ```
-6. **Ejecuta el analizador sintáctico**:
+
+6. **Ejecuta el analizador sintáctico o semántico (línea de comandos)**:
+
    ```bash
    python yacc.py
    ```
+
+7. **🚀 Ejecuta la interfaz gráfica (GUI)**:
+   ```bash
+   python main.py
+   ```
+
+---
+
+## 🖥️ Interfaz Gráfica
+
+### 🚀 Cómo usar la interfaz gráfica
+
+1. **Selecciona un algoritmo:** Usa el dropdown para cargar algoritmos predefinidos
+2. **Edita el código:** Modifica el código en el editor integrado si es necesario
+3. **Ejecuta análisis:**
+   - Usa botones individuales para cada análisis
+   - O usa "Run All" para análisis completo
+4. **Revisa resultados:** Navega entre las pestañas de resultados
+5. **Consulta logs:** Ve el progreso en la sección de logs en la parte inferior
 
 ### 🔌 Desactivar el Entorno Virtual
 
