@@ -326,7 +326,7 @@ def p_return_statement(p):
 
 # ========== REGLAS GRAMATICALES: IMPRESIÓN E INGRESO DE DATOS ==========
 
-
+#--------------------------------------------------------------------------------------------------------------------
 def p_print_statement(p):
     """print_statement : CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
     | CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON
@@ -345,7 +345,7 @@ def p_input_statement(p):
         p[0] = ("input", "string")
     else:
         p[0] = ("input", "int")
-
+#--------------------------------------------------------------------------------------------------------------------
 
 # ========== REGLAS GRAMATICALES: EXPRESIONES ARITMÉTICAS ==========
 
@@ -389,7 +389,7 @@ def p_arithmetic_expression(p):
 
 # ========== REGLAS GRAMATICALES: CONDICIONES Y CONECTORES LÓGICOS ==========
 
-
+#--------------------------------------------------------------------------------------------------------------------
 def p_boolean_expression(p):
     """boolean_expression : expression EQUAL expression
     | expression NOT_EQUAL expression
@@ -404,7 +404,7 @@ def p_boolean_expression(p):
         p[0] = ("not", p[2])
     else:
         p[0] = ("comparison", p[2], p[1], p[3])
-
+#--------------------------------------------------------------------------------------------------------------------
 
 # ========== REGLAS GRAMATICALES: ESTRUCTURAS DE DATOS ==========
 
@@ -412,16 +412,18 @@ def p_boolean_expression(p):
 def p_array_initialization(p):
     """array_initialization : OPEN_BRACE expression_list CLOSE_BRACE
     | NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    | NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    | NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE"""
+    | NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    | NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE"""
     if len(p) == 4:
         p[0] = ("array_init", p[2])
     elif len(p) == 6:
         p[0] = ("array_new", p[2], p[4])
-    elif len(p) == 10:
-        p[0] = ("dict_new", p[4], p[6])
-    else:
-        p[0] = ("dict_init", p[4], p[6], p[9])
+    elif len(p) == 8:
+        # new List<int>()
+        p[0] = ("list_new", p[4], [])
+    elif len(p) == 9:
+        # new List<int>{ 1, 2, 3 }
+        p[0] = ("list_init", p[4], p[7])
 
 
 def p_array_access(p):
@@ -700,6 +702,13 @@ def check_multi_declaration(node):
                         semantic_errors.append(
                             f"[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize {var_type} with {expr_type}"
                         )
+    # En check_multi_declaration o donde sea que verifiques tipos, asegúrate de incluir:
+    if isinstance(var_type, tuple) and var_type[0] == "list_type" and isinstance(expr_type, tuple) and expr_type[0] == "list_type":
+        # Verificar que los tipos de elementos sean compatibles
+        if not are_types_compatible(var_type[1], expr_type[1]):
+            semantic_errors.append(
+                f"[SEMANTIC ERROR] Cannot initialize List<{var_type[1]}> with List<{expr_type[1]}>"
+            )
 
 
 def check_arithmetic_compatibility(node):
@@ -989,6 +998,14 @@ def get_expression_type(expr, is_condition=False):
                 elem_type = get_expression_type(elements[0])
                 return ("array_type", elem_type)
             return "unknown"
+
+        elif expr_type == "list_new":
+            element_type = expr[1]
+            return ("list_type", element_type)
+
+        elif expr_type == "list_init":
+            element_type = expr[1]
+            return ("list_type", element_type)
 
     return "unknown"
 

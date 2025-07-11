@@ -239,8 +239,8 @@ Rule 119   boolean_expression -> boolean_expression DOUBLE_PIPE boolean_expressi
 Rule 120   boolean_expression -> BANG boolean_expression
 Rule 121   array_initialization -> OPEN_BRACE expression_list CLOSE_BRACE
 Rule 122   array_initialization -> NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-Rule 123   array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-Rule 124   array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+Rule 123   array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+Rule 124   array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 Rule 125   array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
 Rule 126   member_access -> IDENTIFIER DOT IDENTIFIER
 Rule 127   function_call -> IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
@@ -295,7 +295,7 @@ CLOSE_BRACE          : 9 10 21 29 30 31 63 121 124 137
 CLOSE_BRACKET        : 46 72 122 125
 CLOSE_PAREN          : 29 30 31 74 75 76 77 85 88 89 90 91 92 92 105 123 127
 COLON                : 
-COMMA                : 32 48 67 123 124 128 131 134 137
+COMMA                : 32 48 67 128 131 134 137
 CONSOLE              : 88 89 90 91 92
 CONST                : 
 CONTAINS             : 
@@ -307,7 +307,7 @@ DECREMENT            : 83
 DEFAULT              : 
 DELEGATE             : 
 DESCENDING           : 
-DICTIONARY           : 48 123 124
+DICTIONARY           : 48
 DIVIDE               : 109
 DIVIDE_ASSIGN        : 
 DO                   : 
@@ -359,7 +359,7 @@ LEFT_SHIFT_ASSIGN    :
 LESS_THAN            : 47 48 114 123 124
 LESS_THAN_EQUAL      : 116
 LET                  : 
-LIST                 : 47
+LIST                 : 47 123 124
 LOCK                 : 
 LONG                 : 
 MINUS                : 107 111
@@ -460,10 +460,10 @@ class_declarations   : 1 7
 class_member         : 15 16
 declaration_statement : 53
 dictionary_initializer : 134 135
-dictionary_initializer_list : 124 134
+dictionary_initializer_list : 134
 empty                : 4 17 34 51 80 84 130 133 136
 expression           : 26 28 64 66 70 71 72 72 73 78 85 86 88 89 105 106 106 107 107 108 108 109 109 110 110 111 112 112 113 113 114 114 115 115 116 116 117 117 122 125 128 129 131 132 137 137
-expression_list      : 121 131
+expression_list      : 121 124 131
 expression_statement : 52
 field_declaration    : 18
 for_init             : 77
@@ -487,7 +487,7 @@ property_declaration : 20
 return_statement     : 59
 statement            : 49 50 74 75 75 76 77 85
 statement_list       : 29 30 31 49 63
-type_specifier       : 21 25 26 27 28 29 30 31 35 46 47 48 48 65 78 85 122 123 123 124 124
+type_specifier       : 21 25 26 27 28 29 30 31 35 46 47 48 48 65 78 85 122 123 124
 using_statement      : 2 3
 using_statements     : 1 2
 variable_declarator  : 67 68
@@ -1673,8 +1673,8 @@ state 61
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -1803,8 +1803,8 @@ state 67
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -2267,8 +2267,8 @@ state 84
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -2340,8 +2340,8 @@ state 85
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -2413,8 +2413,8 @@ state 86
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -2610,8 +2610,8 @@ state 92
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -2649,8 +2649,8 @@ state 92
 state 93
 
     (122) array_initialization -> NEW . type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> NEW . DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW . DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> NEW . LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW . LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (36) type_specifier -> . INT_TYPE
     (37) type_specifier -> . FLOAT_TYPE
     (38) type_specifier -> . DOUBLE
@@ -2665,7 +2665,7 @@ state 93
     (47) generic_type -> . LIST LESS_THAN type_specifier GREATER_THAN
     (48) generic_type -> . DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN
 
-    DICTIONARY      shift and go to state 133
+    LIST            shift and go to state 133
     INT_TYPE        shift and go to state 35
     FLOAT_TYPE      shift and go to state 36
     DOUBLE          shift and go to state 37
@@ -2674,7 +2674,7 @@ state 93
     CHAR            shift and go to state 40
     VOID            shift and go to state 41
     IDENTIFIER      shift and go to state 25
-    LIST            shift and go to state 44
+    DICTIONARY      shift and go to state 45
 
     type_specifier                 shift and go to state 132
     array_type                     shift and go to state 42
@@ -2950,8 +2950,8 @@ state 108
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3027,8 +3027,8 @@ state 109
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3129,8 +3129,8 @@ state 112
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3202,8 +3202,8 @@ state 113
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3275,8 +3275,8 @@ state 114
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3348,8 +3348,8 @@ state 115
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3421,8 +3421,8 @@ state 116
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3494,8 +3494,8 @@ state 117
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3567,8 +3567,8 @@ state 118
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3640,8 +3640,8 @@ state 119
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3713,8 +3713,8 @@ state 120
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3786,8 +3786,8 @@ state 121
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3859,8 +3859,8 @@ state 122
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -3932,8 +3932,8 @@ state 123
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -4005,8 +4005,8 @@ state 124
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -4249,9 +4249,9 @@ state 132
 
 state 133
 
-    (123) array_initialization -> NEW DICTIONARY . LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY . LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY . LESS_THAN type_specifier COMMA type_specifier GREATER_THAN
+    (123) array_initialization -> NEW LIST . LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST . LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
+    (47) generic_type -> LIST . LESS_THAN type_specifier GREATER_THAN
 
     LESS_THAN       shift and go to state 168
 
@@ -5216,8 +5216,8 @@ state 166
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -5290,8 +5290,8 @@ state 167
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -5325,9 +5325,9 @@ state 167
 
 state 168
 
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN . type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN . type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY LESS_THAN . type_specifier COMMA type_specifier GREATER_THAN
+    (123) array_initialization -> NEW LIST LESS_THAN . type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST LESS_THAN . type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
+    (47) generic_type -> LIST LESS_THAN . type_specifier GREATER_THAN
     (36) type_specifier -> . INT_TYPE
     (37) type_specifier -> . FLOAT_TYPE
     (38) type_specifier -> . DOUBLE
@@ -5476,8 +5476,8 @@ state 173
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
   ! shift/reduce conflict for VAR resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
@@ -5686,8 +5686,8 @@ state 178
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -5803,12 +5803,12 @@ state 181
 
 state 182
 
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier . COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier . COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY LESS_THAN type_specifier . COMMA type_specifier GREATER_THAN
+    (123) array_initialization -> NEW LIST LESS_THAN type_specifier . GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST LESS_THAN type_specifier . GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
+    (47) generic_type -> LIST LESS_THAN type_specifier . GREATER_THAN
     (46) array_type -> type_specifier . OPEN_BRACKET CLOSE_BRACKET
 
-    COMMA           shift and go to state 215
+    GREATER_THAN    shift and go to state 215
     OPEN_BRACKET    shift and go to state 53
 
 
@@ -5914,8 +5914,8 @@ state 185
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
   ! shift/reduce conflict for VAR resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
@@ -6174,8 +6174,8 @@ state 188
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (46) array_type -> . type_specifier OPEN_BRACKET CLOSE_BRACKET
     (47) generic_type -> . LIST LESS_THAN type_specifier GREATER_THAN
     (48) generic_type -> . DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN
@@ -6387,8 +6387,8 @@ state 189
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     CLOSE_BRACE     shift and go to state 229
     VAR             shift and go to state 204
@@ -7064,8 +7064,8 @@ state 209
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -7202,8 +7202,8 @@ state 212
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
   ! shift/reduce conflict for VAR resolved as shift
   ! shift/reduce conflict for IDENTIFIER resolved as shift
@@ -7381,37 +7381,14 @@ state 214
 
 state 215
 
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA . type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA . type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY LESS_THAN type_specifier COMMA . type_specifier GREATER_THAN
-    (36) type_specifier -> . INT_TYPE
-    (37) type_specifier -> . FLOAT_TYPE
-    (38) type_specifier -> . DOUBLE
-    (39) type_specifier -> . STRING_TYPE
-    (40) type_specifier -> . BOOL_TYPE
-    (41) type_specifier -> . CHAR
-    (42) type_specifier -> . VOID
-    (43) type_specifier -> . IDENTIFIER
-    (44) type_specifier -> . array_type
-    (45) type_specifier -> . generic_type
-    (46) array_type -> . type_specifier OPEN_BRACKET CLOSE_BRACKET
-    (47) generic_type -> . LIST LESS_THAN type_specifier GREATER_THAN
-    (48) generic_type -> . DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN
+    (123) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN . OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN . OPEN_BRACE expression_list CLOSE_BRACE
+    (47) generic_type -> LIST LESS_THAN type_specifier GREATER_THAN .
 
-    INT_TYPE        shift and go to state 35
-    FLOAT_TYPE      shift and go to state 36
-    DOUBLE          shift and go to state 37
-    STRING_TYPE     shift and go to state 38
-    BOOL_TYPE       shift and go to state 39
-    CHAR            shift and go to state 40
-    VOID            shift and go to state 41
-    IDENTIFIER      shift and go to state 25
-    LIST            shift and go to state 44
-    DICTIONARY      shift and go to state 45
+    OPEN_PAREN      shift and go to state 241
+    OPEN_BRACE      shift and go to state 242
+    OPEN_BRACKET    reduce using rule 47 (generic_type -> LIST LESS_THAN type_specifier GREATER_THAN .)
 
-    type_specifier                 shift and go to state 241
-    array_type                     shift and go to state 42
-    generic_type                   shift and go to state 43
 
 state 216
 
@@ -7471,7 +7448,7 @@ state 217
 
     (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE . DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
-    DOT             shift and go to state 242
+    DOT             shift and go to state 243
 
 
 state 218
@@ -7559,10 +7536,10 @@ state 218
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
-    CLOSE_BRACE     shift and go to state 243
+    CLOSE_BRACE     shift and go to state 244
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
     IF              shift and go to state 205
@@ -7624,8 +7601,8 @@ state 219
     (65) declaration_statement -> type_specifier variable_declarator_list . SEMICOLON
     (67) variable_declarator_list -> variable_declarator_list . COMMA variable_declarator
 
-    SEMICOLON       shift and go to state 244
-    COMMA           shift and go to state 245
+    SEMICOLON       shift and go to state 245
+    COMMA           shift and go to state 246
 
 
 state 220
@@ -7643,7 +7620,7 @@ state 221
 
     SEMICOLON       reduce using rule 69 (variable_declarator -> IDENTIFIER .)
     COMMA           reduce using rule 69 (variable_declarator -> IDENTIFIER .)
-    ASSIGN          shift and go to state 246
+    ASSIGN          shift and go to state 247
 
 
 state 222
@@ -7687,8 +7664,8 @@ state 222
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -7708,7 +7685,7 @@ state 222
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 247
+    expression                     shift and go to state 248
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -7761,8 +7738,8 @@ state 223
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -7782,7 +7759,7 @@ state 223
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 248
+    expression                     shift and go to state 249
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -7798,7 +7775,7 @@ state 224
     (73) assignment_statement -> IDENTIFIER DOT . IDENTIFIER ASSIGN expression SEMICOLON
     (126) member_access -> IDENTIFIER DOT . IDENTIFIER
 
-    IDENTIFIER      shift and go to state 249
+    IDENTIFIER      shift and go to state 250
 
 
 state 225
@@ -7886,10 +7863,10 @@ state 225
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
-    CLOSE_BRACE     shift and go to state 250
+    CLOSE_BRACE     shift and go to state 251
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
     IF              shift and go to state 205
@@ -8156,7 +8133,7 @@ state 232
 
     (66) declaration_statement -> VAR IDENTIFIER . ASSIGN expression SEMICOLON
 
-    ASSIGN          shift and go to state 251
+    ASSIGN          shift and go to state 252
 
 
 state 233
@@ -8201,8 +8178,8 @@ state 233
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -8222,7 +8199,7 @@ state 233
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    boolean_expression             shift and go to state 252
+    boolean_expression             shift and go to state 253
     expression                     shift and go to state 128
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
@@ -8274,8 +8251,8 @@ state 234
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -8295,7 +8272,7 @@ state 234
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    boolean_expression             shift and go to state 253
+    boolean_expression             shift and go to state 254
     expression                     shift and go to state 128
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
@@ -8337,15 +8314,15 @@ state 235
     BOOL_TYPE       shift and go to state 39
     CHAR            shift and go to state 40
     VOID            shift and go to state 41
-    IDENTIFIER      shift and go to state 256
+    IDENTIFIER      shift and go to state 257
     SEMICOLON       reduce using rule 143 (empty -> .)
     LIST            shift and go to state 44
     DICTIONARY      shift and go to state 45
 
-    for_init                       shift and go to state 254
-    type_specifier                 shift and go to state 255
-    assignment_statement           shift and go to state 257
-    empty                          shift and go to state 258
+    for_init                       shift and go to state 255
+    type_specifier                 shift and go to state 256
+    assignment_statement           shift and go to state 258
+    empty                          shift and go to state 259
     array_type                     shift and go to state 42
     generic_type                   shift and go to state 43
 
@@ -8377,7 +8354,7 @@ state 236
     LIST            shift and go to state 44
     DICTIONARY      shift and go to state 45
 
-    type_specifier                 shift and go to state 259
+    type_specifier                 shift and go to state 260
     array_type                     shift and go to state 42
     generic_type                   shift and go to state 43
 
@@ -8396,7 +8373,7 @@ state 237
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    SEMICOLON       shift and go to state 260
+    SEMICOLON       shift and go to state 261
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -8455,8 +8432,8 @@ state 239
     (90) print_statement -> CONSOLE DOT . WRITELINE OPEN_PAREN CLOSE_PAREN SEMICOLON
     (91) input_statement -> CONSOLE DOT . READLINE OPEN_PAREN CLOSE_PAREN
 
-    WRITELINE       shift and go to state 261
-    WRITE           shift and go to state 262
+    WRITELINE       shift and go to state 262
+    WRITE           shift and go to state 263
     READLINE        shift and go to state 169
 
 
@@ -8545,10 +8522,10 @@ state 240
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
-    CLOSE_BRACE     shift and go to state 263
+    CLOSE_BRACE     shift and go to state 264
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
     IF              shift and go to state 205
@@ -8607,23 +8584,100 @@ state 240
 
 state 241
 
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier . GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier . GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY LESS_THAN type_specifier COMMA type_specifier . GREATER_THAN
-    (46) array_type -> type_specifier . OPEN_BRACKET CLOSE_BRACKET
+    (123) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN . CLOSE_PAREN
 
-    GREATER_THAN    shift and go to state 264
-    OPEN_BRACKET    shift and go to state 53
+    CLOSE_PAREN     shift and go to state 265
 
 
 state 242
 
-    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT . READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE . expression_list CLOSE_BRACE
+    (131) expression_list -> . expression_list COMMA expression
+    (132) expression_list -> . expression
+    (133) expression_list -> . empty
+    (93) expression -> . primary_expression
+    (94) expression -> . arithmetic_expression
+    (95) expression -> . boolean_expression
+    (143) empty -> .
+    (96) primary_expression -> . literal
+    (97) primary_expression -> . IDENTIFIER
+    (98) primary_expression -> . function_call
+    (99) primary_expression -> . array_access
+    (100) primary_expression -> . member_access
+    (101) primary_expression -> . array_initialization
+    (102) primary_expression -> . input_statement
+    (103) primary_expression -> . TRUE
+    (104) primary_expression -> . FALSE
+    (105) primary_expression -> . OPEN_PAREN expression CLOSE_PAREN
+    (106) arithmetic_expression -> . expression PLUS expression
+    (107) arithmetic_expression -> . expression MINUS expression
+    (108) arithmetic_expression -> . expression MULTIPLY expression
+    (109) arithmetic_expression -> . expression DIVIDE expression
+    (110) arithmetic_expression -> . expression PERCENT expression
+    (111) arithmetic_expression -> . MINUS expression
+    (112) boolean_expression -> . expression EQUAL expression
+    (113) boolean_expression -> . expression NOT_EQUAL expression
+    (114) boolean_expression -> . expression LESS_THAN expression
+    (115) boolean_expression -> . expression GREATER_THAN expression
+    (116) boolean_expression -> . expression LESS_THAN_EQUAL expression
+    (117) boolean_expression -> . expression GREATER_THAN_EQUAL expression
+    (118) boolean_expression -> . boolean_expression DOUBLE_AMPERSAND boolean_expression
+    (119) boolean_expression -> . boolean_expression DOUBLE_PIPE boolean_expression
+    (120) boolean_expression -> . BANG boolean_expression
+    (138) literal -> . INTEGER
+    (139) literal -> . FLOAT
+    (140) literal -> . STRING
+    (141) literal -> . CHAR_LITERAL
+    (142) literal -> . NULL
+    (127) function_call -> . IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
+    (125) array_access -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
+    (126) member_access -> . IDENTIFIER DOT IDENTIFIER
+    (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
+    (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
+    (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
+    (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
-    READLINE        shift and go to state 265
+    CLOSE_BRACE     reduce using rule 143 (empty -> .)
+    COMMA           reduce using rule 143 (empty -> .)
+    IDENTIFIER      shift and go to state 71
+    TRUE            shift and go to state 82
+    FALSE           shift and go to state 83
+    OPEN_PAREN      shift and go to state 84
+    MINUS           shift and go to state 85
+    BANG            shift and go to state 86
+    INTEGER         shift and go to state 87
+    FLOAT           shift and go to state 88
+    STRING          shift and go to state 89
+    CHAR_LITERAL    shift and go to state 90
+    NULL            shift and go to state 91
+    OPEN_BRACE      shift and go to state 92
+    NEW             shift and go to state 93
+    CONSOLE         shift and go to state 94
+    CONVERT         shift and go to state 95
 
+    expression_list                shift and go to state 266
+    expression                     shift and go to state 130
+    empty                          shift and go to state 131
+    primary_expression             shift and go to state 73
+    arithmetic_expression          shift and go to state 74
+    boolean_expression             shift and go to state 75
+    literal                        shift and go to state 76
+    function_call                  shift and go to state 77
+    array_access                   shift and go to state 78
+    member_access                  shift and go to state 79
+    array_initialization           shift and go to state 80
+    input_statement                shift and go to state 81
 
 state 243
+
+    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT . READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
+
+    READLINE        shift and go to state 267
+
+
+state 244
 
     (31) method_declaration -> STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE .
 
@@ -8645,7 +8699,7 @@ state 243
     DICTIONARY      reduce using rule 31 (method_declaration -> STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE .)
 
 
-state 244
+state 245
 
     (65) declaration_statement -> type_specifier variable_declarator_list SEMICOLON .
 
@@ -8683,7 +8737,7 @@ state 244
     ELSE            reduce using rule 65 (declaration_statement -> type_specifier variable_declarator_list SEMICOLON .)
 
 
-state 245
+state 246
 
     (67) variable_declarator_list -> variable_declarator_list COMMA . variable_declarator
     (69) variable_declarator -> . IDENTIFIER
@@ -8691,9 +8745,9 @@ state 245
 
     IDENTIFIER      shift and go to state 221
 
-    variable_declarator            shift and go to state 266
+    variable_declarator            shift and go to state 268
 
-state 246
+state 247
 
     (70) variable_declarator -> IDENTIFIER ASSIGN . expression
     (93) expression -> . primary_expression
@@ -8734,8 +8788,8 @@ state 246
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -8755,7 +8809,7 @@ state 246
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 267
+    expression                     shift and go to state 269
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -8766,7 +8820,7 @@ state 246
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 247
+state 248
 
     (71) assignment_statement -> IDENTIFIER ASSIGN expression . SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -8781,37 +8835,7 @@ state 247
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    SEMICOLON       shift and go to state 268
-    PLUS            shift and go to state 112
-    MINUS           shift and go to state 113
-    MULTIPLY        shift and go to state 114
-    DIVIDE          shift and go to state 115
-    PERCENT         shift and go to state 116
-    EQUAL           shift and go to state 117
-    NOT_EQUAL       shift and go to state 118
-    LESS_THAN       shift and go to state 119
-    GREATER_THAN    shift and go to state 120
-    LESS_THAN_EQUAL shift and go to state 121
-    GREATER_THAN_EQUAL shift and go to state 122
-
-
-state 248
-
-    (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression . CLOSE_BRACKET ASSIGN expression SEMICOLON
-    (125) array_access -> IDENTIFIER OPEN_BRACKET expression . CLOSE_BRACKET
-    (106) arithmetic_expression -> expression . PLUS expression
-    (107) arithmetic_expression -> expression . MINUS expression
-    (108) arithmetic_expression -> expression . MULTIPLY expression
-    (109) arithmetic_expression -> expression . DIVIDE expression
-    (110) arithmetic_expression -> expression . PERCENT expression
-    (112) boolean_expression -> expression . EQUAL expression
-    (113) boolean_expression -> expression . NOT_EQUAL expression
-    (114) boolean_expression -> expression . LESS_THAN expression
-    (115) boolean_expression -> expression . GREATER_THAN expression
-    (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
-    (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
-
-    CLOSE_BRACKET   shift and go to state 269
+    SEMICOLON       shift and go to state 270
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -8827,10 +8851,40 @@ state 248
 
 state 249
 
+    (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression . CLOSE_BRACKET ASSIGN expression SEMICOLON
+    (125) array_access -> IDENTIFIER OPEN_BRACKET expression . CLOSE_BRACKET
+    (106) arithmetic_expression -> expression . PLUS expression
+    (107) arithmetic_expression -> expression . MINUS expression
+    (108) arithmetic_expression -> expression . MULTIPLY expression
+    (109) arithmetic_expression -> expression . DIVIDE expression
+    (110) arithmetic_expression -> expression . PERCENT expression
+    (112) boolean_expression -> expression . EQUAL expression
+    (113) boolean_expression -> expression . NOT_EQUAL expression
+    (114) boolean_expression -> expression . LESS_THAN expression
+    (115) boolean_expression -> expression . GREATER_THAN expression
+    (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
+    (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
+
+    CLOSE_BRACKET   shift and go to state 271
+    PLUS            shift and go to state 112
+    MINUS           shift and go to state 113
+    MULTIPLY        shift and go to state 114
+    DIVIDE          shift and go to state 115
+    PERCENT         shift and go to state 116
+    EQUAL           shift and go to state 117
+    NOT_EQUAL       shift and go to state 118
+    LESS_THAN       shift and go to state 119
+    GREATER_THAN    shift and go to state 120
+    LESS_THAN_EQUAL shift and go to state 121
+    GREATER_THAN_EQUAL shift and go to state 122
+
+
+state 250
+
     (73) assignment_statement -> IDENTIFIER DOT IDENTIFIER . ASSIGN expression SEMICOLON
     (126) member_access -> IDENTIFIER DOT IDENTIFIER .
 
-    ASSIGN          shift and go to state 270
+    ASSIGN          shift and go to state 272
     SEMICOLON       reduce using rule 126 (member_access -> IDENTIFIER DOT IDENTIFIER .)
     PLUS            reduce using rule 126 (member_access -> IDENTIFIER DOT IDENTIFIER .)
     MINUS           reduce using rule 126 (member_access -> IDENTIFIER DOT IDENTIFIER .)
@@ -8847,7 +8901,7 @@ state 249
     COMMA           reduce using rule 126 (member_access -> IDENTIFIER DOT IDENTIFIER .)
 
 
-state 250
+state 251
 
     (63) block_statement -> OPEN_BRACE statement_list CLOSE_BRACE .
 
@@ -8885,7 +8939,7 @@ state 250
     ELSE            reduce using rule 63 (block_statement -> OPEN_BRACE statement_list CLOSE_BRACE .)
 
 
-state 251
+state 252
 
     (66) declaration_statement -> VAR IDENTIFIER ASSIGN . expression SEMICOLON
     (93) expression -> . primary_expression
@@ -8926,8 +8980,8 @@ state 251
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -8947,7 +9001,7 @@ state 251
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 271
+    expression                     shift and go to state 273
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -8958,7 +9012,7 @@ state 251
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 252
+state 253
 
     (74) if_statement -> IF OPEN_PAREN boolean_expression . CLOSE_PAREN statement
     (75) if_statement -> IF OPEN_PAREN boolean_expression . CLOSE_PAREN statement ELSE statement
@@ -8966,30 +9020,7 @@ state 252
     (119) boolean_expression -> boolean_expression . DOUBLE_PIPE boolean_expression
     (95) expression -> boolean_expression .
 
-    CLOSE_PAREN     shift and go to state 272
-    DOUBLE_AMPERSAND shift and go to state 123
-    DOUBLE_PIPE     shift and go to state 124
-    EQUAL           reduce using rule 95 (expression -> boolean_expression .)
-    NOT_EQUAL       reduce using rule 95 (expression -> boolean_expression .)
-    LESS_THAN       reduce using rule 95 (expression -> boolean_expression .)
-    GREATER_THAN    reduce using rule 95 (expression -> boolean_expression .)
-    LESS_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
-    GREATER_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
-    PLUS            reduce using rule 95 (expression -> boolean_expression .)
-    MINUS           reduce using rule 95 (expression -> boolean_expression .)
-    MULTIPLY        reduce using rule 95 (expression -> boolean_expression .)
-    DIVIDE          reduce using rule 95 (expression -> boolean_expression .)
-    PERCENT         reduce using rule 95 (expression -> boolean_expression .)
-
-
-state 253
-
-    (76) while_statement -> WHILE OPEN_PAREN boolean_expression . CLOSE_PAREN statement
-    (118) boolean_expression -> boolean_expression . DOUBLE_AMPERSAND boolean_expression
-    (119) boolean_expression -> boolean_expression . DOUBLE_PIPE boolean_expression
-    (95) expression -> boolean_expression .
-
-    CLOSE_PAREN     shift and go to state 273
+    CLOSE_PAREN     shift and go to state 274
     DOUBLE_AMPERSAND shift and go to state 123
     DOUBLE_PIPE     shift and go to state 124
     EQUAL           reduce using rule 95 (expression -> boolean_expression .)
@@ -9007,21 +9038,44 @@ state 253
 
 state 254
 
-    (77) for_statement -> FOR OPEN_PAREN for_init . SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
+    (76) while_statement -> WHILE OPEN_PAREN boolean_expression . CLOSE_PAREN statement
+    (118) boolean_expression -> boolean_expression . DOUBLE_AMPERSAND boolean_expression
+    (119) boolean_expression -> boolean_expression . DOUBLE_PIPE boolean_expression
+    (95) expression -> boolean_expression .
 
-    SEMICOLON       shift and go to state 274
+    CLOSE_PAREN     shift and go to state 275
+    DOUBLE_AMPERSAND shift and go to state 123
+    DOUBLE_PIPE     shift and go to state 124
+    EQUAL           reduce using rule 95 (expression -> boolean_expression .)
+    NOT_EQUAL       reduce using rule 95 (expression -> boolean_expression .)
+    LESS_THAN       reduce using rule 95 (expression -> boolean_expression .)
+    GREATER_THAN    reduce using rule 95 (expression -> boolean_expression .)
+    LESS_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
+    GREATER_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
+    PLUS            reduce using rule 95 (expression -> boolean_expression .)
+    MINUS           reduce using rule 95 (expression -> boolean_expression .)
+    MULTIPLY        reduce using rule 95 (expression -> boolean_expression .)
+    DIVIDE          reduce using rule 95 (expression -> boolean_expression .)
+    PERCENT         reduce using rule 95 (expression -> boolean_expression .)
 
 
 state 255
 
-    (78) for_init -> type_specifier . IDENTIFIER ASSIGN expression
-    (46) array_type -> type_specifier . OPEN_BRACKET CLOSE_BRACKET
+    (77) for_statement -> FOR OPEN_PAREN for_init . SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
 
-    IDENTIFIER      shift and go to state 275
-    OPEN_BRACKET    shift and go to state 53
+    SEMICOLON       shift and go to state 276
 
 
 state 256
+
+    (78) for_init -> type_specifier . IDENTIFIER ASSIGN expression
+    (46) array_type -> type_specifier . OPEN_BRACKET CLOSE_BRACKET
+
+    IDENTIFIER      shift and go to state 277
+    OPEN_BRACKET    shift and go to state 53
+
+
+state 257
 
     (43) type_specifier -> IDENTIFIER .
     (71) assignment_statement -> IDENTIFIER . ASSIGN expression SEMICOLON
@@ -9031,36 +9085,36 @@ state 256
   ! shift/reduce conflict for OPEN_BRACKET resolved as shift
     IDENTIFIER      reduce using rule 43 (type_specifier -> IDENTIFIER .)
     ASSIGN          shift and go to state 222
-    OPEN_BRACKET    shift and go to state 276
-    DOT             shift and go to state 277
+    OPEN_BRACKET    shift and go to state 278
+    DOT             shift and go to state 279
 
   ! OPEN_BRACKET    [ reduce using rule 43 (type_specifier -> IDENTIFIER .) ]
 
 
-state 257
+state 258
 
     (79) for_init -> assignment_statement .
 
     SEMICOLON       reduce using rule 79 (for_init -> assignment_statement .)
 
 
-state 258
+state 259
 
     (80) for_init -> empty .
 
     SEMICOLON       reduce using rule 80 (for_init -> empty .)
 
 
-state 259
+state 260
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier . IDENTIFIER IN expression CLOSE_PAREN statement
     (46) array_type -> type_specifier . OPEN_BRACKET CLOSE_BRACKET
 
-    IDENTIFIER      shift and go to state 278
+    IDENTIFIER      shift and go to state 280
     OPEN_BRACKET    shift and go to state 53
 
 
-state 260
+state 261
 
     (86) return_statement -> RETURN expression SEMICOLON .
 
@@ -9098,22 +9152,22 @@ state 260
     ELSE            reduce using rule 86 (return_statement -> RETURN expression SEMICOLON .)
 
 
-state 261
+state 262
 
     (88) print_statement -> CONSOLE DOT WRITELINE . OPEN_PAREN expression CLOSE_PAREN SEMICOLON
     (90) print_statement -> CONSOLE DOT WRITELINE . OPEN_PAREN CLOSE_PAREN SEMICOLON
 
-    OPEN_PAREN      shift and go to state 279
-
-
-state 262
-
-    (89) print_statement -> CONSOLE DOT WRITE . OPEN_PAREN expression CLOSE_PAREN SEMICOLON
-
-    OPEN_PAREN      shift and go to state 280
+    OPEN_PAREN      shift and go to state 281
 
 
 state 263
+
+    (89) print_statement -> CONSOLE DOT WRITE . OPEN_PAREN expression CLOSE_PAREN SEMICOLON
+
+    OPEN_PAREN      shift and go to state 282
+
+
+state 264
 
     (29) method_declaration -> access_modifier STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE .
 
@@ -9135,25 +9189,47 @@ state 263
     DICTIONARY      reduce using rule 29 (method_declaration -> access_modifier STATIC type_specifier IDENTIFIER OPEN_PAREN parameter_list CLOSE_PAREN OPEN_BRACE statement_list CLOSE_BRACE .)
 
 
-state 264
-
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN . OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN . OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (48) generic_type -> DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN .
-
-    OPEN_PAREN      shift and go to state 281
-    OPEN_BRACE      shift and go to state 282
-    OPEN_BRACKET    reduce using rule 48 (generic_type -> DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN .)
-
-
 state 265
 
-    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE . OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
+    (123) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .
 
-    OPEN_PAREN      shift and go to state 283
+    SEMICOLON       reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    PLUS            reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    MINUS           reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    MULTIPLY        reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    DIVIDE          reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    PERCENT         reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    EQUAL           reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    NOT_EQUAL       reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    LESS_THAN       reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    GREATER_THAN    reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    LESS_THAN_EQUAL reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    GREATER_THAN_EQUAL reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    CLOSE_PAREN     reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    CLOSE_BRACE     reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    COMMA           reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    CLOSE_BRACKET   reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    DOUBLE_AMPERSAND reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
+    DOUBLE_PIPE     reduce using rule 123 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
 
 
 state 266
+
+    (124) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list . CLOSE_BRACE
+    (131) expression_list -> expression_list . COMMA expression
+
+    CLOSE_BRACE     shift and go to state 283
+    COMMA           shift and go to state 166
+
+
+state 267
+
+    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE . OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
+
+    OPEN_PAREN      shift and go to state 284
+
+
+state 268
 
     (67) variable_declarator_list -> variable_declarator_list COMMA variable_declarator .
 
@@ -9161,7 +9237,7 @@ state 266
     COMMA           reduce using rule 67 (variable_declarator_list -> variable_declarator_list COMMA variable_declarator .)
 
 
-state 267
+state 269
 
     (70) variable_declarator -> IDENTIFIER ASSIGN expression .
     (106) arithmetic_expression -> expression . PLUS expression
@@ -9191,7 +9267,7 @@ state 267
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 268
+state 270
 
     (71) assignment_statement -> IDENTIFIER ASSIGN expression SEMICOLON .
 
@@ -9231,12 +9307,12 @@ state 268
     CLOSE_PAREN     reduce using rule 71 (assignment_statement -> IDENTIFIER ASSIGN expression SEMICOLON .)
 
 
-state 269
+state 271
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET . ASSIGN expression SEMICOLON
     (125) array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET .
 
-    ASSIGN          shift and go to state 284
+    ASSIGN          shift and go to state 285
     SEMICOLON       reduce using rule 125 (array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET .)
     PLUS            reduce using rule 125 (array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET .)
     MINUS           reduce using rule 125 (array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET .)
@@ -9253,7 +9329,7 @@ state 269
     COMMA           reduce using rule 125 (array_access -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET .)
 
 
-state 270
+state 272
 
     (73) assignment_statement -> IDENTIFIER DOT IDENTIFIER ASSIGN . expression SEMICOLON
     (93) expression -> . primary_expression
@@ -9294,8 +9370,8 @@ state 270
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -9315,7 +9391,7 @@ state 270
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 285
+    expression                     shift and go to state 286
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -9326,7 +9402,7 @@ state 270
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 271
+state 273
 
     (66) declaration_statement -> VAR IDENTIFIER ASSIGN expression . SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -9341,7 +9417,7 @@ state 271
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    SEMICOLON       shift and go to state 286
+    SEMICOLON       shift and go to state 287
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -9355,7 +9431,7 @@ state 271
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 272
+state 274
 
     (74) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN . statement
     (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN . statement ELSE statement
@@ -9440,8 +9516,8 @@ state 272
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
@@ -9475,7 +9551,7 @@ state 272
     NEW             shift and go to state 93
 
     boolean_expression             shift and go to state 75
-    statement                      shift and go to state 287
+    statement                      shift and go to state 288
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
     assignment_statement           shift and go to state 194
@@ -9499,7 +9575,7 @@ state 272
     member_access                  shift and go to state 79
     array_initialization           shift and go to state 80
 
-state 273
+state 275
 
     (76) while_statement -> WHILE OPEN_PAREN boolean_expression CLOSE_PAREN . statement
     (52) statement -> . expression_statement
@@ -9583,8 +9659,8 @@ state 273
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
@@ -9618,7 +9694,7 @@ state 273
     NEW             shift and go to state 93
 
     boolean_expression             shift and go to state 75
-    statement                      shift and go to state 288
+    statement                      shift and go to state 289
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
     assignment_statement           shift and go to state 194
@@ -9642,7 +9718,7 @@ state 273
     member_access                  shift and go to state 79
     array_initialization           shift and go to state 80
 
-state 274
+state 276
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON . boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (112) boolean_expression -> . expression EQUAL expression
@@ -9683,8 +9759,8 @@ state 274
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -9704,7 +9780,7 @@ state 274
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    boolean_expression             shift and go to state 289
+    boolean_expression             shift and go to state 290
     expression                     shift and go to state 128
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
@@ -9715,14 +9791,14 @@ state 274
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 275
+state 277
 
     (78) for_init -> type_specifier IDENTIFIER . ASSIGN expression
 
-    ASSIGN          shift and go to state 290
+    ASSIGN          shift and go to state 291
 
 
-state 276
+state 278
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET . expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (93) expression -> . primary_expression
@@ -9763,8 +9839,8 @@ state 276
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -9784,7 +9860,7 @@ state 276
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 291
+    expression                     shift and go to state 292
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -9795,21 +9871,21 @@ state 276
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 277
+state 279
 
     (73) assignment_statement -> IDENTIFIER DOT . IDENTIFIER ASSIGN expression SEMICOLON
 
-    IDENTIFIER      shift and go to state 292
+    IDENTIFIER      shift and go to state 293
 
 
-state 278
+state 280
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER . IN expression CLOSE_PAREN statement
 
-    IN              shift and go to state 293
+    IN              shift and go to state 294
 
 
-state 279
+state 281
 
     (88) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN . expression CLOSE_PAREN SEMICOLON
     (90) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN . CLOSE_PAREN SEMICOLON
@@ -9851,12 +9927,12 @@ state 279
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
-    CLOSE_PAREN     shift and go to state 295
+    CLOSE_PAREN     shift and go to state 296
     IDENTIFIER      shift and go to state 71
     TRUE            shift and go to state 82
     FALSE           shift and go to state 83
@@ -9873,7 +9949,7 @@ state 279
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 294
+    expression                     shift and go to state 295
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -9884,7 +9960,7 @@ state 279
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 280
+state 282
 
     (89) print_statement -> CONSOLE DOT WRITE OPEN_PAREN . expression CLOSE_PAREN SEMICOLON
     (93) expression -> . primary_expression
@@ -9925,8 +10001,8 @@ state 280
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -9946,7 +10022,7 @@ state 280
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 296
+    expression                     shift and go to state 297
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -9957,38 +10033,38 @@ state 280
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 281
-
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN . CLOSE_PAREN
-
-    CLOSE_PAREN     shift and go to state 297
-
-
-state 282
-
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE . dictionary_initializer_list CLOSE_BRACE
-    (134) dictionary_initializer_list -> . dictionary_initializer_list COMMA dictionary_initializer
-    (135) dictionary_initializer_list -> . dictionary_initializer
-    (136) dictionary_initializer_list -> . empty
-    (137) dictionary_initializer -> . OPEN_BRACE expression COMMA expression CLOSE_BRACE
-    (143) empty -> .
-
-    OPEN_BRACE      shift and go to state 298
-    CLOSE_BRACE     reduce using rule 143 (empty -> .)
-    COMMA           reduce using rule 143 (empty -> .)
-
-    dictionary_initializer_list    shift and go to state 299
-    dictionary_initializer         shift and go to state 300
-    empty                          shift and go to state 301
-
 state 283
 
-    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN . CLOSE_PAREN CLOSE_PAREN
+    (124) array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .
 
-    CLOSE_PAREN     shift and go to state 302
+    SEMICOLON       reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    PLUS            reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    MINUS           reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    MULTIPLY        reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    DIVIDE          reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    PERCENT         reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    EQUAL           reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    NOT_EQUAL       reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    LESS_THAN       reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    GREATER_THAN    reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    LESS_THAN_EQUAL reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    GREATER_THAN_EQUAL reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    CLOSE_PAREN     reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    CLOSE_BRACE     reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    COMMA           reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    CLOSE_BRACKET   reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    DOUBLE_AMPERSAND reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
+    DOUBLE_PIPE     reduce using rule 124 (array_initialization -> NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE .)
 
 
 state 284
+
+    (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN . CLOSE_PAREN CLOSE_PAREN
+
+    CLOSE_PAREN     shift and go to state 298
+
+
+state 285
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN . expression SEMICOLON
     (93) expression -> . primary_expression
@@ -10029,8 +10105,8 @@ state 284
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -10050,7 +10126,7 @@ state 284
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 303
+    expression                     shift and go to state 299
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -10061,7 +10137,7 @@ state 284
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 285
+state 286
 
     (73) assignment_statement -> IDENTIFIER DOT IDENTIFIER ASSIGN expression . SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10076,7 +10152,7 @@ state 285
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    SEMICOLON       shift and go to state 304
+    SEMICOLON       shift and go to state 300
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10090,7 +10166,7 @@ state 285
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 286
+state 287
 
     (66) declaration_statement -> VAR IDENTIFIER ASSIGN expression SEMICOLON .
 
@@ -10128,7 +10204,7 @@ state 286
     ELSE            reduce using rule 66 (declaration_statement -> VAR IDENTIFIER ASSIGN expression SEMICOLON .)
 
 
-state 287
+state 288
 
     (74) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .
     (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement . ELSE statement
@@ -10165,12 +10241,12 @@ state 287
     CHAR_LITERAL    reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
     NULL            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
     NEW             reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    ELSE            shift and go to state 305
+    ELSE            shift and go to state 301
 
   ! ELSE            [ reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .) ]
 
 
-state 288
+state 289
 
     (76) while_statement -> WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement .
 
@@ -10208,14 +10284,14 @@ state 288
     ELSE            reduce using rule 76 (while_statement -> WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
 
 
-state 289
+state 290
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression . SEMICOLON for_update CLOSE_PAREN statement
     (118) boolean_expression -> boolean_expression . DOUBLE_AMPERSAND boolean_expression
     (119) boolean_expression -> boolean_expression . DOUBLE_PIPE boolean_expression
     (95) expression -> boolean_expression .
 
-    SEMICOLON       shift and go to state 306
+    SEMICOLON       shift and go to state 302
     DOUBLE_AMPERSAND shift and go to state 123
     DOUBLE_PIPE     shift and go to state 124
     EQUAL           reduce using rule 95 (expression -> boolean_expression .)
@@ -10231,7 +10307,7 @@ state 289
     PERCENT         reduce using rule 95 (expression -> boolean_expression .)
 
 
-state 290
+state 291
 
     (78) for_init -> type_specifier IDENTIFIER ASSIGN . expression
     (93) expression -> . primary_expression
@@ -10272,8 +10348,8 @@ state 290
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -10293,7 +10369,7 @@ state 290
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 307
+    expression                     shift and go to state 303
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -10304,7 +10380,7 @@ state 290
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 291
+state 292
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression . CLOSE_BRACKET ASSIGN expression SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10319,7 +10395,7 @@ state 291
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    CLOSE_BRACKET   shift and go to state 308
+    CLOSE_BRACKET   shift and go to state 304
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10333,14 +10409,14 @@ state 291
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 292
+state 293
 
     (73) assignment_statement -> IDENTIFIER DOT IDENTIFIER . ASSIGN expression SEMICOLON
 
-    ASSIGN          shift and go to state 270
+    ASSIGN          shift and go to state 272
 
 
-state 293
+state 294
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER IN . expression CLOSE_PAREN statement
     (93) expression -> . primary_expression
@@ -10381,8 +10457,8 @@ state 293
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
@@ -10402,7 +10478,7 @@ state 293
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    expression                     shift and go to state 309
+    expression                     shift and go to state 305
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     boolean_expression             shift and go to state 75
@@ -10413,7 +10489,7 @@ state 293
     array_initialization           shift and go to state 80
     input_statement                shift and go to state 81
 
-state 294
+state 295
 
     (88) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN expression . CLOSE_PAREN SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10428,7 +10504,7 @@ state 294
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    CLOSE_PAREN     shift and go to state 310
+    CLOSE_PAREN     shift and go to state 306
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10442,14 +10518,14 @@ state 294
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 295
+state 296
 
     (90) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN CLOSE_PAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 311
+    SEMICOLON       shift and go to state 307
 
 
-state 296
+state 297
 
     (89) print_statement -> CONSOLE DOT WRITE OPEN_PAREN expression . CLOSE_PAREN SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10464,7 +10540,7 @@ state 296
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    CLOSE_PAREN     shift and go to state 312
+    CLOSE_PAREN     shift and go to state 308
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10478,136 +10554,14 @@ state 296
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 297
-
-    (123) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .
-
-    SEMICOLON       reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    PLUS            reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    MINUS           reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    MULTIPLY        reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    DIVIDE          reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    PERCENT         reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    EQUAL           reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    NOT_EQUAL       reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    LESS_THAN       reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    GREATER_THAN    reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    LESS_THAN_EQUAL reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    GREATER_THAN_EQUAL reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    CLOSE_PAREN     reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    CLOSE_BRACE     reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    COMMA           reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    CLOSE_BRACKET   reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    DOUBLE_AMPERSAND reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-    DOUBLE_PIPE     reduce using rule 123 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN .)
-
-
 state 298
-
-    (137) dictionary_initializer -> OPEN_BRACE . expression COMMA expression CLOSE_BRACE
-    (93) expression -> . primary_expression
-    (94) expression -> . arithmetic_expression
-    (95) expression -> . boolean_expression
-    (96) primary_expression -> . literal
-    (97) primary_expression -> . IDENTIFIER
-    (98) primary_expression -> . function_call
-    (99) primary_expression -> . array_access
-    (100) primary_expression -> . member_access
-    (101) primary_expression -> . array_initialization
-    (102) primary_expression -> . input_statement
-    (103) primary_expression -> . TRUE
-    (104) primary_expression -> . FALSE
-    (105) primary_expression -> . OPEN_PAREN expression CLOSE_PAREN
-    (106) arithmetic_expression -> . expression PLUS expression
-    (107) arithmetic_expression -> . expression MINUS expression
-    (108) arithmetic_expression -> . expression MULTIPLY expression
-    (109) arithmetic_expression -> . expression DIVIDE expression
-    (110) arithmetic_expression -> . expression PERCENT expression
-    (111) arithmetic_expression -> . MINUS expression
-    (112) boolean_expression -> . expression EQUAL expression
-    (113) boolean_expression -> . expression NOT_EQUAL expression
-    (114) boolean_expression -> . expression LESS_THAN expression
-    (115) boolean_expression -> . expression GREATER_THAN expression
-    (116) boolean_expression -> . expression LESS_THAN_EQUAL expression
-    (117) boolean_expression -> . expression GREATER_THAN_EQUAL expression
-    (118) boolean_expression -> . boolean_expression DOUBLE_AMPERSAND boolean_expression
-    (119) boolean_expression -> . boolean_expression DOUBLE_PIPE boolean_expression
-    (120) boolean_expression -> . BANG boolean_expression
-    (138) literal -> . INTEGER
-    (139) literal -> . FLOAT
-    (140) literal -> . STRING
-    (141) literal -> . CHAR_LITERAL
-    (142) literal -> . NULL
-    (127) function_call -> . IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
-    (125) array_access -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
-    (126) member_access -> . IDENTIFIER DOT IDENTIFIER
-    (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
-    (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
-    (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
-
-    IDENTIFIER      shift and go to state 71
-    TRUE            shift and go to state 82
-    FALSE           shift and go to state 83
-    OPEN_PAREN      shift and go to state 84
-    MINUS           shift and go to state 85
-    BANG            shift and go to state 86
-    INTEGER         shift and go to state 87
-    FLOAT           shift and go to state 88
-    STRING          shift and go to state 89
-    CHAR_LITERAL    shift and go to state 90
-    NULL            shift and go to state 91
-    OPEN_BRACE      shift and go to state 92
-    NEW             shift and go to state 93
-    CONSOLE         shift and go to state 94
-    CONVERT         shift and go to state 95
-
-    expression                     shift and go to state 313
-    primary_expression             shift and go to state 73
-    arithmetic_expression          shift and go to state 74
-    boolean_expression             shift and go to state 75
-    literal                        shift and go to state 76
-    function_call                  shift and go to state 77
-    array_access                   shift and go to state 78
-    member_access                  shift and go to state 79
-    array_initialization           shift and go to state 80
-    input_statement                shift and go to state 81
-
-state 299
-
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list . CLOSE_BRACE
-    (134) dictionary_initializer_list -> dictionary_initializer_list . COMMA dictionary_initializer
-
-    CLOSE_BRACE     shift and go to state 315
-    COMMA           shift and go to state 314
-
-
-state 300
-
-    (135) dictionary_initializer_list -> dictionary_initializer .
-
-    CLOSE_BRACE     reduce using rule 135 (dictionary_initializer_list -> dictionary_initializer .)
-    COMMA           reduce using rule 135 (dictionary_initializer_list -> dictionary_initializer .)
-
-
-state 301
-
-    (136) dictionary_initializer_list -> empty .
-
-    CLOSE_BRACE     reduce using rule 136 (dictionary_initializer_list -> empty .)
-    COMMA           reduce using rule 136 (dictionary_initializer_list -> empty .)
-
-
-state 302
 
     (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN . CLOSE_PAREN
 
-    CLOSE_PAREN     shift and go to state 316
+    CLOSE_PAREN     shift and go to state 309
 
 
-state 303
+state 299
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression . SEMICOLON
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10622,7 +10576,7 @@ state 303
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    SEMICOLON       shift and go to state 317
+    SEMICOLON       shift and go to state 310
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10636,7 +10590,7 @@ state 303
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 304
+state 300
 
     (73) assignment_statement -> IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON .
 
@@ -10676,7 +10630,7 @@ state 304
     CLOSE_PAREN     reduce using rule 73 (assignment_statement -> IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON .)
 
 
-state 305
+state 301
 
     (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE . statement
     (52) statement -> . expression_statement
@@ -10760,8 +10714,8 @@ state 305
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
@@ -10795,7 +10749,7 @@ state 305
     NEW             shift and go to state 93
 
     boolean_expression             shift and go to state 75
-    statement                      shift and go to state 318
+    statement                      shift and go to state 311
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
     assignment_statement           shift and go to state 194
@@ -10819,7 +10773,7 @@ state 305
     member_access                  shift and go to state 79
     array_initialization           shift and go to state 80
 
-state 306
+state 302
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON . for_update CLOSE_PAREN statement
     (81) for_update -> . assignment_statement
@@ -10831,14 +10785,14 @@ state 306
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
     (143) empty -> .
 
-    IDENTIFIER      shift and go to state 321
+    IDENTIFIER      shift and go to state 314
     CLOSE_PAREN     reduce using rule 143 (empty -> .)
 
-    for_update                     shift and go to state 319
-    assignment_statement           shift and go to state 320
-    empty                          shift and go to state 322
+    for_update                     shift and go to state 312
+    assignment_statement           shift and go to state 313
+    empty                          shift and go to state 315
 
-state 307
+state 303
 
     (78) for_init -> type_specifier IDENTIFIER ASSIGN expression .
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10867,14 +10821,14 @@ state 307
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 308
+state 304
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET . ASSIGN expression SEMICOLON
 
-    ASSIGN          shift and go to state 284
+    ASSIGN          shift and go to state 285
 
 
-state 309
+state 305
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression . CLOSE_PAREN statement
     (106) arithmetic_expression -> expression . PLUS expression
@@ -10889,7 +10843,7 @@ state 309
     (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
     (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
-    CLOSE_PAREN     shift and go to state 323
+    CLOSE_PAREN     shift and go to state 316
     PLUS            shift and go to state 112
     MINUS           shift and go to state 113
     MULTIPLY        shift and go to state 114
@@ -10903,14 +10857,14 @@ state 309
     GREATER_THAN_EQUAL shift and go to state 122
 
 
-state 310
+state 306
 
     (88) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 324
+    SEMICOLON       shift and go to state 317
 
 
-state 311
+state 307
 
     (90) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN CLOSE_PAREN SEMICOLON .
 
@@ -10948,76 +10902,14 @@ state 311
     ELSE            reduce using rule 90 (print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN CLOSE_PAREN SEMICOLON .)
 
 
-state 312
+state 308
 
     (89) print_statement -> CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 325
+    SEMICOLON       shift and go to state 318
 
 
-state 313
-
-    (137) dictionary_initializer -> OPEN_BRACE expression . COMMA expression CLOSE_BRACE
-    (106) arithmetic_expression -> expression . PLUS expression
-    (107) arithmetic_expression -> expression . MINUS expression
-    (108) arithmetic_expression -> expression . MULTIPLY expression
-    (109) arithmetic_expression -> expression . DIVIDE expression
-    (110) arithmetic_expression -> expression . PERCENT expression
-    (112) boolean_expression -> expression . EQUAL expression
-    (113) boolean_expression -> expression . NOT_EQUAL expression
-    (114) boolean_expression -> expression . LESS_THAN expression
-    (115) boolean_expression -> expression . GREATER_THAN expression
-    (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
-    (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
-
-    COMMA           shift and go to state 326
-    PLUS            shift and go to state 112
-    MINUS           shift and go to state 113
-    MULTIPLY        shift and go to state 114
-    DIVIDE          shift and go to state 115
-    PERCENT         shift and go to state 116
-    EQUAL           shift and go to state 117
-    NOT_EQUAL       shift and go to state 118
-    LESS_THAN       shift and go to state 119
-    GREATER_THAN    shift and go to state 120
-    LESS_THAN_EQUAL shift and go to state 121
-    GREATER_THAN_EQUAL shift and go to state 122
-
-
-state 314
-
-    (134) dictionary_initializer_list -> dictionary_initializer_list COMMA . dictionary_initializer
-    (137) dictionary_initializer -> . OPEN_BRACE expression COMMA expression CLOSE_BRACE
-
-    OPEN_BRACE      shift and go to state 298
-
-    dictionary_initializer         shift and go to state 327
-
-state 315
-
-    (124) array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .
-
-    SEMICOLON       reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    PLUS            reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    MINUS           reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    MULTIPLY        reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    DIVIDE          reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    PERCENT         reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    EQUAL           reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    NOT_EQUAL       reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    LESS_THAN       reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    GREATER_THAN    reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    LESS_THAN_EQUAL reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    GREATER_THAN_EQUAL reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    CLOSE_PAREN     reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    CLOSE_BRACE     reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    COMMA           reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    CLOSE_BRACKET   reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    DOUBLE_AMPERSAND reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-    DOUBLE_PIPE     reduce using rule 124 (array_initialization -> NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE .)
-
-
-state 316
+state 309
 
     (92) input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN .
 
@@ -11071,7 +10963,7 @@ state 316
     ELSE            reduce using rule 92 (input_statement -> CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN .)
 
 
-state 317
+state 310
 
     (72) assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON .
 
@@ -11111,7 +11003,7 @@ state 317
     CLOSE_PAREN     reduce using rule 72 (assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON .)
 
 
-state 318
+state 311
 
     (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .
 
@@ -11149,21 +11041,21 @@ state 318
     ELSE            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
 
 
-state 319
+state 312
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update . CLOSE_PAREN statement
 
-    CLOSE_PAREN     shift and go to state 328
+    CLOSE_PAREN     shift and go to state 319
 
 
-state 320
+state 313
 
     (81) for_update -> assignment_statement .
 
     CLOSE_PAREN     reduce using rule 81 (for_update -> assignment_statement .)
 
 
-state 321
+state 314
 
     (82) for_update -> IDENTIFIER . INCREMENT
     (83) for_update -> IDENTIFIER . DECREMENT
@@ -11171,21 +11063,21 @@ state 321
     (72) assignment_statement -> IDENTIFIER . OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> IDENTIFIER . DOT IDENTIFIER ASSIGN expression SEMICOLON
 
-    INCREMENT       shift and go to state 329
-    DECREMENT       shift and go to state 330
+    INCREMENT       shift and go to state 320
+    DECREMENT       shift and go to state 321
     ASSIGN          shift and go to state 222
-    OPEN_BRACKET    shift and go to state 276
-    DOT             shift and go to state 277
+    OPEN_BRACKET    shift and go to state 278
+    DOT             shift and go to state 279
 
 
-state 322
+state 315
 
     (84) for_update -> empty .
 
     CLOSE_PAREN     reduce using rule 84 (for_update -> empty .)
 
 
-state 323
+state 316
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN . statement
     (52) statement -> . expression_statement
@@ -11269,8 +11161,8 @@ state 323
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
@@ -11305,7 +11197,7 @@ state 323
 
     type_specifier                 shift and go to state 186
     expression                     shift and go to state 203
-    statement                      shift and go to state 331
+    statement                      shift and go to state 322
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
     assignment_statement           shift and go to state 194
@@ -11328,7 +11220,7 @@ state 323
     member_access                  shift and go to state 79
     array_initialization           shift and go to state 80
 
-state 324
+state 317
 
     (88) print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON .
 
@@ -11366,7 +11258,7 @@ state 324
     ELSE            reduce using rule 88 (print_statement -> CONSOLE DOT WRITELINE OPEN_PAREN expression CLOSE_PAREN SEMICOLON .)
 
 
-state 325
+state 318
 
     (89) print_statement -> CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON .
 
@@ -11404,88 +11296,7 @@ state 325
     ELSE            reduce using rule 89 (print_statement -> CONSOLE DOT WRITE OPEN_PAREN expression CLOSE_PAREN SEMICOLON .)
 
 
-state 326
-
-    (137) dictionary_initializer -> OPEN_BRACE expression COMMA . expression CLOSE_BRACE
-    (93) expression -> . primary_expression
-    (94) expression -> . arithmetic_expression
-    (95) expression -> . boolean_expression
-    (96) primary_expression -> . literal
-    (97) primary_expression -> . IDENTIFIER
-    (98) primary_expression -> . function_call
-    (99) primary_expression -> . array_access
-    (100) primary_expression -> . member_access
-    (101) primary_expression -> . array_initialization
-    (102) primary_expression -> . input_statement
-    (103) primary_expression -> . TRUE
-    (104) primary_expression -> . FALSE
-    (105) primary_expression -> . OPEN_PAREN expression CLOSE_PAREN
-    (106) arithmetic_expression -> . expression PLUS expression
-    (107) arithmetic_expression -> . expression MINUS expression
-    (108) arithmetic_expression -> . expression MULTIPLY expression
-    (109) arithmetic_expression -> . expression DIVIDE expression
-    (110) arithmetic_expression -> . expression PERCENT expression
-    (111) arithmetic_expression -> . MINUS expression
-    (112) boolean_expression -> . expression EQUAL expression
-    (113) boolean_expression -> . expression NOT_EQUAL expression
-    (114) boolean_expression -> . expression LESS_THAN expression
-    (115) boolean_expression -> . expression GREATER_THAN expression
-    (116) boolean_expression -> . expression LESS_THAN_EQUAL expression
-    (117) boolean_expression -> . expression GREATER_THAN_EQUAL expression
-    (118) boolean_expression -> . boolean_expression DOUBLE_AMPERSAND boolean_expression
-    (119) boolean_expression -> . boolean_expression DOUBLE_PIPE boolean_expression
-    (120) boolean_expression -> . BANG boolean_expression
-    (138) literal -> . INTEGER
-    (139) literal -> . FLOAT
-    (140) literal -> . STRING
-    (141) literal -> . CHAR_LITERAL
-    (142) literal -> . NULL
-    (127) function_call -> . IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
-    (125) array_access -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET
-    (126) member_access -> . IDENTIFIER DOT IDENTIFIER
-    (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
-    (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
-    (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
-    (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
-
-    IDENTIFIER      shift and go to state 71
-    TRUE            shift and go to state 82
-    FALSE           shift and go to state 83
-    OPEN_PAREN      shift and go to state 84
-    MINUS           shift and go to state 85
-    BANG            shift and go to state 86
-    INTEGER         shift and go to state 87
-    FLOAT           shift and go to state 88
-    STRING          shift and go to state 89
-    CHAR_LITERAL    shift and go to state 90
-    NULL            shift and go to state 91
-    OPEN_BRACE      shift and go to state 92
-    NEW             shift and go to state 93
-    CONSOLE         shift and go to state 94
-    CONVERT         shift and go to state 95
-
-    expression                     shift and go to state 332
-    primary_expression             shift and go to state 73
-    arithmetic_expression          shift and go to state 74
-    boolean_expression             shift and go to state 75
-    literal                        shift and go to state 76
-    function_call                  shift and go to state 77
-    array_access                   shift and go to state 78
-    member_access                  shift and go to state 79
-    array_initialization           shift and go to state 80
-    input_statement                shift and go to state 81
-
-state 327
-
-    (134) dictionary_initializer_list -> dictionary_initializer_list COMMA dictionary_initializer .
-
-    CLOSE_BRACE     reduce using rule 134 (dictionary_initializer_list -> dictionary_initializer_list COMMA dictionary_initializer .)
-    COMMA           reduce using rule 134 (dictionary_initializer_list -> dictionary_initializer_list COMMA dictionary_initializer .)
-
-
-state 328
+state 319
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN . statement
     (52) statement -> . expression_statement
@@ -11569,8 +11380,8 @@ state 328
     (126) member_access -> . IDENTIFIER DOT IDENTIFIER
     (121) array_initialization -> . OPEN_BRACE expression_list CLOSE_BRACE
     (122) array_initialization -> . NEW type_specifier OPEN_BRACKET expression CLOSE_BRACKET
-    (123) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
-    (124) array_initialization -> . NEW DICTIONARY LESS_THAN type_specifier COMMA type_specifier GREATER_THAN OPEN_BRACE dictionary_initializer_list CLOSE_BRACE
+    (123) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
+    (124) array_initialization -> . NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE
 
     VAR             shift and go to state 204
     IDENTIFIER      shift and go to state 187
@@ -11604,7 +11415,7 @@ state 328
     NEW             shift and go to state 93
 
     boolean_expression             shift and go to state 75
-    statement                      shift and go to state 333
+    statement                      shift and go to state 323
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
     assignment_statement           shift and go to state 194
@@ -11628,21 +11439,21 @@ state 328
     member_access                  shift and go to state 79
     array_initialization           shift and go to state 80
 
-state 329
+state 320
 
     (82) for_update -> IDENTIFIER INCREMENT .
 
     CLOSE_PAREN     reduce using rule 82 (for_update -> IDENTIFIER INCREMENT .)
 
 
-state 330
+state 321
 
     (83) for_update -> IDENTIFIER DECREMENT .
 
     CLOSE_PAREN     reduce using rule 83 (for_update -> IDENTIFIER DECREMENT .)
 
 
-state 331
+state 322
 
     (85) foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement .
 
@@ -11680,36 +11491,7 @@ state 331
     ELSE            reduce using rule 85 (foreach_statement -> FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement .)
 
 
-state 332
-
-    (137) dictionary_initializer -> OPEN_BRACE expression COMMA expression . CLOSE_BRACE
-    (106) arithmetic_expression -> expression . PLUS expression
-    (107) arithmetic_expression -> expression . MINUS expression
-    (108) arithmetic_expression -> expression . MULTIPLY expression
-    (109) arithmetic_expression -> expression . DIVIDE expression
-    (110) arithmetic_expression -> expression . PERCENT expression
-    (112) boolean_expression -> expression . EQUAL expression
-    (113) boolean_expression -> expression . NOT_EQUAL expression
-    (114) boolean_expression -> expression . LESS_THAN expression
-    (115) boolean_expression -> expression . GREATER_THAN expression
-    (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
-    (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
-
-    CLOSE_BRACE     shift and go to state 334
-    PLUS            shift and go to state 112
-    MINUS           shift and go to state 113
-    MULTIPLY        shift and go to state 114
-    DIVIDE          shift and go to state 115
-    PERCENT         shift and go to state 116
-    EQUAL           shift and go to state 117
-    NOT_EQUAL       shift and go to state 118
-    LESS_THAN       shift and go to state 119
-    GREATER_THAN    shift and go to state 120
-    LESS_THAN_EQUAL shift and go to state 121
-    GREATER_THAN_EQUAL shift and go to state 122
-
-
-state 333
+state 323
 
     (77) for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement .
 
@@ -11745,14 +11527,6 @@ state 333
     NULL            reduce using rule 77 (for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement .)
     NEW             reduce using rule 77 (for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement .)
     ELSE            reduce using rule 77 (for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement .)
-
-
-state 334
-
-    (137) dictionary_initializer -> OPEN_BRACE expression COMMA expression CLOSE_BRACE .
-
-    CLOSE_BRACE     reduce using rule 137 (dictionary_initializer -> OPEN_BRACE expression COMMA expression CLOSE_BRACE .)
-    COMMA           reduce using rule 137 (dictionary_initializer -> OPEN_BRACE expression COMMA expression CLOSE_BRACE .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -11912,8 +11686,8 @@ WARNING: shift/reduce conflict for CHAR_LITERAL in state 212 resolved as shift
 WARNING: shift/reduce conflict for NULL in state 212 resolved as shift
 WARNING: shift/reduce conflict for NEW in state 212 resolved as shift
 WARNING: shift/reduce conflict for OPEN_BRACKET in state 228 resolved as shift
-WARNING: shift/reduce conflict for OPEN_BRACKET in state 256 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 287 resolved as shift
+WARNING: shift/reduce conflict for OPEN_BRACKET in state 257 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 288 resolved as shift
 WARNING: reduce/reduce conflict in state 127 resolved using rule (expression -> boolean_expression)
 WARNING: rejected rule (boolean_expression -> BANG boolean_expression) in state 127
 WARNING: reduce/reduce conflict in state 162 resolved using rule (expression -> boolean_expression)
