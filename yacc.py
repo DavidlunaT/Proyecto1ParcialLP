@@ -1112,11 +1112,22 @@ def run_syntax_analysis(file_path, user_git_name):
     os.makedirs("logs", exist_ok=True)
     log_filename = f"logs/sintactico-{user_git_name}-{timestamp}.txt"
 
+    # Extraer el nombre real del archivo desde el path proporcionado
+    real_file_name = os.path.basename(file_path)
+    
+    # Si es un archivo temporal pero sabemos el nombre original
+    original_file_name = None
+    if real_file_name == "temp_analysis.cs" and hasattr(run_syntax_analysis, "original_file"):
+        original_file_name = run_syntax_analysis.original_file
+
     with open(file_path, "r", encoding="utf-8") as f:
         source_code = f.read()
 
     # Limpiar errores previos
     syntax_errors.clear()
+    
+    # Reiniciar el lexer para asegurar que las líneas comiencen desde 1
+    lexer.lineno = 1
 
     # Construir el parser
     parser = yacc.yacc()
@@ -1127,7 +1138,7 @@ def run_syntax_analysis(file_path, user_git_name):
 
         with open(log_filename, "w", encoding="utf-8") as log_file:
             log_file.write(
-                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {original_file_name or real_file_name}\nDate: {timestamp}\n\n"
             )
 
             if syntax_errors:
@@ -1147,7 +1158,7 @@ def run_syntax_analysis(file_path, user_git_name):
     except Exception as e:
         with open(log_filename, "w", encoding="utf-8") as log_file:
             log_file.write(
-                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+                f"Syntax Analysis Log\nUser: {user_git_name}\nFile: {original_file_name or real_file_name}\nDate: {timestamp}\n\n"
             )
             log_file.write("=== CRITICAL ERROR ===\n")
             log_file.write(f"Parser failed: {str(e)}\n")
@@ -1168,11 +1179,19 @@ def run_semantic_analysis(ast, file_path, user_git_name):
 
     log_filename = f"logs/semantico-{user_git_name}-{timestamp}.txt"
 
+    # Extraer el nombre real del archivo desde el path proporcionado
+    real_file_name = os.path.basename(file_path)
+    
+    # Si es un archivo temporal pero sabemos el nombre original
+    original_file_name = None
+    if real_file_name == "temp_analysis.cs" and hasattr(run_semantic_analysis, "original_file"):
+        original_file_name = run_semantic_analysis.original_file
+
     success = semantic_analysis(ast)
 
     with open(log_filename, "w", encoding="utf-8") as log_file:
         log_file.write(
-            f"Semantic Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+            f"Semantic Analysis Log\nUser: {user_git_name}\nFile: {original_file_name or real_file_name}\nDate: {timestamp}\n\n"
         )
 
         log_file.write("=== SYMBOL TABLE ===\n")

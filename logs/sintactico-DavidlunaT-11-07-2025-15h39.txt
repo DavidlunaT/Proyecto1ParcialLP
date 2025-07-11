@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: DavidlunaT
+File: temp_analysis.cs
+Date: 11-07-2025-15h39
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'Console' at line 188

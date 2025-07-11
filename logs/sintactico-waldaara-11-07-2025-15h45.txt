@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: waldaara
+File: algoritmo2.cs
+Date: 11-07-2025-15h45
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'for' at line 9

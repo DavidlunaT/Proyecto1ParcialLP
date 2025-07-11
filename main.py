@@ -445,6 +445,11 @@ class CompilerAnalyzerGUI:
             # Clear previous errors
             lex_error_log.clear()
 
+            # Guardar el nombre original del archivo para usarlo en el log
+            if self.current_file:
+                # Usar un atributo de función para almacenar el nombre original
+                run_lexical_analysis.original_file = self.current_file
+            
             # Run analysis
             user_name = self.algorithms.get(self.current_file, {}).get("user", "user")
             run_lexical_analysis(temp_file, user_name)
@@ -478,6 +483,12 @@ class CompilerAnalyzerGUI:
             temp_file = "temp_analysis.cs"
             with open(temp_file, "w", encoding="utf-8") as f:
                 f.write(self.current_code)
+
+            # Guardar el nombre original del archivo para usarlo en el log
+            if self.current_file:
+                # Usar un atributo de función para almacenar el nombre original
+                import yacc
+                yacc.run_syntax_analysis.original_file = self.current_file
 
             # Run analysis
             user_name = self.algorithms.get(self.current_file, {}).get("user", "user")
@@ -519,6 +530,12 @@ class CompilerAnalyzerGUI:
             with open(temp_file, "w", encoding="utf-8") as f:
                 f.write(self.current_code)
 
+            # Guardar el nombre original del archivo para usarlo en el log
+            if self.current_file:
+                # Usar un atributo de función para almacenar el nombre original
+                import yacc
+                yacc.run_semantic_analysis.original_file = self.current_file
+
             # First run syntax to get AST
             user_name = self.algorithms.get(self.current_file, {}).get("user", "user")
             syntax_success, ast = run_syntax_analysis(temp_file, user_name)
@@ -533,9 +550,7 @@ class CompilerAnalyzerGUI:
                     if semantic_success
                     else "Semantic analysis completed with errors"
                 )
-                color = (
-                    ft.Colors.GREEN_400 if semantic_success else ft.Colors.ORANGE_400
-                )
+                color = ft.Colors.GREEN_400 if semantic_success else ft.Colors.ORANGE_400
                 self.update_status(status, color)
             else:
                 self.update_status(

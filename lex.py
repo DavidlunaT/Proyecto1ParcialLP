@@ -357,18 +357,38 @@ def run_lexical_analysis(file_path, user_git_name):
     os.makedirs("logs", exist_ok=True)
     log_filename = f"logs/lexico-{user_git_name}-{timestamp}.txt"
 
+    # Extraer el nombre real del archivo desde el path proporcionado
+    real_file_name = os.path.basename(file_path)
+
+    # Si es un archivo temporal pero sabemos el nombre original
+    original_file_name = None
+    if real_file_name == "temp_analysis.cs" and hasattr(run_lexical_analysis, "original_file"):
+        original_file_name = run_lexical_analysis.original_file
+
     with open(file_path, "r", encoding="utf-8") as f:
         source_code = f.read()
 
+    # Reiniciar el número de línea del lexer antes de cada análisis
+    lexer.lineno = 1
     lexer.input(source_code)
+
+    # Recolectar todos los tokens para el análisis
+    token_list = []
+    while True:
+        token = lexer.token()
+        if not token:
+            break
+        token_list.append(token)
 
     with open(log_filename, "w", encoding="utf-8") as log_file:
         log_file.write(
-            f"Lexical Analysis Log\nUser: {user_git_name}\nFile: {file_path}\nDate: {timestamp}\n\n"
+            f"Lexical Analysis Log\nUser: {user_git_name}\n"
+            f"File: {original_file_name or real_file_name}\n"
+            f"Date: {timestamp}\n\n"
         )
         log_file.write("=== TOKENS ===\n")
 
-        for token in lexer:
+        for token in token_list:
             log_file.write(
                 f"{token.type:<17} {repr(token.value):<30} (line {token.lineno})\n"
             )
