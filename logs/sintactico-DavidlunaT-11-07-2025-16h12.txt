@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: DavidlunaT
+File: algoritmo1.cs
+Date: 11-07-2025-16h12
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'write' at line 8

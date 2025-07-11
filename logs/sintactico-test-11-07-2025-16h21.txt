@@ -1,0 +1,8 @@
+Syntax Analysis Log
+User: test
+File: test_listas.cs
+Date: 11-07-2025-16h21
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token '.' at line 2
+[SYNTAX ERROR] Unexpected token '(' at line 9

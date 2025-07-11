@@ -31,11 +31,6 @@ class CompilerAnalyzerGUI:
                 "user": "gabsjimz",
                 "description": "Advanced data structures",
             },
-            "test_listas.cs": {
-                "path": "algoritmos/test_listas.cs",
-                "user": "test",
-                "description": "List operations demo",
-            },
             "test_errors.cs": {
                 "path": "algoritmos/test_errors.cs",
                 "user": "test",
