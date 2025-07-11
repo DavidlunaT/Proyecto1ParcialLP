@@ -583,19 +583,75 @@ class CompilerAnalyzerGUI:
     def display_lexical_results(self):
         """Display lexical analysis results"""
         self.lexical_content.controls.clear()
-
-        # Tokenize current code
-        lexer.input(self.current_code)
+        
+        # Buscar el archivo de log más reciente
+        log_files = glob.glob("logs/lexico-*.txt")
+        if not log_files:
+            self.lexical_content.controls.append(
+                ft.Text("No lexical analysis logs found", color=ft.Colors.RED_400)
+            )
+            return
+            
+        latest_log = max(log_files, key=os.path.getmtime)
+        
+        # Leer el archivo de log
         tokens = []
-        while True:
-            tok = lexer.token()
-            if not tok:
-                break
-            tokens.append(tok)
+        errors = []
+        file_name = ""
+        try:
+            with open(latest_log, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+                
+                # Extraer el nombre del archivo del log
+                for line in lines[:5]:  # Buscar en las primeras 5 líneas
+                    if line.startswith("File:"):
+                        file_name = line.split(":", 1)[1].strip()
+                        break
+                
+                # Extraer tokens y errores
+                in_tokens = False
+                in_errors = False
+                
+                for line in lines:
+                    if line.startswith("=== TOKENS ==="):
+                        in_tokens = True
+                        in_errors = False
+                        continue
+                    elif line.startswith("=== ERRORS ==="):
+                        in_tokens = False
+                        in_errors = True
+                        continue
+                    elif line.strip() == "":
+                        continue
+                    
+                    if in_tokens and not line.startswith("==="):
+                        # Formato esperado: TOKEN_TYPE 'value' (line N)
+                        parts = line.strip().split("'", 1)
+                        if len(parts) >= 2:
+                            token_type = parts[0].strip()
+                            rest = parts[1].split("(line", 1)
+                            if len(rest) >= 2:
+                                token_value = rest[0].strip("' ")
+                                line_num = rest[1].strip(" )")
+                                tokens.append({"type": token_type, "value": token_value, "line": line_num})
+                    
+                    if in_errors and not line.startswith("==="):
+                        errors.append(line.strip())
+    
+        except Exception as ex:
+            self.lexical_content.controls.append(
+                ft.Text(f"Error reading log file: {str(ex)}", color=ft.Colors.RED_400)
+            )
+            return
 
         # Statistics
         token_count = len(tokens)
-        error_count = len(lex_error_log)
+        error_count = len(errors)
+
+        # Mostrar información del archivo analizado
+        self.lexical_content.controls.append(
+            ft.Text(f"File analyzed: {file_name}", size=16, weight=ft.FontWeight.BOLD, color=ft.Colors.BLUE_400)
+        )
 
         self.lexical_content.controls.extend(
             [
@@ -649,7 +705,7 @@ class CompilerAnalyzerGUI:
             ]
         )
 
-        # Display tokens in a scrollable container instead of DataTable
+        # Display tokens in a scrollable container
         if tokens:
             self.lexical_content.controls.append(
                 ft.Text(f"Total tokens found: {len(tokens)}", color=ft.Colors.GREY_400)
@@ -666,13 +722,13 @@ class CompilerAnalyzerGUI:
                     ft.DataRow(
                         cells=[
                             ft.DataCell(
-                                ft.Text(tok.type, color=self.get_token_color(tok.type))
+                                ft.Text(token["type"], color=self.get_token_color(token["type"]))
                             ),
-                            ft.DataCell(ft.Text(repr(tok.value))),
-                            ft.DataCell(ft.Text(str(tok.lineno))),
+                            ft.DataCell(ft.Text(token["value"])),
+                            ft.DataCell(ft.Text(token["line"])),
                         ]
                     )
-                    for tok in tokens
+                    for token in tokens
                 ],
                 border=ft.border.all(1, ft.Colors.GREY_600),
                 bgcolor=ft.Colors.GREY_900,
@@ -690,13 +746,13 @@ class CompilerAnalyzerGUI:
                     border_radius=8,
                     expand=True,
                     padding=10,
-                    width=None,  # Remove width constraint
-                    height=None,  # Remove height constraint
+                    width=None,
+                    height=None,
                 )
             )
 
         # Display errors if any
-        if lex_error_log:
+        if errors:
             self.lexical_content.controls.extend(
                 [
                     ft.Text(
@@ -709,7 +765,7 @@ class CompilerAnalyzerGUI:
                         content=ft.Column(
                             [
                                 ft.Text(error, color=ft.Colors.RED_300)
-                                for error in lex_error_log
+                                for error in errors
                             ]
                         ),
                         bgcolor=ft.Colors.RED_900,

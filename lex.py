@@ -2,7 +2,7 @@ import ply.lex as lex
 import datetime
 import os
 
-# C# reserved keywords
+# C# reserved keywords -------------------------------------
 reserved = {
     # Reserved keywords
     "abstract": "ABSTRACT",
@@ -131,7 +131,7 @@ reserved = {
     "List": "LIST",
     "Dictionary": "DICTIONARY",
 }
-
+#-------------------------------------------------------------
 tokens = [
     # Identifiers and literals
     "IDENTIFIER",
