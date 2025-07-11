@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: waldaara
+File: temp_analysis.cs
+Date: 11-07-2025-05h10
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'count' at line 248

@@ -92,7 +92,7 @@ reserved = {
     "capacity": "CAPACITY",
     "clear": "CLEAR",
     "contains": "CONTAINS",
-    "count": "COUNT",
+    "Count": "COUNT",
     "descending": "DESCENDING",
     "dynamic": "DYNAMIC",
     "equals": "EQUALS",

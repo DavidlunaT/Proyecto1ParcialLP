@@ -1,0 +1,14 @@
+Semantic Analysis Log
+User: DavidlunaT
+File: temp_analysis.cs
+Date: 11-07-2025-04h56
+
+=== SYMBOL TABLE ===
+Main: {'type': 'function', 'initialized': True, 'parameters': [('parameter', ('array_type', 'string'), 'args')]}
+args: {'type': ('array_type', 'string'), 'initialized': True}
+num1: {'type': 'int', 'initialized': True}
+num2: {'type': 'int', 'initialized': True}
+operation: {'type': 'string', 'initialized': True}
+result: {'type': 'int', 'initialized': True}
+
+✔ Semantic analysis completed successfully.

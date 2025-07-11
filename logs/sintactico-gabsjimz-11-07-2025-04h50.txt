@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: gabsjimz
+File: temp_analysis.cs
+Date: 11-07-2025-04h50
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token ')' at line 1004

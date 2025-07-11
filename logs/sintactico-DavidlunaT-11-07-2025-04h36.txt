@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: DavidlunaT
+File: temp_analysis.cs
+Date: 11-07-2025-04h36
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'if' at line 416

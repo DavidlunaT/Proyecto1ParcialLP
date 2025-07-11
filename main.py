@@ -225,7 +225,7 @@ class CompilerAnalyzerGUI:
                     ),
                 ]
             ),
-            width=700,
+            expand=True,  # Changed from fixed width=700 to expand=True
             bgcolor=ft.Colors.GREY_800,
             border=ft.border.only(right=ft.border.BorderSide(1, ft.Colors.GREY_700)),
         )
@@ -234,7 +234,7 @@ class CompilerAnalyzerGUI:
         right_panel = ft.Container(
             content=ft.Column(
                 [
-                    # Analysis controls
+                    # Analysis controls - now responsive
                     ft.Container(
                         content=ft.Column(
                             [
@@ -250,28 +250,32 @@ class CompilerAnalyzerGUI:
                                             on_click=self.run_lexical_analysis,
                                             bgcolor=ft.Colors.GREEN_600,
                                             color=ft.Colors.WHITE,
+                                            expand=True,  # Make buttons expand
                                         ),
                                         ft.ElevatedButton(
                                             "▶️ Run Syntax",
                                             on_click=self.run_syntax_analysis,
                                             bgcolor=ft.Colors.ORANGE_600,
                                             color=ft.Colors.WHITE,
+                                            expand=True,
                                         ),
                                         ft.ElevatedButton(
                                             "▶️ Run Semantic",
                                             on_click=self.run_semantic_analysis,
                                             bgcolor=ft.Colors.PURPLE_600,
                                             color=ft.Colors.WHITE,
+                                            expand=True,
                                         ),
                                         ft.ElevatedButton(
                                             "⚡ Run All",
                                             on_click=self.run_all_analysis,
                                             bgcolor=ft.Colors.BLUE_600,
                                             color=ft.Colors.WHITE,
+                                            expand=True,
                                         ),
                                     ],
                                     spacing=10,
-                                    wrap=True,
+                                    expand=True,  # Make the row expand
                                 ),
                             ]
                         ),
@@ -284,7 +288,7 @@ class CompilerAnalyzerGUI:
                     # Analysis tabs - give most of the space to this section
                     ft.Container(
                         content=self.analysis_tabs,
-                        expand=5,  # Much more space for analysis
+                        expand=True,  # Changed from expand=5 to expand=True for better responsiveness
                         padding=ft.padding.only(left=5, right=5, top=5),
                     ),
                     # Logs section - compact but functional
@@ -292,17 +296,18 @@ class CompilerAnalyzerGUI:
                         content=ft.Column(
                             [self.logs_content],
                             scroll=ft.ScrollMode.ALWAYS,
+                            expand=True,  # Make logs content expand within its container
                         ),
                         padding=15,
                         bgcolor=ft.Colors.GREY_900,
                         border=ft.border.only(
                             top=ft.border.BorderSide(1, ft.Colors.GREY_700)
                         ),
-                        height=150,  # Reduced height for logs to give more space to analysis
+                        height=150,  # Keep fixed height for logs
                     ),
                 ]
             ),
-            expand=True,
+            expand=True,  # Changed to expand=True to take remaining horizontal space
             bgcolor=ft.Colors.GREY_800,
         )
 
@@ -634,12 +639,13 @@ class CompilerAnalyzerGUI:
             ]
         )
 
-        # Display tokens in a table-like format
+        # Display tokens in a scrollable container instead of DataTable
         if tokens:
             self.lexical_content.controls.append(
                 ft.Text(f"Total tokens found: {len(tokens)}", color=ft.Colors.GREY_400)
             )
 
+            # Create a scrollable container with the token table
             token_table = ft.DataTable(
                 columns=[
                     ft.DataColumn(ft.Text("Type", weight=ft.FontWeight.BOLD)),
@@ -656,12 +662,13 @@ class CompilerAnalyzerGUI:
                             ft.DataCell(ft.Text(str(tok.lineno))),
                         ]
                     )
-                    for tok in tokens  # Show ALL tokens
+                    for tok in tokens
                 ],
                 border=ft.border.all(1, ft.Colors.GREY_600),
                 bgcolor=ft.Colors.GREY_900,
             )
 
+            # Wrap the table in a scrollable container that expands
             self.lexical_content.controls.append(
                 ft.Container(
                     content=ft.Column(
@@ -671,8 +678,10 @@ class CompilerAnalyzerGUI:
                     ),
                     border=ft.border.all(1, ft.Colors.GREY_600),
                     border_radius=8,
-                    expand=True,  # Let it expand to fill available space
+                    expand=True,
                     padding=10,
+                    width=None,  # Remove width constraint
+                    height=None,  # Remove height constraint
                 )
             )
 
@@ -831,59 +840,69 @@ class CompilerAnalyzerGUI:
             ]
         )
 
-        # Display symbol table
+        # Display symbol table with proper expansion
         if symbol_table:
+            symbol_table_dt = ft.DataTable(
+                columns=[
+                    ft.DataColumn(
+                        ft.Text("Symbol", weight=ft.FontWeight.BOLD)
+                    ),
+                    ft.DataColumn(
+                        ft.Text("Type", weight=ft.FontWeight.BOLD)
+                    ),
+                    ft.DataColumn(
+                        ft.Text("Initialized", weight=ft.FontWeight.BOLD)
+                    ),
+                ],
+                rows=[
+                    ft.DataRow(
+                        cells=[
+                            ft.DataCell(
+                                ft.Text(name, color=ft.Colors.BLUE_300)
+                            ),
+                            ft.DataCell(
+                                ft.Text(
+                                    str(info.get("type", "unknown")),
+                                    color=ft.Colors.GREEN_300,
+                                )
+                            ),
+                            ft.DataCell(
+                                ft.Text(
+                                    (
+                                        "✓"
+                                        if info.get("initialized", False)
+                                        else "✗"
+                                    ),
+                                    color=(
+                                        ft.Colors.GREEN_400
+                                        if info.get("initialized", False)
+                                        else ft.Colors.RED_400
+                                    ),
+                                )
+                            ),
+                        ]
+                    )
+                    for name, info in symbol_table.items()
+                ],
+                border=ft.border.all(1, ft.Colors.GREY_600),
+                bgcolor=ft.Colors.GREY_900,
+            )
+
             self.semantic_content.controls.extend(
                 [
                     ft.Text("📋 Symbol Table", size=18, weight=ft.FontWeight.BOLD),
                     ft.Container(
-                        content=ft.DataTable(
-                            columns=[
-                                ft.DataColumn(
-                                    ft.Text("Symbol", weight=ft.FontWeight.BOLD)
-                                ),
-                                ft.DataColumn(
-                                    ft.Text("Type", weight=ft.FontWeight.BOLD)
-                                ),
-                                ft.DataColumn(
-                                    ft.Text("Initialized", weight=ft.FontWeight.BOLD)
-                                ),
-                            ],
-                            rows=[
-                                ft.DataRow(
-                                    cells=[
-                                        ft.DataCell(
-                                            ft.Text(name, color=ft.Colors.BLUE_300)
-                                        ),
-                                        ft.DataCell(
-                                            ft.Text(
-                                                str(info.get("type", "unknown")),
-                                                color=ft.Colors.GREEN_300,
-                                            )
-                                        ),
-                                        ft.DataCell(
-                                            ft.Text(
-                                                (
-                                                    "✓"
-                                                    if info.get("initialized", False)
-                                                    else "✗"
-                                                ),
-                                                color=(
-                                                    ft.Colors.GREEN_400
-                                                    if info.get("initialized", False)
-                                                    else ft.Colors.RED_400
-                                                ),
-                                            )
-                                        ),
-                                    ]
-                                )
-                                for name, info in symbol_table.items()
-                            ],
-                            border=ft.border.all(1, ft.Colors.GREY_600),
-                            bgcolor=ft.Colors.GREY_900,
+                        content=ft.Column(
+                            [symbol_table_dt],
+                            scroll=ft.ScrollMode.ALWAYS,
+                            expand=True,
                         ),
                         border=ft.border.all(1, ft.Colors.GREY_600),
                         border_radius=8,
+                        expand=True,
+                        padding=10,
+                        width=None,  # Remove width constraint
+                        height=None,  # Remove height constraint
                     ),
                 ]
             )

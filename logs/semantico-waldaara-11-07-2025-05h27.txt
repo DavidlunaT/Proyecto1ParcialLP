@@ -1,0 +1,15 @@
+Semantic Analysis Log
+User: waldaara
+File: temp_analysis.cs
+Date: 11-07-2025-05h27
+
+=== SYMBOL TABLE ===
+Fibonacci: {'type': 'function', 'initialized': True, 'parameters': [('parameter', 'int', 'count')]}
+count: {'type': 'int', 'initialized': True}
+a: {'type': 'int', 'initialized': True}
+b: {'type': 'int', 'initialized': True}
+i: {'type': 'int', 'initialized': True}
+temp: {'type': 'int', 'initialized': True}
+Main: {'type': 'function', 'initialized': True, 'parameters': []}
+
+✔ Semantic analysis completed successfully.
