@@ -1,0 +1,25 @@
+Lexical Analysis Log
+User: gabsjimz
+File: algoritmo3.cs
+Date: 13-07-2025-21h12
+
+=== TOKENS ===
+LIST              'List'                         (line 1)
+LESS_THAN         '<'                            (line 1)
+STRING_TYPE       'string'                       (line 1)
+GREATER_THAN      '>'                            (line 1)
+IDENTIFIER        'nombres'                      (line 1)
+ASSIGN            '='                            (line 1)
+NEW               'new'                          (line 1)
+LIST              'List'                         (line 1)
+LESS_THAN         '<'                            (line 1)
+STRING_TYPE       'string'                       (line 1)
+GREATER_THAN      '>'                            (line 1)
+OPEN_PAREN        '('                            (line 1)
+STRING            'Juan'                         (line 1)
+COMMA             ','                            (line 1)
+STRING            'Pedro'                        (line 1)
+CLOSE_PAREN       ')'                            (line 1)
+SEMICOLON         ';'                            (line 1)
+
+No lexical errors detected.

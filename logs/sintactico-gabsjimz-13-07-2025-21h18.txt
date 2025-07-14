@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: gabsjimz
+File: algoritmo3.cs
+Date: 13-07-2025-21h18
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token '(' at line 25

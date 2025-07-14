@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: gabsjimz
+File: algoritmo3.cs
+Date: 13-07-2025-21h11
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'Juan' at line 26

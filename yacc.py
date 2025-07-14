@@ -228,6 +228,7 @@ def p_expression_statement(p):
 # ========== REGLAS GRAMATICALES: ASIGNACIÓN DE VARIABLES ==========
 
 
+
 def p_declaration_statement(p):
     """declaration_statement : type_specifier variable_declarator_list SEMICOLON
     | VAR IDENTIFIER ASSIGN expression SEMICOLON"""
@@ -475,6 +476,10 @@ def p_dictionary_initializer_list(p):
 def p_dictionary_initializer(p):
     """dictionary_initializer : OPEN_BRACE expression COMMA expression CLOSE_BRACE"""
     p[0] = ("key_value", p[2], p[4])
+
+def p_expression_new_generic(p):
+    """expression : NEW generic_type OPEN_PAREN CLOSE_PAREN"""
+    p[0] = p[2] 
 
 
 # ========== REGLAS GRAMATICALES: LITERALES ==========

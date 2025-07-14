@@ -1,0 +1,19 @@
+Semantic Analysis Log
+User: gabsjimz
+File: algoritmo3.cs
+Date: 13-07-2025-21h30
+
+=== SYMBOL TABLE ===
+BubbleSort: {'type': 'function', 'initialized': True, 'parameters': [('parameter', ('array_type', 'int'), 'array')]}
+array: {'type': ('array_type', 'int'), 'initialized': True}
+n: {'type': 'int', 'initialized': True}
+i: {'type': 'int', 'initialized': True}
+j: {'type': 'int', 'initialized': True}
+temp: {'type': 'int', 'initialized': True}
+Main: {'type': 'function', 'initialized': True, 'parameters': [('parameter', ('array_type', 'string'), 'args')]}
+args: {'type': ('array_type', 'string'), 'initialized': True}
+comunidadesCapitales: {'type': ('dictionary_type', 'string', 'string'), 'initialized': True}
+numbers: {'type': ('array_type', 'int'), 'initialized': True}
+num: {'type': 'int', 'initialized': True}
+
+✔ Semantic analysis completed successfully.
