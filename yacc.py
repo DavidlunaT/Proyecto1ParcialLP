@@ -271,8 +271,8 @@ def p_assignment_statement(p):
 
 
 def p_if_statement(p):
-    """if_statement : IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    | IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement"""
+    """if_statement : IF OPEN_PAREN expression CLOSE_PAREN statement
+    | IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement"""
     if len(p) == 6:
         p[0] = ("if", p[3], p[5], None)
     else:

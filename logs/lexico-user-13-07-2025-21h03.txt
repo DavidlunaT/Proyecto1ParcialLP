@@ -1,0 +1,12 @@
+Lexical Analysis Log
+User: user
+File: temp_analysis.cs
+Date: 13-07-2025-21h03
+
+=== TOKENS ===
+IF                'if'                           (line 1)
+OPEN_PAREN        '('                            (line 1)
+IDENTIFIER        'a'                            (line 1)
+CLOSE_PAREN       ')'                            (line 1)
+
+No lexical errors detected.

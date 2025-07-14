@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: DavidlunaT
+File: algoritmo1.cs
+Date: 13-07-2025-21h04
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token ')' at line 18

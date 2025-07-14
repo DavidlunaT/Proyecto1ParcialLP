@@ -190,8 +190,8 @@ Rule 70    variable_declarator -> IDENTIFIER ASSIGN expression
 Rule 71    assignment_statement -> IDENTIFIER ASSIGN expression SEMICOLON
 Rule 72    assignment_statement -> IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
 Rule 73    assignment_statement -> IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-Rule 74    if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-Rule 75    if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+Rule 74    if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement
+Rule 75    if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
 Rule 76    while_statement -> WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
 Rule 77    for_statement -> FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
 Rule 78    for_init -> type_specifier IDENTIFIER ASSIGN expression
@@ -453,7 +453,7 @@ array_initialization : 101
 array_type           : 44
 assignment_statement : 54 79 81
 block_statement      : 60
-boolean_expression   : 74 75 76 77 95 118 118 119 119 120
+boolean_expression   : 76 77 95 118 118 119 119 120
 class_body           : 9 10 15
 class_declaration    : 7 8
 class_declarations   : 1 7
@@ -462,7 +462,7 @@ declaration_statement : 53
 dictionary_initializer : 134 135
 dictionary_initializer_list : 134
 empty                : 4 17 34 51 80 84 130 133 136
-expression           : 26 28 64 66 70 71 72 72 73 78 85 86 88 89 105 106 106 107 107 108 108 109 109 110 110 111 112 112 113 113 114 114 115 115 116 116 117 117 122 125 128 129 131 132 137 137
+expression           : 26 28 64 66 70 71 72 72 73 74 75 78 85 86 88 89 105 106 106 107 107 108 108 109 109 110 110 111 112 112 113 113 114 114 115 115 116 116 117 117 122 125 128 129 131 132 137 137
 expression_list      : 121 124 131
 expression_statement : 52
 field_declaration    : 18
@@ -5412,8 +5412,8 @@ state 173
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -5850,8 +5850,8 @@ state 185
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -6116,8 +6116,8 @@ state 188
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -6323,8 +6323,8 @@ state 189
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -6995,8 +6995,8 @@ state 204
 
 state 205
 
-    (74) if_statement -> IF . OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> IF . OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> IF . OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> IF . OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
 
     OPEN_PAREN      shift and go to state 233
 
@@ -7138,8 +7138,8 @@ state 212
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -7472,8 +7472,8 @@ state 218
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -7799,8 +7799,8 @@ state 225
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -8138,17 +8138,8 @@ state 232
 
 state 233
 
-    (74) if_statement -> IF OPEN_PAREN . boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> IF OPEN_PAREN . boolean_expression CLOSE_PAREN statement ELSE statement
-    (112) boolean_expression -> . expression EQUAL expression
-    (113) boolean_expression -> . expression NOT_EQUAL expression
-    (114) boolean_expression -> . expression LESS_THAN expression
-    (115) boolean_expression -> . expression GREATER_THAN expression
-    (116) boolean_expression -> . expression LESS_THAN_EQUAL expression
-    (117) boolean_expression -> . expression GREATER_THAN_EQUAL expression
-    (118) boolean_expression -> . boolean_expression DOUBLE_AMPERSAND boolean_expression
-    (119) boolean_expression -> . boolean_expression DOUBLE_PIPE boolean_expression
-    (120) boolean_expression -> . BANG boolean_expression
+    (74) if_statement -> IF OPEN_PAREN . expression CLOSE_PAREN statement
+    (75) if_statement -> IF OPEN_PAREN . expression CLOSE_PAREN statement ELSE statement
     (93) expression -> . primary_expression
     (94) expression -> . arithmetic_expression
     (95) expression -> . boolean_expression
@@ -8168,6 +8159,15 @@ state 233
     (109) arithmetic_expression -> . expression DIVIDE expression
     (110) arithmetic_expression -> . expression PERCENT expression
     (111) arithmetic_expression -> . MINUS expression
+    (112) boolean_expression -> . expression EQUAL expression
+    (113) boolean_expression -> . expression NOT_EQUAL expression
+    (114) boolean_expression -> . expression LESS_THAN expression
+    (115) boolean_expression -> . expression GREATER_THAN expression
+    (116) boolean_expression -> . expression LESS_THAN_EQUAL expression
+    (117) boolean_expression -> . expression GREATER_THAN_EQUAL expression
+    (118) boolean_expression -> . boolean_expression DOUBLE_AMPERSAND boolean_expression
+    (119) boolean_expression -> . boolean_expression DOUBLE_PIPE boolean_expression
+    (120) boolean_expression -> . BANG boolean_expression
     (138) literal -> . INTEGER
     (139) literal -> . FLOAT
     (140) literal -> . STRING
@@ -8183,12 +8183,12 @@ state 233
     (91) input_statement -> . CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN
     (92) input_statement -> . CONVERT DOT TOINT32 OPEN_PAREN CONSOLE DOT READLINE OPEN_PAREN CLOSE_PAREN CLOSE_PAREN
 
-    BANG            shift and go to state 86
     IDENTIFIER      shift and go to state 71
     TRUE            shift and go to state 82
     FALSE           shift and go to state 83
     OPEN_PAREN      shift and go to state 84
     MINUS           shift and go to state 85
+    BANG            shift and go to state 86
     INTEGER         shift and go to state 87
     FLOAT           shift and go to state 88
     STRING          shift and go to state 89
@@ -8199,10 +8199,10 @@ state 233
     CONSOLE         shift and go to state 94
     CONVERT         shift and go to state 95
 
-    boolean_expression             shift and go to state 253
-    expression                     shift and go to state 128
+    expression                     shift and go to state 253
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
+    boolean_expression             shift and go to state 75
     literal                        shift and go to state 76
     function_call                  shift and go to state 77
     array_access                   shift and go to state 78
@@ -8458,8 +8458,8 @@ state 240
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -9014,26 +9014,32 @@ state 252
 
 state 253
 
-    (74) if_statement -> IF OPEN_PAREN boolean_expression . CLOSE_PAREN statement
-    (75) if_statement -> IF OPEN_PAREN boolean_expression . CLOSE_PAREN statement ELSE statement
-    (118) boolean_expression -> boolean_expression . DOUBLE_AMPERSAND boolean_expression
-    (119) boolean_expression -> boolean_expression . DOUBLE_PIPE boolean_expression
-    (95) expression -> boolean_expression .
+    (74) if_statement -> IF OPEN_PAREN expression . CLOSE_PAREN statement
+    (75) if_statement -> IF OPEN_PAREN expression . CLOSE_PAREN statement ELSE statement
+    (106) arithmetic_expression -> expression . PLUS expression
+    (107) arithmetic_expression -> expression . MINUS expression
+    (108) arithmetic_expression -> expression . MULTIPLY expression
+    (109) arithmetic_expression -> expression . DIVIDE expression
+    (110) arithmetic_expression -> expression . PERCENT expression
+    (112) boolean_expression -> expression . EQUAL expression
+    (113) boolean_expression -> expression . NOT_EQUAL expression
+    (114) boolean_expression -> expression . LESS_THAN expression
+    (115) boolean_expression -> expression . GREATER_THAN expression
+    (116) boolean_expression -> expression . LESS_THAN_EQUAL expression
+    (117) boolean_expression -> expression . GREATER_THAN_EQUAL expression
 
     CLOSE_PAREN     shift and go to state 274
-    DOUBLE_AMPERSAND shift and go to state 123
-    DOUBLE_PIPE     shift and go to state 124
-    EQUAL           reduce using rule 95 (expression -> boolean_expression .)
-    NOT_EQUAL       reduce using rule 95 (expression -> boolean_expression .)
-    LESS_THAN       reduce using rule 95 (expression -> boolean_expression .)
-    GREATER_THAN    reduce using rule 95 (expression -> boolean_expression .)
-    LESS_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
-    GREATER_THAN_EQUAL reduce using rule 95 (expression -> boolean_expression .)
-    PLUS            reduce using rule 95 (expression -> boolean_expression .)
-    MINUS           reduce using rule 95 (expression -> boolean_expression .)
-    MULTIPLY        reduce using rule 95 (expression -> boolean_expression .)
-    DIVIDE          reduce using rule 95 (expression -> boolean_expression .)
-    PERCENT         reduce using rule 95 (expression -> boolean_expression .)
+    PLUS            shift and go to state 112
+    MINUS           shift and go to state 113
+    MULTIPLY        shift and go to state 114
+    DIVIDE          shift and go to state 115
+    PERCENT         shift and go to state 116
+    EQUAL           shift and go to state 117
+    NOT_EQUAL       shift and go to state 118
+    LESS_THAN       shift and go to state 119
+    GREATER_THAN    shift and go to state 120
+    LESS_THAN_EQUAL shift and go to state 121
+    GREATER_THAN_EQUAL shift and go to state 122
 
 
 state 254
@@ -9433,8 +9439,8 @@ state 273
 
 state 274
 
-    (74) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN . statement
-    (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN . statement ELSE statement
+    (74) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN . statement
+    (75) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN . statement ELSE statement
     (52) statement -> . expression_statement
     (53) statement -> . declaration_statement
     (54) statement -> . assignment_statement
@@ -9452,8 +9458,8 @@ state 274
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -9550,7 +9556,7 @@ state 274
     NULL            shift and go to state 91
     NEW             shift and go to state 93
 
-    boolean_expression             shift and go to state 75
+    expression                     shift and go to state 203
     statement                      shift and go to state 288
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
@@ -9563,8 +9569,8 @@ state 274
     block_statement                shift and go to state 200
     print_statement                shift and go to state 201
     input_statement                shift and go to state 202
-    expression                     shift and go to state 203
     type_specifier                 shift and go to state 186
+    boolean_expression             shift and go to state 75
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     array_type                     shift and go to state 42
@@ -9595,8 +9601,8 @@ state 275
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -10206,44 +10212,44 @@ state 287
 
 state 288
 
-    (74) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .
-    (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement . ELSE statement
+    (74) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .
+    (75) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement . ELSE statement
 
   ! shift/reduce conflict for ELSE resolved as shift
-    CLOSE_BRACE     reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    VAR             reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    IDENTIFIER      reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    IF              reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    WHILE           reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    FOR             reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    FOREACH         reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    RETURN          reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    OPEN_BRACE      reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    CONSOLE         reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    CONVERT         reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    INT_TYPE        reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    FLOAT_TYPE      reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    DOUBLE          reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    STRING_TYPE     reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    BOOL_TYPE       reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    CHAR            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    VOID            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    TRUE            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    FALSE           reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    OPEN_PAREN      reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    MINUS           reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    BANG            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    LIST            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    DICTIONARY      reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    INTEGER         reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    FLOAT           reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    STRING          reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    CHAR_LITERAL    reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    NULL            reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
-    NEW             reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .)
+    CLOSE_BRACE     reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    VAR             reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    IDENTIFIER      reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    IF              reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    WHILE           reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    FOR             reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    FOREACH         reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    RETURN          reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    OPEN_BRACE      reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    CONSOLE         reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    CONVERT         reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    INT_TYPE        reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    FLOAT_TYPE      reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    DOUBLE          reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    STRING_TYPE     reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    BOOL_TYPE       reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    CHAR            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    VOID            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    TRUE            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    FALSE           reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    OPEN_PAREN      reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    MINUS           reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    BANG            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    LIST            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    DICTIONARY      reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    INTEGER         reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    FLOAT           reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    STRING          reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    CHAR_LITERAL    reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    NULL            reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
+    NEW             reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .)
     ELSE            shift and go to state 301
 
-  ! ELSE            [ reduce using rule 74 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement .) ]
+  ! ELSE            [ reduce using rule 74 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement .) ]
 
 
 state 289
@@ -10632,7 +10638,7 @@ state 300
 
 state 301
 
-    (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE . statement
+    (75) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE . statement
     (52) statement -> . expression_statement
     (53) statement -> . declaration_statement
     (54) statement -> . assignment_statement
@@ -10650,8 +10656,8 @@ state 301
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -10748,7 +10754,7 @@ state 301
     NULL            shift and go to state 91
     NEW             shift and go to state 93
 
-    boolean_expression             shift and go to state 75
+    expression                     shift and go to state 203
     statement                      shift and go to state 311
     expression_statement           shift and go to state 192
     declaration_statement          shift and go to state 193
@@ -10761,8 +10767,8 @@ state 301
     block_statement                shift and go to state 200
     print_statement                shift and go to state 201
     input_statement                shift and go to state 202
-    expression                     shift and go to state 203
     type_specifier                 shift and go to state 186
+    boolean_expression             shift and go to state 75
     primary_expression             shift and go to state 73
     arithmetic_expression          shift and go to state 74
     array_type                     shift and go to state 42
@@ -11005,40 +11011,40 @@ state 310
 
 state 311
 
-    (75) if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .
+    (75) if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .
 
-    CLOSE_BRACE     reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    VAR             reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    IDENTIFIER      reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    IF              reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    WHILE           reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    FOR             reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    FOREACH         reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    RETURN          reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    OPEN_BRACE      reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    CONSOLE         reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    CONVERT         reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    INT_TYPE        reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    FLOAT_TYPE      reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    DOUBLE          reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    STRING_TYPE     reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    BOOL_TYPE       reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    CHAR            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    VOID            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    TRUE            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    FALSE           reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    OPEN_PAREN      reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    MINUS           reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    BANG            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    LIST            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    DICTIONARY      reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    INTEGER         reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    FLOAT           reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    STRING          reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    CHAR_LITERAL    reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    NULL            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    NEW             reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
-    ELSE            reduce using rule 75 (if_statement -> IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement .)
+    CLOSE_BRACE     reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    VAR             reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    IDENTIFIER      reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    IF              reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    WHILE           reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    FOR             reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    FOREACH         reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    RETURN          reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    OPEN_BRACE      reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    CONSOLE         reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    CONVERT         reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    INT_TYPE        reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    FLOAT_TYPE      reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    DOUBLE          reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    STRING_TYPE     reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    BOOL_TYPE       reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    CHAR            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    VOID            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    TRUE            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    FALSE           reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    OPEN_PAREN      reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    MINUS           reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    BANG            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    LIST            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    DICTIONARY      reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    INTEGER         reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    FLOAT           reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    STRING          reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    CHAR_LITERAL    reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    NULL            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    NEW             reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
+    ELSE            reduce using rule 75 (if_statement -> IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement .)
 
 
 state 312
@@ -11097,8 +11103,8 @@ state 316
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
@@ -11316,8 +11322,8 @@ state 319
     (71) assignment_statement -> . IDENTIFIER ASSIGN expression SEMICOLON
     (72) assignment_statement -> . IDENTIFIER OPEN_BRACKET expression CLOSE_BRACKET ASSIGN expression SEMICOLON
     (73) assignment_statement -> . IDENTIFIER DOT IDENTIFIER ASSIGN expression SEMICOLON
-    (74) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement
-    (75) if_statement -> . IF OPEN_PAREN boolean_expression CLOSE_PAREN statement ELSE statement
+    (74) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement
+    (75) if_statement -> . IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement
     (76) while_statement -> . WHILE OPEN_PAREN boolean_expression CLOSE_PAREN statement
     (77) for_statement -> . FOR OPEN_PAREN for_init SEMICOLON boolean_expression SEMICOLON for_update CLOSE_PAREN statement
     (85) foreach_statement -> . FOREACH OPEN_PAREN type_specifier IDENTIFIER IN expression CLOSE_PAREN statement
