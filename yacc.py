@@ -416,7 +416,7 @@ def p_array_initialization(p):
     | NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_PAREN CLOSE_PAREN
     | NEW LIST LESS_THAN type_specifier GREATER_THAN OPEN_BRACE expression_list CLOSE_BRACE"""
     if len(p) == 4:
-        p[0] = ("array_init", p[2])
+        p[0] = ("array_literal", p[2])
     elif len(p) == 6:
         p[0] = ("array_new", p[2], p[4])
     elif len(p) == 8:
@@ -719,21 +719,36 @@ def check_multi_declaration(node):
                 }
 
                 if init_expr:
+                    # Validar elementos internos si es un array literal
+                    if isinstance(init_expr, tuple) and init_expr[0] == "array_literal":
+                        if isinstance(var_type, tuple) and var_type[0] == "array_type":
+                            expected_elem_type = var_type[1]
+                            for i, el in enumerate(init_expr[1]):
+                                el_type = get_expression_type(el)
+                                if el_type != expected_elem_type:
+                                    semantic_errors.append(
+                                        f"[SEMANTIC ERROR] Incompatible types in array literal at position {i}: expected {expected_elem_type}, got {el_type}"
+                                    )
+                            continue  # Ya validamos aquí, saltamos al siguiente declarator
+
                     expr_type = get_expression_type(init_expr)
-                    # Solo verificar compatibilidad si el tipo de expresión es válido
-                    if expr_type != "unknown" and not are_types_compatible(
-                        var_type, expr_type
+
+                    # Verificar compatibilidad de listas
+                    if (
+                        isinstance(var_type, tuple) and var_type[0] == "list_type" and
+                        isinstance(expr_type, tuple) and expr_type[0] == "list_type"
                     ):
+                        if not are_types_compatible(var_type[1], expr_type[1]):
+                            semantic_errors.append(
+                                f"[SEMANTIC ERROR] Cannot initialize List<{var_type[1]}> with List<{expr_type[1]}>"
+                            )
+
+                    # Verificar compatibilidad general
+                    elif expr_type != "unknown" and not are_types_compatible(var_type, expr_type):
                         semantic_errors.append(
                             f"[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize {var_type} with {expr_type}"
                         )
-    # En check_multi_declaration o donde sea que verifiques tipos, asegúrate de incluir:
-    if isinstance(var_type, tuple) and var_type[0] == "list_type" and isinstance(expr_type, tuple) and expr_type[0] == "list_type":
-        # Verificar que los tipos de elementos sean compatibles
-        if not are_types_compatible(var_type[1], expr_type[1]):
-            semantic_errors.append(
-                f"[SEMANTIC ERROR] Cannot initialize List<{var_type[1]}> with List<{expr_type[1]}>"
-            )
+
 
 
 def check_arithmetic_compatibility(node):
@@ -1020,8 +1035,15 @@ def get_expression_type(expr, is_condition=False):
             # Si es un array literal, retornar array_type del primer elemento
             elements = expr[1]
             if elements and len(elements) > 0:
-                elem_type = get_expression_type(elements[0])
-                return ("array_type", elem_type)
+                first_type = get_expression_type(elements[0])
+                for i, el in enumerate(elements[1:], start=1):
+                    el_type = get_expression_type(el)
+                    if el_type != first_type:
+                        semantic_errors.append(
+                            f"[SEMANTIC ERROR] Incompatible types in array literal at position {i}: expected {first_type}, got {el_type}"
+                        )
+                        return "unknown"
+                return ("array_type", first_type)
             return "unknown"
 
         elif expr_type == "list_new":
