@@ -479,7 +479,13 @@ def p_dictionary_initializer(p):
 
 def p_expression_new_generic(p):
     """expression : NEW generic_type OPEN_PAREN CLOSE_PAREN"""
-    p[0] = p[2] 
+    if isinstance(p[2], tuple) and p[2][0] == "dictionary_type":
+        p[0] = ("dict_new", p[2][1], p[2][2])  # Marca explícitamente como dict
+    elif isinstance(p[2], tuple) and p[2][0] == "list_type":
+        p[0] = ("list_new", p[2][1], [])  # Para listas vacías
+    else:
+        p[0] = p[2]
+
 
 
 # ========== REGLAS GRAMATICALES: LITERALES ==========
@@ -676,6 +682,20 @@ def check_declaration(node):
                 semantic_errors.append(
                     f"[SEMANTIC ERROR] Type mismatch in declaration: Cannot initialize {var_type} with {expr_type}"
                 )
+
+def types_match(expected, actual):
+    if expected == actual:
+        return True
+    if isinstance(expected, tuple) and isinstance(actual, tuple):
+        if expected[0] != actual[0]:
+            return False
+        if len(expected) != len(actual):
+            return False
+        for e, a in zip(expected[1:], actual[1:]):
+            if not types_match(e, a):
+                return False
+        return True
+    return False
 
 
 def check_multi_declaration(node):

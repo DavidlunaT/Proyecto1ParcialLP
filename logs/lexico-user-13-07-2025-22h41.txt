@@ -1,0 +1,26 @@
+Lexical Analysis Log
+User: user
+File: temp_analysis.cs
+Date: 13-07-2025-22h41
+
+=== TOKENS ===
+DICTIONARY        'Dictionary'                   (line 1)
+LESS_THAN         '<'                            (line 1)
+STRING_TYPE       'string'                       (line 1)
+COMMA             ','                            (line 1)
+INT_TYPE          'int'                          (line 1)
+GREATER_THAN      '>'                            (line 1)
+IDENTIFIER        'comunidadesCapitales'         (line 1)
+ASSIGN            '='                            (line 1)
+NEW               'new'                          (line 1)
+DICTIONARY        'Dictionary'                   (line 1)
+LESS_THAN         '<'                            (line 1)
+STRING_TYPE       'string'                       (line 1)
+COMMA             ','                            (line 1)
+STRING_TYPE       'string'                       (line 1)
+GREATER_THAN      '>'                            (line 1)
+OPEN_PAREN        '('                            (line 1)
+CLOSE_PAREN       ')'                            (line 1)
+SEMICOLON         ';'                            (line 1)
+
+No lexical errors detected.
