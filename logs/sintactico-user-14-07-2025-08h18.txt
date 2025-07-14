@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: user
+File: temp_analysis.cs
+Date: 14-07-2025-08h18
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected end of input

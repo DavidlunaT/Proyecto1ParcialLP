@@ -1,0 +1,16 @@
+Semantic Analysis Log
+User: waldaara
+File: algoritmo2.cs
+Date: 14-07-2025-08h44
+
+=== SYMBOL TABLE ===
+Fibonacci: {'type': 'function', 'initialized': True, 'parameters': [('parameter', 'int', 'count')]}
+count: {'type': 'int', 'initialized': True}
+a: {'type': 'int', 'initialized': True}
+b: {'type': 'int', 'initialized': True}
+nombres: {'type': ('list_type', 'string'), 'initialized': True}
+i: {'type': 'int', 'initialized': True}
+temp: {'type': 'int', 'initialized': True}
+Main: {'type': 'function', 'initialized': True, 'parameters': []}
+
+✔ Semantic analysis completed successfully.

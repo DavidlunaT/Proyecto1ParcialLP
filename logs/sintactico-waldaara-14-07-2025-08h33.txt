@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: waldaara
+File: algoritmo2.cs
+Date: 14-07-2025-08h33
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'Class' at line 3

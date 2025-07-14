@@ -1,0 +1,7 @@
+Syntax Analysis Log
+User: gabsjimz
+File: algoritmo3.cs
+Date: 14-07-2025-08h22
+
+=== SYNTAX ERRORS ===
+[SYNTAX ERROR] Unexpected token 'static' at line 22

@@ -479,12 +479,14 @@ def p_dictionary_initializer(p):
 
 def p_expression_new_generic(p):
     """expression : NEW generic_type OPEN_PAREN CLOSE_PAREN"""
-    if isinstance(p[2], tuple) and p[2][0] == "dictionary_type":
-        p[0] = ("dict_new", p[2][1], p[2][2])  # Marca explícitamente como dict
-    elif isinstance(p[2], tuple) and p[2][0] == "list_type":
-        p[0] = ("list_new", p[2][1], [])  # Para listas vacías
-    else:
-        p[0] = p[2]
+    if isinstance(p[2], tuple):
+        if p[2][0] == "dictionary_type":
+            p[0] = ("dict_new", p[2][1], p[2][2])  # ✅ BIEN
+        elif p[2][0] == "list_type":
+            p[0] = ("list_new", p[2][1], [])
+        else:
+            p[0] = p[2]
+
 
 
 
@@ -1004,9 +1006,6 @@ def get_expression_type(expr, is_condition=False):
                 )
             return "unknown"
 
-        elif expr_type == "dict_new":
-            return ("dictionary", expr[1], expr[2])  # (tipo_clave, tipo_valor)
-
         elif expr_type == "dict_init":
             return ("dictionary", expr[1], expr[2])  # (tipo_clave, tipo_valor)
 
@@ -1053,6 +1052,8 @@ def get_expression_type(expr, is_condition=False):
         elif expr_type == "list_init":
             element_type = expr[1]
             return ("list_type", element_type)
+        elif expr_type == "dict_new":
+            return ("dictionary_type", expr[1], expr[2])
 
     return "unknown"
 
